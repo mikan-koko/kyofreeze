@@ -91,7 +91,7 @@ header::after{content:"";display:block;height:3px;
 .hero h1 .u{background:linear-gradient(transparent 66%, rgba(201,162,75,.38) 66%);padding:0 3px}
 .hero p{color:var(--muted);font-size:14.5px;max-width:580px;margin:0 auto}
 
-/* controls: 意訳モード + はんなり度 */
+/* controls: 意訳モード */
 .controls{max-width:640px;margin:26px auto 4px;display:flex;flex-direction:column;gap:14px;
   background:linear-gradient(160deg,#FFFFFF,#FBF6EC);border:1.5px solid rgba(40,50,74,.10);
   border-radius:18px;padding:18px 20px;box-shadow:0 8px 24px rgba(40,50,74,.08);position:relative;overflow:hidden}
@@ -450,13 +450,18 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 }
 .hero-art{
   position:relative;
-  min-height:270px;
-  padding:8px 0 22px;
+  min-height:360px;
+  padding:34px 28px 28px;
+  overflow:hidden;
+  border:3px solid rgba(38,35,58,.16);
+  border-radius:28px;
+  background:#FFF3DC;
+  box-shadow:0 14px 0 rgba(38,35,58,.12),0 32px 60px -42px rgba(38,35,58,.74);
 }
 .hero-copy{
   position:relative;
   z-index:3;
-  max-width:720px;
+  max-width:650px;
 }
 .hero-title{
   font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
@@ -472,22 +477,30 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   max-width:100%;
   font-size:clamp(46px,8vw,92px);
   line-height:.96;
-  color:#FFFDF8;
-  -webkit-text-stroke:2px var(--pop-ink);
+  color:var(--pop-sakura);
+  -webkit-text-stroke:2.5px var(--pop-ink);
+  paint-order:stroke fill;
   text-shadow:
-    4px 4px 0 var(--pop-sakura),
-    8px 8px 0 rgba(38,35,58,.14);
+    3px 3px 0 #FFFDF8,
+    7px 7px 0 var(--pop-yuzu),
+    11px 11px 0 rgba(38,35,58,.16);
+  filter:drop-shadow(0 6px 0 rgba(255,253,248,.82));
   transform:rotate(-1.4deg);
 }
 .hero-title .title-sub{
   display:inline-block;
   margin-top:12px;
-  padding:.18em .36em .22em;
+  padding:.20em .46em .24em;
   font-size:clamp(24px,4.2vw,44px);
   line-height:1.12;
-  color:var(--pop-ink);
-  background:linear-gradient(transparent 46%,rgba(244,211,94,.92) 46%);
-  text-shadow:2px 2px 0 rgba(255,253,248,.9);
+  color:#FFFDF8;
+  -webkit-text-stroke:1.3px var(--pop-ink);
+  paint-order:stroke fill;
+  background:linear-gradient(135deg,var(--pop-ai),#243B57);
+  border:3px solid var(--pop-ink);
+  border-radius:16px;
+  box-shadow:6px 6px 0 var(--pop-mikan),10px 10px 0 rgba(38,35,58,.13);
+  text-shadow:2px 2px 0 rgba(38,35,58,.22);
   box-decoration-break:clone;
   -webkit-box-decoration-break:clone;
   transform:rotate(.6deg);
@@ -522,173 +535,62 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 }
 .hero-stage{
   position:absolute;
-  right:-14px;
-  bottom:0;
-  width:min(430px,50vw);
-  height:220px;
+  inset:0;
   z-index:1;
   pointer-events:none;
 }
-.hero-sun{
+.hero-stage::before{
+  content:"";
   position:absolute;
-  right:34px;
-  top:0;
-  width:86px;
-  height:86px;
-  border:3px solid var(--pop-ink);
-  border-radius:50%;
+  inset:0;
+  z-index:2;
   background:
-    radial-gradient(circle at 38% 34%,#FFF6C6 0 18%,transparent 19%),
-    repeating-radial-gradient(circle at 50% 50%,rgba(38,35,58,.12) 0 2px,transparent 2px 6px),
-    var(--pop-mikan);
-  box-shadow:0 8px 0 rgba(38,35,58,.14);
-  animation:hero-float 5.8s ease-in-out infinite;
+    linear-gradient(90deg,rgba(255,243,220,.96) 0%,rgba(255,243,220,.82) 28%,rgba(255,243,220,.30) 54%,rgba(255,243,220,.02) 100%),
+    linear-gradient(180deg,rgba(255,253,248,.36),rgba(255,253,248,0) 42%,rgba(38,35,58,.06));
 }
-.hero-cloud{
-  position:absolute;
-  width:86px;
-  height:24px;
-  border:3px solid var(--pop-ink);
-  border-radius:999px;
-  background:#FFFDF8;
-  box-shadow:0 5px 0 rgba(38,35,58,.12);
-  opacity:.92;
-  animation:hero-drift 7s ease-in-out infinite;
-}
-.hero-cloud.c1{right:138px;top:34px}
-.hero-cloud.c2{right:6px;top:82px;width:70px;animation-delay:-2.4s}
-.hero-town{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:42px;
-  height:122px;
-  --town-scale:1;
-  transform-origin:50% 100%;
-  animation:kyoto-sway 4.8s ease-in-out infinite;
-}
-.machiya{
-  position:absolute;
-  bottom:0;
-  height:74px;
-  border:3px solid var(--pop-ink);
-  border-radius:8px 8px 4px 4px;
-  background:linear-gradient(180deg,#FFF3D0,#F2C989);
-  box-shadow:0 7px 0 rgba(38,35,58,.14);
-}
-.machiya::before{
+.hero-stage::after{
   content:"";
   position:absolute;
-  left:-6px;
-  right:-6px;
-  top:-19px;
-  height:24px;
-  border:3px solid var(--pop-ink);
-  border-radius:6px 6px 2px 2px;
-  background:linear-gradient(90deg,var(--pop-ai),#23364B);
-  transform:skewX(-14deg);
+  inset:14px;
+  z-index:3;
+  border:2px solid rgba(38,35,58,.18);
+  border-radius:22px;
+  box-shadow:inset 0 0 0 2px rgba(255,253,248,.30);
 }
-.machiya::after{
-  content:"";
+.hero-illustration{
   position:absolute;
-  left:14px;
-  right:14px;
-  bottom:13px;
-  height:30px;
-  background:repeating-linear-gradient(90deg,var(--pop-ink) 0 4px,rgba(255,253,248,.75) 4px 11px);
-  border-radius:3px;
+  inset:-16px -22px -18px -18px;
+  width:calc(100% + 40px);
+  height:calc(100% + 34px);
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(1.08) contrast(1.03);
+  transform-origin:65% 55%;
+  animation:hero-image-sway 9s ease-in-out infinite;
 }
-.machiya.m1{left:8px;width:118px}
-.machiya.m2{left:126px;width:98px;height:62px;animation-delay:-.4s}
-.machiya.m3{right:6px;width:112px;height:68px;animation-delay:-.8s}
-.pagoda{
+.hero-shine{
   position:absolute;
-  left:220px;
-  bottom:0;
-  width:86px;
-  height:122px;
+  left:-18%;
+  top:14%;
+  z-index:4;
+  width:38%;
+  height:62%;
+  background:linear-gradient(100deg,transparent,rgba(255,253,248,.32),transparent);
+  transform:skewX(-18deg);
+  animation:hero-shine 6.5s ease-in-out infinite;
 }
-.pagoda span{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  border:3px solid var(--pop-ink);
-  background:linear-gradient(180deg,var(--pop-sakura),#D84D6E);
-  box-shadow:0 5px 0 rgba(38,35,58,.14);
+@keyframes hero-image-sway{
+  0%,100%{transform:scale(1.02) translate3d(0,0,0) rotate(-.35deg)}
+  50%{transform:scale(1.055) translate3d(-10px,-7px,0) rotate(.35deg)}
 }
-.pagoda .roof{
-  height:18px;
-  border-radius:999px 999px 5px 5px;
-  background:var(--pop-ai);
-}
-.pagoda .r1{top:0;width:56px}.pagoda .r2{top:30px;width:74px}.pagoda .r3{top:62px;width:86px}
-.pagoda .body{bottom:0;width:48px;height:96px;border-radius:8px}
-.lantern{
-  position:absolute;
-  bottom:86px;
-  width:26px;
-  height:38px;
-  border:3px solid var(--pop-ink);
-  border-radius:14px;
-  background:linear-gradient(180deg,var(--pop-yuzu),var(--pop-mikan));
-  box-shadow:0 5px 0 rgba(38,35,58,.12);
-  animation:lantern-bob 2.8s ease-in-out infinite;
-}
-.lantern::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:-22px;
-  width:3px;
-  height:22px;
-  background:var(--pop-ink);
-}
-.lantern.l1{left:72px}
-.lantern.l2{right:92px;animation-delay:-1.2s}
-.hero-river{
-  position:absolute;
-  left:18px;
-  right:8px;
-  bottom:10px;
-  height:38px;
-  border:3px solid var(--pop-ink);
-  border-radius:999px;
-  background:
-    repeating-linear-gradient(135deg,rgba(255,253,248,.38) 0 8px,transparent 8px 18px),
-    linear-gradient(90deg,var(--pop-aqua),#5AC9D2);
-  box-shadow:0 7px 0 rgba(38,35,58,.14);
-  overflow:hidden;
-}
-.hero-river::after{
-  content:"";
-  position:absolute;
-  inset:8px -40px auto;
-  height:12px;
-  background:repeating-linear-gradient(90deg,transparent 0 18px,#FFFDF8 18px 34px,transparent 34px 48px);
-  opacity:.72;
-  animation:river-slide 3.4s linear infinite;
-}
-@keyframes kyoto-sway{
-  0%,100%{transform:translateY(0) rotate(-.35deg) scale(var(--town-scale))}
-  50%{transform:translateY(-5px) rotate(.45deg) scale(var(--town-scale))}
-}
-@keyframes hero-float{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  50%{transform:translateY(-8px) rotate(4deg)}
-}
-@keyframes hero-drift{
-  0%,100%{transform:translateX(0)}
-  50%{transform:translateX(-16px)}
-}
-@keyframes lantern-bob{
-  0%,100%{transform:translateY(0) rotate(-3deg)}
-  50%{transform:translateY(-7px) rotate(4deg)}
-}
-@keyframes river-slide{
-  to{transform:translateX(48px)}
+@keyframes hero-shine{
+  0%,42%{transform:translateX(0) skewX(-18deg);opacity:0}
+  52%{opacity:.95}
+  76%,100%{transform:translateX(320%) skewX(-18deg);opacity:0}
 }
 .controls{
-  max-width:760px;
+  max-width:520px;
+  margin-top:18px;
   background:rgba(255,253,248,.82);
   border:2px solid rgba(38,35,58,.14);
   border-radius:18px;
@@ -977,13 +879,13 @@ footer .discl{
 @media (prefers-reduced-motion: reduce){
   .card{animation:none}
   .chip:hover,.tab:hover,.card:hover{transform:none}
-  .hero-sun,.hero-cloud,.hero-town,.lantern,.hero-river::after{animation:none}
+  .hero-illustration,.hero-shine{animation:none}
 }
 @media (max-width:720px){
   .hero h1{font-size:clamp(31px,10vw,46px)}
   .hero::before{font-size:11px}
   .hero::after{top:46px;height:360px}
-  .hero-art{min-height:auto;padding-bottom:12px}
+  .hero-art{min-height:auto;padding:22px 16px 18px}
   .hero-copy{max-width:none}
   .hero-title .title-main{
     font-size:clamp(44px,16vw,68px);
@@ -993,18 +895,11 @@ footer .discl{
   .hero-title .title-sub{font-size:clamp(23px,8vw,34px)}
   .hero-lead{font-size:14px;padding:13px 15px;margin-top:14px}
   .hero-stage{
-    position:relative;
-    right:auto;
-    bottom:auto;
-    width:100%;
-    height:168px;
-    margin-top:10px;
+    position:absolute;
+    inset:0;
   }
-  .hero-sun{right:18px;width:66px;height:66px}
-  .hero-cloud.c1{right:94px;top:28px}
-  .hero-cloud.c2{right:2px;top:70px}
-  .hero-town{bottom:34px;--town-scale:.82;transform-origin:50% 100%}
-  .hero-river{left:8px;right:8px;bottom:4px}
+  .hero-stage::before{background:linear-gradient(180deg,rgba(255,243,220,.95),rgba(255,243,220,.76) 48%,rgba(255,243,220,.42))}
+  .hero-illustration{object-position:62% center;opacity:.78}
   .grid{gap:14px}
   .card{border-radius:16px;box-shadow:0 8px 0 rgba(38,35,58,.12),0 20px 40px -34px rgba(38,35,58,.7)}
   .seal{width:42px;height:42px}
@@ -1044,18 +939,8 @@ footer .discl{
         <p class="hero-lead">おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。京都ことばの奥ゆかしさと、街のリアルな空気を味わえます。</p>
       </div>
       <div class="hero-stage" aria-hidden="true">
-        <span class="hero-sun"></span>
-        <span class="hero-cloud c1"></span>
-        <span class="hero-cloud c2"></span>
-        <span class="lantern l1"></span>
-        <span class="lantern l2"></span>
-        <div class="hero-town">
-          <span class="machiya m1"></span>
-          <span class="machiya m2"></span>
-          <span class="pagoda"><span class="body"></span><span class="roof r1"></span><span class="roof r2"></span><span class="roof r3"></span></span>
-          <span class="machiya m3"></span>
-        </div>
-        <span class="hero-river"></span>
+        <img class="hero-illustration" src="assets/hero/kyoto-town-pop.png" alt="" loading="eager">
+        <span class="hero-shine"></span>
       </div>
     </div>
 
@@ -1065,14 +950,6 @@ footer .discl{
         <label class="toggle" id="ikToggle" role="switch" aria-checked="false" tabindex="0">
           <span class="tt">OFF</span><span class="tswitch"></span>
         </label>
-      </div>
-      <div class="meter">
-        <div class="mtop">
-          <span class="clabel">はんなり度メーター</span>
-          <span class="mval" id="hval">Lv.5 祇園の女将まで</span>
-        </div>
-        <input type="range" id="hslider" min="1" max="5" value="5" step="1">
-        <div class="mscale"><span>観光客</span><span>ご近所</span><span>京都人</span><span>旦那さん</span><span>女将</span></div>
       </div>
     </div>
     <div class="site-share">
@@ -1797,7 +1674,6 @@ for(const [cat,keys] of Object.entries(RECATEGORIZE)){
 
 /* ------- state ------- */
 let ikezu = false;     // 意訳モード
-let hlevel = 5;        // はんなり度 上限
 let activeTab = "all"; // カテゴリ
 let query = "";
 
@@ -1836,21 +1712,11 @@ function setIkezu(v){
 ikT.addEventListener("click",()=>setIkezu(!ikezu));
 ikT.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();setIkezu(!ikezu);}});
 
-/* ------- はんなり度 slider ------- */
-const hs = document.getElementById("hslider");
-const hval = document.getElementById("hval");
-hs.addEventListener("input",()=>{
-  hlevel=+hs.value;
-  hval.textContent = `Lv.${hlevel} ${HANNARI[hlevel]}まで`;
-  render();
-});
-
 /* ------- search ------- */
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim();render();});
 
 /* ------- render ------- */
 function matches(d){
-  if(d.h>hlevel) return false;
   if(activeTab!=="all" && d.c!==activeTab) return false;
   if(query){
     const q=query.toLowerCase();
