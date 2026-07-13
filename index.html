@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>京ふれーず ～洛中リアル・京ことば辞典～</title>
+<meta name="description" content="おいでやす、ぶぶ漬け、よう言わんわ——京都の方言・京ことばを「直訳」と「意訳」で読み解く、和風モダンでポップな京ことば辞典。">
+<meta name="theme-color" content="#FAF6EE">
+<meta property="og:title" content="京ふれーず ～洛中リアル・京ことば辞典～">
+<meta property="og:description" content="ぶぶ漬けでもどうどす？から街のローカルあるあるまで。京ことばを直訳と意訳で読み解く辞書アプリ。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="京ふれーず">
+<meta property="og:locale" content="ja_JP">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<meta property="og:image" content="assets/icons/app-icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAF6EE;          /* 生成り */
+  --panel:#FFFFFF;
+  --ink:#28324A;         /* 藍墨 */
+  --muted:#7C7361;       /* 利休鼠 */
+  --matcha:#6B8E4E;      /* 抹茶 */
+  --matchad:#4E6B37;
+  --shu:#C0392B;         /* 朱・鳥居 */
+  --shud:#9C2B20;
+  --gold:#C9A24B;        /* 金 */
+  --goldd:#A97C3A;
+  --murasaki:#7C5A9E;    /* 京紫 */
+  --murasakid:#5F4380;
+  --ai:#1C2B4A;          /* 藍 */
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:linear-gradient(168deg,#FBF8F1 0%,#F6EFE1 40%,#F3EEE3 66%,#FBF6EC 100%);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  line-height:1.75;min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 420px at 12% -6%, rgba(192,57,43,.10), transparent 60%),
+    radial-gradient(900px 420px at 88% -6%, rgba(107,142,78,.12), transparent 60%),
+    radial-gradient(1100px 480px at 50% 114%, rgba(124,90,158,.08), transparent 65%);
+}
+/* 麻の葉風の薄い地紋 */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
+  background-image:
+    repeating-linear-gradient(60deg, var(--gold) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(-60deg, var(--gold) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(0deg, var(--gold) 0 1px, transparent 1px 26px);
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+
+/* header */
+header{position:sticky;top:0;z-index:50;
+  background:linear-gradient(105deg, rgba(192,57,43,.10), rgba(255,253,248,.82) 34%, rgba(255,253,248,.82) 66%, rgba(107,142,78,.12));
+  backdrop-filter:blur(14px);box-shadow:0 2px 14px rgba(40,50,74,.08);}
+header::after{content:"";display:block;height:3px;
+  background:linear-gradient(90deg,var(--shu),var(--gold) 40%,var(--matcha) 70%,var(--murasaki));}
+.hbar{display:flex;align-items:center;gap:14px;padding:11px 0}
+.logo{display:flex;align-items:center;gap:11px;white-space:nowrap}
+.logo .mark{width:44px;height:44px;flex:none;filter:drop-shadow(0 4px 9px rgba(0,0,0,.25));transition:transform .25s}
+.logo:hover .mark{transform:rotate(-8deg) scale(1.06)}
+.logo .mark svg,.logo .mark img{width:100%;height:100%;display:block}
+.logo .mark img{object-fit:cover;border-radius:15px}
+.logo b{font-family:"Shippori Mincho",serif;font-weight:800;font-size:20px;letter-spacing:.04em;
+  background:linear-gradient(92deg,var(--shu) 0%,var(--goldd) 52%,var(--matchad) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.logo small{display:block;color:#A79C86;font-size:10px;letter-spacing:.28em;font-family:"Cormorant Garamond",serif;font-weight:600}
+.search{flex:1;position:relative}
+.search input{width:100%;padding:10px 14px 10px 40px;border-radius:999px;background:#fff;
+  border:1.5px solid rgba(40,50,74,.16);color:var(--ink);font:inherit;font-size:14px;outline:none;
+  transition:border-color .2s, box-shadow .2s;}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.20)}
+.search input::placeholder{color:#B3A891}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55}
+
+/* hero */
+.hero{padding:42px 0 6px;text-align:center}
+.hero .kicker{font-family:"Cormorant Garamond",serif;letter-spacing:.32em;font-size:13px;color:var(--shu);text-transform:uppercase;font-weight:600}
+.hero h1{font-family:"Shippori Mincho",serif;font-size:clamp(25px,5vw,42px);font-weight:800;line-height:1.4;margin:12px 0 10px}
+.hero h1 .u{background:linear-gradient(transparent 66%, rgba(201,162,75,.38) 66%);padding:0 3px}
+.hero p{color:var(--muted);font-size:14.5px;max-width:580px;margin:0 auto}
+
+/* controls: 意訳モード + はんなり度 */
+.controls{max-width:640px;margin:26px auto 4px;display:flex;flex-direction:column;gap:14px;
+  background:linear-gradient(160deg,#FFFFFF,#FBF6EC);border:1.5px solid rgba(40,50,74,.10);
+  border-radius:18px;padding:18px 20px;box-shadow:0 8px 24px rgba(40,50,74,.08);position:relative;overflow:hidden}
+.controls::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--shu),var(--gold),var(--matcha),var(--murasaki))}
+.ctrlrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ctrlrow .clabel{font-weight:900;font-size:13.5px;display:flex;align-items:center;gap:7px}
+.ctrlrow .chelp{font-size:11.5px;color:var(--muted)}
+/* toggle */
+.toggle{margin-left:auto;display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.toggle .tt{font-size:12.5px;font-weight:700;color:var(--muted)}
+.tswitch{width:52px;height:29px;border-radius:999px;background:#DcD3C0;position:relative;transition:background .25s;flex:none}
+.tswitch::after{content:"";position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:transform .25s}
+.toggle.on .tswitch{background:var(--shu)}
+.toggle.on .tswitch::after{transform:translateX(23px)}
+.toggle.on .tt{color:var(--shu)}
+/* slider */
+.meter{display:flex;flex-direction:column;gap:8px}
+.meter .mtop{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.meter .mval{font-family:"Shippori Mincho",serif;font-weight:800;font-size:14.5px;color:var(--goldd)}
+.meter input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;
+  background:linear-gradient(90deg,#8FB06E,var(--gold) 55%,var(--shu));outline:none;cursor:pointer}
+.meter input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;
+  background:#fff;border:3px solid var(--goldd);box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:pointer}
+.meter input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--goldd);cursor:pointer}
+.meter .mscale{display:flex;justify-content:space-between;font-size:10px;color:#A79C86;letter-spacing:.02em}
+
+/* トレンド */
+.trend{margin:24px 0 4px}
+.trend .tlabel{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:12.5px;margin-bottom:12px;letter-spacing:.05em}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--shu);animation:blink 1.5s infinite}
+@keyframes blink{50%{opacity:.3}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;
+  background:#fff;color:var(--ink);border:1.5px solid rgba(40,50,74,.14);box-shadow:0 2px 8px rgba(40,50,74,.07);
+  transition:transform .15s, border-color .15s, background .15s;}
+.chip:hover{transform:translateY(-2px);border-color:var(--gold);background:#FCF6E6}
+
+/* tabs */
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:28px 0 20px;position:sticky;top:69px;z-index:40;
+  padding:10px 0;background:linear-gradient(rgba(250,246,238,.96),rgba(250,246,238,.86));backdrop-filter:blur(8px)}
+.tab{padding:9px 18px;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;font-weight:700;
+  background:#fff;color:var(--muted);border:1.5px solid rgba(40,50,74,.15);transition:all .2s}
+.tab:hover{color:var(--ink)}
+.tab.on{background:var(--ai);color:#fff;border-color:var(--ai);box-shadow:0 4px 16px rgba(28,43,74,.25)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding-bottom:70px}
+.card{background:linear-gradient(165deg,#FFFFFF 0%,#FBF7EF 100%);border:1.5px solid rgba(40,50,74,.11);
+  border-radius:var(--r);padding:18px 18px 16px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);
+  transition:transform .18s, border-color .18s, box-shadow .18s;display:flex;flex-direction:column;gap:5px;
+  position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(40,50,74,.08)}
+.card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cc,var(--gold));opacity:.9}
+.card:hover{transform:translateY(-4px);border-color:var(--cc,var(--gold));
+  box-shadow:0 14px 30px rgba(40,50,74,.16), 0 0 22px -8px var(--cc,var(--gold))}
+.card .cat{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--ccd,var(--goldd));padding-right:38px}
+.card h3{font-family:"Shippori Mincho",serif;font-size:18px;font-weight:800;line-height:1.4;padding-right:38px}
+.card .yomi{font-family:"Cormorant Garamond",serif;font-size:12px;color:var(--muted);letter-spacing:.06em}
+.card .one{font-size:13px;color:var(--muted);line-height:1.6;margin-top:3px}
+.card .one .lead{font-size:10.5px;font-weight:800;letter-spacing:.05em;display:block;margin-bottom:1px}
+.card.honne .one .lead{color:var(--shu)}
+.card .lvl{font-size:12px;letter-spacing:.12em;margin-top:auto;padding-top:9px;color:var(--ccd,var(--goldd))}
+.card .emoji{position:absolute;right:12px;top:11px;font-size:25px;opacity:.92;filter:drop-shadow(0 2px 5px rgba(0,0,0,.18));transition:transform .18s}
+.card:hover .emoji{transform:scale(1.16) rotate(-8deg)}
+.card[data-cat="greet"]{--cc:#42B8A8;--ccd:#2D8C80;background:linear-gradient(160deg,rgba(66,184,168,.20),transparent 52%),linear-gradient(165deg,#FFF 0%,#F2FBF9 100%)}
+.card[data-cat="nuance"]{--cc:#F26D88;--ccd:#B94262;background:linear-gradient(160deg,rgba(242,109,136,.20),transparent 52%),linear-gradient(165deg,#FFF 0%,#FFF4F7 100%)}
+.card[data-cat="trap"]{--cc:#F6A23A;--ccd:#B66E24;background:linear-gradient(160deg,rgba(246,162,58,.22),transparent 52%),linear-gradient(165deg,#FFF 0%,#FFF7EA 100%)}
+.card[data-cat="life"]{--cc:#A84E8A;--ccd:#783663;background:linear-gradient(160deg,rgba(168,78,138,.18),transparent 52%),linear-gradient(165deg,#FFF 0%,#FCF2F9 100%)}
+.card[data-cat="food"]{--cc:#F4D35E;--ccd:#B08A2C;background:linear-gradient(160deg,rgba(244,211,94,.23),transparent 52%),linear-gradient(165deg,#FFF 0%,#FFFBEA 100%)}
+.card[data-cat="place"]{--cc:#335C81;--ccd:#24435E;background:linear-gradient(160deg,rgba(51,92,129,.18),transparent 52%),linear-gradient(165deg,#FFF 0%,#F1F7FC 100%)}
+.card[data-cat="local"]{--cc:#788A56;--ccd:#52623A;background:linear-gradient(160deg,rgba(120,138,86,.18),transparent 52%),linear-gradient(165deg,#FFF 0%,#F8FBF2 100%)}
+.card .ikbadge{position:absolute;left:12px;bottom:12px;font-size:9.5px;font-weight:900;letter-spacing:.1em;color:#fff;background:var(--shu);padding:2px 8px;border-radius:999px;opacity:0;transform:translateY(4px);transition:.18s;display:none}
+.card.honne .ikbadge{display:inline-block;opacity:1;transform:none}
+.card.honne .lvl{padding-left:52px}
+
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;font-size:14.5px}
+.empty .big{font-size:40px;display:block;margin-bottom:10px}
+
+/* section head */
+.sechead{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:14px 0 2px;padding:11px 16px;border-radius:12px;
+  background:linear-gradient(90deg, rgba(255,255,255,.9), rgba(255,255,255,.35) 70%);border-left:4px solid var(--cc,var(--gold));box-shadow:0 2px 8px rgba(40,50,74,.05)}
+.sechead h2{font-family:"Shippori Mincho",serif;font-size:17px;font-weight:800}
+.sechead .cnt{font-size:12px;color:var(--muted)}
+
+/* modal */
+.mback{position:fixed;inset:0;background:rgba(28,32,44,.5);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:4vh 16px 6vh}
+.mback.open{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.modal{width:100%;max-width:640px;background:#FFFDF8;border:1px solid rgba(40,50,74,.14);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(24,30,50,.4);animation:pop .25s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:translateY(18px) scale(.97);opacity:0}}
+.mhead{padding:26px 28px 6px;position:relative}
+.mhead .cat{font-size:12px;font-weight:700;letter-spacing:.06em}
+.mhead h2{font-family:"Shippori Mincho",serif;font-size:clamp(23px,4.5vw,32px);font-weight:800;line-height:1.35;margin-top:4px}
+.mhead .yomi{font-family:"Cormorant Garamond",serif;font-size:13px;color:var(--muted);letter-spacing:.1em}
+.close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;background:rgba(40,50,74,.08);border:none;color:var(--ink);font-size:17px;cursor:pointer;transition:background .15s}
+.close:hover{background:rgba(40,50,74,.16)}
+.mbody{padding:8px 28px 28px;display:flex;flex-direction:column;gap:18px}
+.block{display:flex;flex-direction:column;gap:7px}
+.block .blabel{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.block .bnum{width:22px;height:22px;border-radius:50%;color:#fff;display:inline-grid;place-items:center;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:13px}
+.n1{background:var(--matcha)}.n2{background:var(--shu)}.n3{background:var(--gold)}.n4{background:var(--murasaki)}
+.choku{font-size:16px;font-weight:700;padding:13px 16px;border-radius:12px;background:rgba(107,142,78,.12);border:1.5px solid rgba(107,142,78,.4)}
+.honne{font-family:"Shippori Mincho",serif;font-size:clamp(16px,2.6vw,19px);font-weight:800;line-height:1.6;padding:15px 18px;border-radius:12px;color:var(--shud);background:rgba(192,57,43,.10);border:1.5px dashed var(--shu)}
+.honne .warn{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--shu);display:block;margin-bottom:4px;font-family:"Zen Kaku Gothic New",sans-serif}
+.why{font-size:14.5px;line-height:1.9}
+.why b{color:var(--goldd)}
+.scene{font-size:13.5px;background:#F3F6EF;border-left:3px solid var(--matcha);border-radius:0 10px 10px 0;padding:12px 16px;line-height:1.85}
+.scene .who{font-size:11px;color:var(--matchad);font-weight:700;letter-spacing:.06em;display:block;margin-bottom:2px}
+/* はんなり度 in modal */
+.hmeter{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hbeans{display:flex;gap:5px}
+.hbeans span{width:16px;height:16px;border-radius:50%;background:#E3DAC6;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.05)}
+.hbeans span.on{background:radial-gradient(circle at 35% 30%, #E8C877, var(--gold) 70%);box-shadow:0 1px 3px rgba(169,124,58,.5)}
+.hmeter .htxt{font-family:"Shippori Mincho",serif;font-weight:800;font-size:14px;color:var(--goldd)}
+.rel{display:flex;flex-wrap:wrap;gap:8px}
+.rel button{font:inherit;font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:999px;cursor:pointer;background:#fff;color:var(--murasakid);border:1.5px solid rgba(124,90,158,.4);transition:background .15s}
+.rel button:hover{background:rgba(124,90,158,.09)}
+
+/* footer */
+footer{border-top:1px solid rgba(40,50,74,.14);padding:30px 0 46px;color:var(--muted);font-size:12.5px;text-align:center;line-height:2}
+.discl{max-width:640px;margin:0 auto 20px;font-size:11.5px;color:#A79C86;line-height:1.9;background:rgba(255,255,255,.6);border:1px solid rgba(40,50,74,.08);border-radius:12px;padding:12px 16px}
+.copy{margin-top:12px;font-size:11.5px;color:#B3A891}
+
+@media (prefers-reduced-motion: reduce){.dot{animation:none}}
+@media (max-width:640px){
+  .hbar{flex-wrap:wrap;padding:9px 0}
+  .search{order:3;width:100%;flex-basis:100%}
+  .search input{font-size:16px}
+  .logo .mark{width:38px;height:38px}.logo b{font-size:18px}
+  .tabs{top:112px;gap:6px}.tab{padding:8px 13px;font-size:13px}
+  .hero{padding:28px 0 4px}
+  .grid{grid-template-columns:1fr 1fr;gap:10px}
+  .card{padding:14px 13px 12px}.card h3{font-size:16px}
+  .card .one{display:none}
+  .card.honne .one{display:block}
+  .card .emoji{font-size:21px;right:9px;top:9px}
+  .mbody,.mhead{padding-left:18px;padding-right:18px}
+  .modal{border-radius:16px}.mback{padding:2vh 10px 4vh}
+  .controls{padding:16px}
+}
+@media (max-width:380px){.grid{grid-template-columns:1fr}.card .one{display:block}}
+@media (min-width:1200px){.grid{grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px}}
+
+/* ============ Washi karuta redesign ============ */
+:root{
+  --washi:#F3EDE0; --washi2:#EBE2CF; --washi3:#E4D9C2;
+  --sumi:#2B2A26; --sumi-soft:#575247; --kin:#B08A4E;
+  --ai:#48586E; --matcha:#788A56; --shu:#B4553F; --murasaki:#7C6690;
+}
+body{
+  background:
+    radial-gradient(900px 500px at 12% -4%, rgba(180,85,63,.12), transparent 58%),
+    radial-gradient(900px 520px at 88% 4%, rgba(72,88,110,.13), transparent 60%),
+    linear-gradient(155deg,#E9DFCC 0%,#F8F1E5 38%,#D8CDB9 100%);
+  color:var(--sumi);
+}
+body::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+  opacity:.34;mix-blend-mode:multiply;
+}
+body::after{opacity:.035}
+header{background:rgba(243,237,224,.82);box-shadow:0 1px 0 rgba(43,42,38,.14);border-bottom:1px solid rgba(176,138,78,.28)}
+header::after{height:1px;background:linear-gradient(90deg,transparent,var(--kin),transparent)}
+.logo b,.hero h1,.sechead h2,.mhead h2{color:var(--sumi);background:none;-webkit-background-clip:initial;background-clip:initial}
+.logo small,.hero .kicker{color:var(--kin)}
+.hero{text-align:left;max-width:760px;margin:0 auto;padding-top:50px}
+.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.28;letter-spacing:.02em}
+.hero p{max-width:660px;margin:0;color:#6B6255}
+.controls{background:rgba(246,239,226,.74);border:1px solid rgba(43,42,38,.20);border-radius:10px;box-shadow:0 18px 38px -30px rgba(43,42,38,.55)}
+.controls::before{background:linear-gradient(90deg,var(--shu),var(--kin),var(--matcha),var(--ai))}
+.search input,.chip,.tab{border-radius:8px;background:rgba(255,253,248,.78);border-color:rgba(43,42,38,.22)}
+.tab.on{background:var(--sumi);border-color:var(--sumi);color:#FFFDF8}
+.grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;align-items:start}
+.card{
+  position:relative;width:100%;aspect-ratio:300/418;border:0;border-radius:12px;padding:0;
+  color:var(--sumi);background:
+    radial-gradient(120% 80% at 22% 12%, #FBF6EC, transparent 55%),
+    radial-gradient(130% 90% at 85% 96%, #E6DBC4, transparent 60%),
+    linear-gradient(155deg, var(--washi) 0%, var(--washi2) 60%, var(--washi3) 100%);
+  box-shadow:0 28px 44px -25px rgba(43,42,38,.65),0 8px 18px -12px rgba(43,42,38,.5),inset 0 0 0 1px rgba(255,255,255,.35);
+  overflow:hidden;isolation:isolate;display:block;cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.25,1),box-shadow .35s;
+}
+.card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.46;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");}
+.card::after{display:none}
+.card:hover{transform:translateY(-7px) rotate(-.5deg);border-color:transparent;box-shadow:0 42px 58px -26px rgba(43,42,38,.7),0 10px 22px -12px rgba(43,42,38,.5),inset 0 0 0 1px rgba(255,255,255,.4)}
+.fuda-band{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--shu);opacity:0;transition:opacity .3s;z-index:5}
+.card.honne .fuda-band{opacity:.86}
+.frame{position:absolute;inset:13px;border:1px solid rgba(43,42,38,.48);border-radius:7px;z-index:2;pointer-events:none}
+.frame::after{content:"";position:absolute;inset:4px;border:1px solid rgba(176,138,78,.55);border-radius:5px}
+.corner{position:absolute;width:16px;height:16px;z-index:3;pointer-events:none}
+.corner::before,.corner::after{content:"";position:absolute;background:var(--kin);opacity:.84}
+.corner::before{width:16px;height:1.5px}.corner::after{width:1.5px;height:16px}
+.corner.tl{top:20px;left:20px}.corner.tr{top:20px;right:20px}.corner.tr::before,.corner.tr::after{right:0}
+.corner.bl{bottom:20px;left:20px}.corner.bl::before,.corner.bl::after{bottom:0}
+.corner.br{bottom:20px;right:20px}.corner.br::before,.corner.br::after{right:0;bottom:0}
+.inner{position:absolute;inset:26px;z-index:4;display:flex;flex-direction:column;align-items:center;text-align:center}
+.seal{position:absolute;top:-2px;left:-2px;width:46px;height:46px;border:2px solid var(--cc,var(--shu));border-radius:6px;
+  display:grid;place-content:center;color:var(--cc,var(--shu));transform:rotate(-4deg);background:rgba(180,85,63,.05);box-shadow:0 0 0 1px rgba(43,42,38,.12) inset}
+.seal span{writing-mode:vertical-rl;font-weight:800;font-size:16px;letter-spacing:.12em;line-height:1.05}
+.seal::after{content:"";position:absolute;inset:0;border-radius:6px;mix-blend-mode:multiply;opacity:.34;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E")}
+.rank{position:absolute;top:-2px;right:-2px;writing-mode:vertical-rl;font-size:10px;letter-spacing:.28em;color:var(--kin);opacity:.92}
+.mon{margin-top:28px;width:min(52%,150px);aspect-ratio:1}
+.mon svg{width:100%;height:100%;display:block;overflow:visible}
+.mon.illus{
+  width:min(68%,188px);
+  border-radius:999px;
+  overflow:visible;
+  filter:drop-shadow(0 5px 0 rgba(255,253,248,.95)) drop-shadow(0 9px 0 rgba(38,35,58,.14)) drop-shadow(0 18px 18px rgba(38,35,58,.14));
+}
+.mon.illus img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  border-radius:999px;
+}
+.ink{fill:none;stroke:var(--sumi);stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}
+.ink-thin{fill:none;stroke:var(--sumi);stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round;opacity:.76}
+.gold{fill:none;stroke:var(--kin);stroke-width:1;opacity:.62}
+.goldfill{fill:var(--kin);opacity:.72}
+.ringink{fill:none;stroke:var(--sumi);stroke-width:1.35;opacity:.86}
+.term{margin-top:14px;font-family:"Shippori Mincho",serif;font-weight:800;font-size:clamp(18px,2.1vw,25px);letter-spacing:.06em;line-height:1.34;color:var(--sumi)}
+.card .yomi{margin-top:6px;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:11px;letter-spacing:.30em;color:#5A5449;text-transform:uppercase}
+.rule{width:64px;height:1px;background:linear-gradient(90deg,transparent,var(--sumi),transparent);opacity:.38;margin:12px 0}
+.line{padding:0 6px;text-align:center}
+.line .lead{font-size:10px;font-weight:800;letter-spacing:.22em;color:var(--kin);display:block;margin-bottom:4px}
+.line .txt{font-size:13px;color:#5A5449;line-height:1.62;font-weight:500}
+.card.honne .line .lead{color:var(--shu)}
+.card.honne .line .txt{color:var(--sumi);font-weight:700}
+.beans{position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:8px}
+.beans .lb{font-size:9px;letter-spacing:.2em;color:#8D846F;margin-right:2px}
+.beans .b{width:11px;height:11px;border-radius:50%;border:1.2px solid rgba(43,42,38,.5)}
+.beans .b.on{border-color:transparent;background:radial-gradient(circle at 38% 34%, #4a463e, var(--sumi) 72%);box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.card .emoji,.card .cat,.card .one,.card .lvl,.card .ikbadge{display:none}
+.sechead{border-radius:8px;background:rgba(255,253,248,.45);border-left:0;border-top:1px solid rgba(43,42,38,.16);box-shadow:none}
+.sechead h2::before{content:attr(data-seal);display:inline-grid;place-items:center;width:30px;height:30px;margin-right:10px;border:1.5px solid var(--cc);border-radius:5px;color:var(--cc);font-size:13px;vertical-align:middle;transform:rotate(-3deg)}
+.mback{background:rgba(43,42,38,.48)}
+.modal{max-width:760px;background:var(--washi);border-radius:12px;border:1px solid rgba(43,42,38,.24)}
+.modal-card{display:grid;grid-template-columns:minmax(220px,290px) 1fr;gap:0}
+.modal-fuda{position:relative;min-height:410px;background:linear-gradient(155deg,var(--washi),var(--washi2) 62%,var(--washi3));overflow:hidden}
+.modal-fuda .inner{inset:26px}
+.modal-body{padding:28px;display:flex;flex-direction:column;gap:16px;background:rgba(255,253,248,.48)}
+.mhead{padding:0}
+.mhead .cat{display:none}
+.close{top:16px;right:16px;border-radius:50%;background:rgba(43,42,38,.08)}
+.block .blabel{color:#6B6255}
+.block .bnum{background:var(--sumi)}
+.honne .warn{color:var(--shu)}
+.empty .big{display:none}
+@media (max-width:720px){
+  .hero{text-align:left;padding-top:30px}
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .inner{inset:18px}
+  .seal{width:38px;height:38px}.seal span{font-size:13px}.rank{font-size:9px}
+  .mon{margin-top:28px;width:48%}
+  .term{font-size:16px;margin-top:10px}.line .txt{font-size:11.5px}.rule{margin:8px 0}.beans{gap:5px}.beans .b{width:9px;height:9px}
+  .modal-card{grid-template-columns:1fr}.modal-fuda{min-height:390px}
+}
+@media (max-width:420px){
+  .grid{grid-template-columns:1fr}
+  .card{max-width:300px;margin:0 auto}
+}
+
+/* ============ Wa-modern pop direction ============ */
+:root{
+  --pop-sakura:#F26D88;
+  --pop-mikan:#F6A23A;
+  --pop-yuzu:#F4D35E;
+  --pop-aqua:#42B8A8;
+  --pop-ai:#335C81;
+  --pop-ume:#A84E8A;
+  --pop-ink:#26233A;
+  --pop-paper:#FFF3DC;
+}
+body{
+  color:var(--pop-ink);
+  background:
+    radial-gradient(560px 320px at 9% 11%, rgba(242,109,136,.24), transparent 62%),
+    radial-gradient(620px 360px at 91% 16%, rgba(66,184,168,.23), transparent 62%),
+    radial-gradient(650px 360px at 50% 102%, rgba(246,162,58,.22), transparent 66%),
+    linear-gradient(150deg,#FFF8E8 0%,#F8ECD2 42%,#F7DDBE 100%);
+}
+body::before{opacity:.22}
+body::after{
+  opacity:.11;
+  background-size:28px 28px;
+  background-image:
+    radial-gradient(circle at 6px 6px, rgba(242,109,136,.45) 0 2px, transparent 2.4px),
+    radial-gradient(circle at 20px 18px, rgba(66,184,168,.45) 0 2px, transparent 2.4px),
+    radial-gradient(circle at 18px 5px, rgba(246,162,58,.42) 0 1.5px, transparent 2px);
+}
+header{
+  background:rgba(255,248,232,.82);
+  border-bottom:2px solid rgba(38,35,58,.10);
+  box-shadow:0 10px 30px -25px rgba(38,35,58,.45);
+}
+header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan),var(--pop-yuzu),var(--pop-aqua),var(--pop-ai),var(--pop-ume))}
+.logo .mark{
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 7px 0 rgba(38,35,58,.16);
+  overflow:hidden;
+}
+.logo b{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-weight:900;
+  color:var(--pop-ink);
+  text-shadow:0 2px 0 rgba(246,162,58,.20);
+}
+.logo small,.hero .kicker{
+  color:var(--pop-sakura);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-weight:900;
+}
+.hero{
+  max-width:900px;
+  padding-top:44px;
+}
+.hero::before{
+  content:"直訳と意訳で、京の空気をめくる。";
+  display:inline-flex;
+  align-items:center;
+  padding:7px 12px;
+  margin-bottom:14px;
+  border:2px solid rgba(38,35,58,.18);
+  border-radius:999px;
+  background:#fff;
+  color:var(--pop-ai);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.06em;
+  box-shadow:0 6px 0 rgba(38,35,58,.12);
+  transform:rotate(-1.4deg);
+}
+.hero .kicker{
+  display:none;
+}
+.hero h1{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:clamp(34px,5.5vw,62px);
+  line-height:1.16;
+  font-weight:900;
+  letter-spacing:.01em;
+}
+.hero h1 .u{
+  background:linear-gradient(transparent 58%, rgba(244,211,94,.82) 58%);
+  padding:0 .08em;
+}
+.hero p{
+  color:#655B50;
+  font-weight:700;
+  font-size:15px;
+}
+.controls{
+  max-width:760px;
+  background:rgba(255,253,248,.82);
+  border:2px solid rgba(38,35,58,.14);
+  border-radius:18px;
+  box-shadow:0 10px 0 rgba(38,35,58,.12),0 24px 45px -34px rgba(38,35,58,.6);
+}
+.controls::before{height:6px;background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan),var(--pop-yuzu),var(--pop-aqua),var(--pop-ai))}
+.ctrlrow .clabel,.meter .mval{color:var(--pop-ink)}
+.toggle .tt{font-weight:900}
+.tswitch{
+  height:32px;
+  width:58px;
+  background:#F1D7B7;
+  box-shadow:inset 0 0 0 2px rgba(38,35,58,.12);
+}
+.tswitch::after{
+  width:26px;height:26px;
+  background:#FFFDF8;
+  box-shadow:0 4px 0 rgba(38,35,58,.16);
+}
+.toggle.on .tswitch{background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan))}
+.toggle.on .tswitch::after{transform:translateX(26px)}
+.meter input[type=range]{
+  height:12px;
+  background:linear-gradient(90deg,var(--pop-aqua),var(--pop-yuzu),var(--pop-mikan),var(--pop-sakura));
+}
+.meter input[type=range]::-webkit-slider-thumb{
+  width:28px;height:28px;border:4px solid var(--pop-ink);box-shadow:0 4px 0 rgba(38,35,58,.18);
+}
+.meter input[type=range]::-moz-range-thumb{
+  width:26px;height:26px;border:4px solid var(--pop-ink);
+}
+.trend .tlabel{
+  color:var(--pop-ai);
+  font-weight:900;
+}
+.dot{
+  width:10px;height:10px;
+  background:var(--pop-sakura);
+  box-shadow:0 0 0 5px rgba(242,109,136,.14);
+}
+.chip,.tab,.search input{
+  border:2px solid rgba(38,35,58,.14);
+  border-radius:14px;
+  background:rgba(255,253,248,.88);
+}
+.chip{
+  box-shadow:0 5px 0 rgba(38,35,58,.10);
+  color:var(--pop-ink);
+}
+.chip:nth-child(3n+1){background:#FFF3D0}
+.chip:nth-child(3n+2){background:#FCE4EA}
+.chip:nth-child(3n){background:#DFF7F1}
+.chip:hover,.tab:hover{
+  transform:translateY(-3px) rotate(-.7deg);
+  border-color:rgba(38,35,58,.28);
+}
+.tabs{
+  background:linear-gradient(rgba(255,248,232,.96),rgba(255,248,232,.82));
+}
+.tab{
+  box-shadow:0 4px 0 rgba(38,35,58,.10);
+}
+.tab.on{
+  background:var(--pop-ink);
+  border-color:var(--pop-ink);
+  color:#FFFDF8;
+  box-shadow:0 6px 0 rgba(38,35,58,.22);
+}
+.grid{
+  grid-template-columns:repeat(auto-fill,minmax(245px,1fr));
+  gap:24px;
+}
+.card{
+  border-radius:18px;
+  border:2px solid rgba(38,35,58,.18);
+  background:
+    radial-gradient(120% 72% at 19% 10%, rgba(255,255,255,.92), transparent 55%),
+    radial-gradient(90% 82% at 86% 90%, color-mix(in srgb,var(--cc) 24%, transparent), transparent 62%),
+    linear-gradient(153deg,#FFF8E5 0%,#F6E6C8 65%,#EBD2A9 100%);
+  box-shadow:0 12px 0 rgba(38,35,58,.14),0 26px 50px -36px rgba(38,35,58,.74),inset 0 0 0 1px rgba(255,255,255,.54);
+}
+.card:hover{
+  transform:translateY(-10px) rotate(-1.2deg);
+  box-shadow:0 18px 0 rgba(38,35,58,.12),0 36px 64px -40px rgba(38,35,58,.80),inset 0 0 0 1px rgba(255,255,255,.64);
+}
+.card:nth-of-type(4n+1){transform:rotate(-.55deg)}
+.card:nth-of-type(4n+2){transform:rotate(.45deg)}
+.card:nth-of-type(4n+3){transform:rotate(-.25deg)}
+.card:nth-of-type(4n){transform:rotate(.65deg)}
+.card:nth-of-type(4n+1):hover,.card:nth-of-type(4n+2):hover,.card:nth-of-type(4n+3):hover,.card:nth-of-type(4n):hover{transform:translateY(-10px) rotate(-1.2deg)}
+.frame{border:2px solid rgba(38,35,58,.42);border-radius:13px}
+.frame::after{border-color:color-mix(in srgb,var(--cc) 58%,#FFFDF8);border-radius:9px}
+.corner::before,.corner::after{background:var(--cc)}
+.seal{
+  width:50px;height:50px;
+  color:#FFFDF8;
+  border:0;
+  background:var(--cc);
+  box-shadow:0 4px 0 rgba(38,35,58,.18),inset 0 0 0 2px rgba(255,255,255,.48);
+}
+.seal span{font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;font-size:16px}
+.rank{
+  color:var(--pop-ai);
+  font-weight:900;
+}
+.ringink{stroke:var(--pop-ink);stroke-width:1.8}
+.ink{stroke:var(--pop-ink);stroke-width:2.7}
+.ink-thin{stroke:var(--pop-ink);stroke-width:1.8}
+.gold{stroke:var(--cc);stroke-width:2;opacity:.9}
+.goldfill{fill:var(--cc);opacity:.9}
+.term{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-weight:900;
+  color:var(--pop-ink);
+  text-shadow:0 2px 0 rgba(255,255,255,.7);
+}
+.card .yomi{
+  color:#6C6075;
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:10px;
+  font-weight:900;
+}
+.line .lead{
+  color:var(--cc);
+  font-weight:900;
+}
+.line .txt{
+  color:#4E4653;
+  font-weight:800;
+}
+.beans .b{
+  background:#FFFDF8;
+  border:2px solid rgba(38,35,58,.36);
+}
+.beans .b.on{
+  background:radial-gradient(circle at 36% 32%, #FFFDF8 0 18%, var(--cc) 20% 100%);
+}
+.card[data-cat="greet"]{--cc:var(--pop-aqua)}
+.card[data-cat="nuance"]{--cc:var(--pop-sakura)}
+.card[data-cat="trap"]{--cc:var(--pop-mikan)}
+.card[data-cat="life"]{--cc:var(--pop-ume)}
+.card[data-cat="food"]{--cc:var(--pop-yuzu)}
+.card[data-cat="place"]{--cc:var(--pop-ai)}
+.card[data-cat="local"]{--cc:var(--matcha)}
+.card.honne{--cc:var(--pop-sakura)}
+.fuda-band{width:7px}
+.sechead{
+  border-radius:16px;
+  border:2px solid rgba(38,35,58,.13);
+  background:rgba(255,253,248,.70);
+  box-shadow:0 7px 0 rgba(38,35,58,.10);
+}
+.sechead h2{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-weight:900;
+}
+.sechead h2::before{
+  border:0;
+  background:var(--cc);
+  color:#FFFDF8;
+  box-shadow:0 3px 0 rgba(38,35,58,.16);
+}
+.modal{
+  border:2px solid rgba(38,35,58,.16);
+  border-radius:20px;
+  box-shadow:0 18px 0 rgba(38,35,58,.16),0 40px 80px -34px rgba(38,35,58,.72);
+}
+.modal-fuda{
+  background:
+    radial-gradient(120% 72% at 19% 10%, rgba(255,255,255,.92), transparent 55%),
+    radial-gradient(90% 82% at 86% 90%, color-mix(in srgb,var(--cc) 22%, transparent), transparent 62%),
+    linear-gradient(153deg,#FFF8E5 0%,#F6E6C8 65%,#EBD2A9 100%);
+}
+.modal-body{
+  background:rgba(255,253,248,.76);
+}
+.mhead h2{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  font-weight:900;
+}
+.choku,.honne,.scene{
+  border-radius:16px;
+  border-width:2px;
+}
+.choku{
+  background:#E5F8F3;
+  border-color:rgba(66,184,168,.45);
+}
+.honne{
+  background:#FCE4EA;
+  border-color:var(--pop-sakura);
+  color:#81314B;
+}
+.scene{
+  background:#FFF3D0;
+  border-left-color:var(--pop-mikan);
+}
+.rel button{
+  border:2px solid rgba(38,35,58,.14);
+  border-radius:12px;
+  background:#FFFDF8;
+  color:var(--pop-ai);
+  font-weight:900;
+  box-shadow:0 4px 0 rgba(38,35,58,.09);
+}
+footer .discl{
+  background:rgba(255,253,248,.72);
+  border:2px solid rgba(38,35,58,.12);
+  border-radius:16px;
+}
+@keyframes card-pop-in{
+  from{opacity:0;transform:translateY(18px) rotate(0deg) scale(.97)}
+}
+.card{animation:card-pop-in .42s cubic-bezier(.2,.85,.25,1.2) both}
+.card{
+  padding-bottom:52px;
+}
+.card:focus-visible{
+  outline:4px solid rgba(38,35,58,.34);
+  outline-offset:5px;
+}
+.inner{
+  bottom:54px;
+}
+.card .line{
+  max-height:4.45em;
+  overflow:hidden;
+  margin-bottom:8px;
+  flex:0 1 auto;
+}
+.card .line .txt{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.card .beans{
+  position:static;
+  margin-top:auto;
+  padding-top:8px;
+  flex:none;
+  width:100%;
+  min-height:18px;
+}
+.card-share{
+  position:absolute;
+  right:18px;
+  bottom:13px;
+  z-index:8;
+  border:2px solid rgba(38,35,58,.16);
+  border-radius:999px;
+  background:#FFFDF8;
+  color:var(--pop-ink);
+  font:inherit;
+  font-size:11px;
+  font-weight:900;
+  line-height:1;
+  padding:8px 10px;
+  cursor:pointer;
+  box-shadow:0 4px 0 rgba(38,35,58,.12);
+  transition:transform .15s, box-shadow .15s;
+}
+.card-share:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 0 rgba(38,35,58,.12);
+}
+.site-share{
+  max-width:760px;
+  margin:16px auto 0;
+  display:flex;
+  justify-content:flex-end;
+}
+.share-site-btn{
+  border:2px solid rgba(38,35,58,.16);
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan));
+  color:#FFFDF8;
+  font:inherit;
+  font-size:13px;
+  font-weight:900;
+  padding:10px 16px;
+  cursor:pointer;
+  box-shadow:0 6px 0 rgba(38,35,58,.16);
+}
+.share-site-btn:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){
+  .card{animation:none}
+  .chip:hover,.tab:hover,.card:hover{transform:none}
+}
+@media (max-width:720px){
+  .hero h1{font-size:clamp(31px,10vw,46px)}
+  .hero::before{font-size:11px}
+  .grid{gap:14px}
+  .card{border-radius:16px;box-shadow:0 8px 0 rgba(38,35,58,.12),0 20px 40px -34px rgba(38,35,58,.7)}
+  .seal{width:42px;height:42px}
+  .seal span{font-size:13px}
+  .inner{bottom:50px}
+  .card .beans{padding-top:6px;min-height:16px}
+  .card .line{max-height:3.75em;margin-bottom:6px}
+  .card .line .txt{-webkit-line-clamp:2}
+  .card-share{right:14px;bottom:11px;padding:7px 9px}
+  .site-share{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hbar">
+    <div class="logo">
+      <div class="mark">
+        <img src="assets/icons/app-icon-512.png" alt="" width="44" height="44">
+      </div>
+      <div><b>京ふれーず</b><small>RAKUCHU REAL</small></div>
+    </div>
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C7361" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="京ことばを検索（例：ぶぶ漬け、おおきに、よう言わんわ…）" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">Kyoto Dialect, Decoded</div>
+    <h1>京ふれーず<br><span class="u">洛中リアル</span>・京ことば辞典。</h1>
+    <p>おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。京都ことばの奥ゆかしさと、街のリアルな空気を味わえます。</p>
+
+    <div class="controls">
+      <div class="ctrlrow">
+        <span class="clabel">意訳モード <span class="chelp">直訳 → 意訳を表示</span></span>
+        <label class="toggle" id="ikToggle" role="switch" aria-checked="false" tabindex="0">
+          <span class="tt">OFF</span><span class="tswitch"></span>
+        </label>
+      </div>
+      <div class="meter">
+        <div class="mtop">
+          <span class="clabel">はんなり度メーター</span>
+          <span class="mval" id="hval">Lv.5 祇園の女将まで</span>
+        </div>
+        <input type="range" id="hslider" min="1" max="5" value="5" step="1">
+        <div class="mscale"><span>観光客</span><span>ご近所</span><span>京都人</span><span>旦那さん</span><span>女将</span></div>
+      </div>
+    </div>
+    <div class="site-share">
+      <button class="share-site-btn" id="shareSite" type="button">この辞典を共有</button>
+    </div>
+  </section>
+
+  <section class="trend">
+    <div class="tlabel"><span class="dot"></span> いま解読されてる京ことば</div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <div class="tabs" id="tabs"></div>
+  <section class="grid" id="grid"></section>
+</main>
+
+<div class="mback" id="mback">
+  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="discl">
+      ※ 本アプリの「意訳」は、京ことばや京都ローカル表現に含まれるニュアンスをユーモアを交えて表現したものです。すべての京都の方が同じ意図で使うわけではありません。京ことばの奥ゆかしさを楽しむための読み物としてお使いください。
+    </div>
+    京ふれーず ～洛中リアル・京ことば辞典～ — 京ことばを、直訳と意訳で。<br>
+    <div class="copy">© 2026 京ふれーず</div>
+  </div>
+</footer>
+
+<script>
+const CATS = {
+  greet:{label:"あいさつ・語尾", seal:"挨拶", css:"pop-aqua"},
+  nuance:{label:"含み・意訳表現", seal:"含み", css:"pop-sakura"},
+  trap:{label:"勘違い注意", seal:"注意", css:"pop-mikan"},
+  life:{label:"暮らしのことば", seal:"暮し", css:"pop-ume"},
+  food:{label:"食べもの・お茶", seal:"食", css:"pop-yuzu"},
+  place:{label:"地名・道案内", seal:"地名", css:"pop-ai"},
+  local:{label:"街・学生あるある", seal:"街", css:"matcha"}
+};
+const HANNARI = ["","観光客レベル","ご近所さんレベル","京都人レベル","老舗の旦那さんレベル","祇園の女将レベル"];
+
+// 京ことばデータ
+const D = [
+/* ---------- 定番の日常会話 ---------- */
+{k:"おいでやす",y:"oideyasu",c:"greet",e:"🙇",h:1,
+ choku:"いらっしゃいませ",honne:"ようこそ、まずはくつろいでおくれやす。",
+ why:"京都のお店で迎える定番の挨拶。<b>「おいで（お出で）」＋「やす」</b>の丁寧表現で、やわらかく歓迎する響き。観光でもいちばん耳にする京ことば。",
+ who:"店の女将さんが暖簾をくぐった客に",scene:"「おいでやす〜。奥、空いてますえ。」",
+ rel:["おこしやす","おおきに"]},
+{k:"おこしやす",y:"okoshiyasu",c:"greet",e:"🌸",h:2,
+ choku:"いらっしゃいませ（より丁寧）",honne:"わざわざ遠いとこ、よう来てくれはりました。",
+ why:"「おいでやす」よりもう一段丁寧。<b>予約客や、遠方からわざわざ来た大切な客</b>を迎えるときに使う、格上のもてなし表現。",
+ who:"料亭で予約客を迎えて",scene:"「〇〇様、おこしやす。お待ちしておりました。」",
+ rel:["おいでやす","はばかりさん"]},
+{k:"〜してはる",y:"shite-haru",c:"greet",e:"🐱",h:2,
+ choku:"〜していらっしゃる",honne:"（身近な相手にも自然に使う）〜してるわ。",
+ why:"京都の敬語のキモ。目上だけやのうて、<b>身近な人・ペット・時には雨にまで</b>使う親愛の表現。「雨降ってはるわ」で角が立たへん。",
+ who:"ご近所さんの世間話で",scene:"「隣の猫、また塀の上で寝てはるわ。」",
+ rel:["おおきに","ぼちぼち"]},
+{k:"おおきに",y:"ookini",c:"greet",e:"🙏",h:1,
+ choku:"ありがとう",honne:"ほんまに助かりました、感謝してます。",
+ why:"「大きに（おおきに）ありがとう」の略。<b>感謝の定番</b>で、店では「おおきに、また来ておくれやす」と続く。断りの語尾に付くと柔らかい拒否にもなる。",
+ who:"会計を済ませた客に",scene:"「おおきに〜。おおきに、ありがとうございます。」",
+ rel:["はばかりさん","かんにんね"]},
+{k:"かんにんね",y:"kannin-ne",c:"greet",e:"🙇‍♀️",h:1,
+ choku:"ごめんね／許してね",honne:"堪忍してな、悪う思わんといて。",
+ why:"「堪忍（かんにん）」から。<b>柔らかく許しを請う</b>謝罪。「ごめん」より角が立たず、日常の小さな詫びにぴったり。",
+ who:"約束に少し遅れて",scene:"「待たせてかんにんね、道が混んでてなあ。」",
+ rel:["おおきに","はばかりさん"]},
+{k:"ほな",y:"hona",c:"greet",e:"👋",h:1,
+ choku:"それでは／じゃあ",honne:"ほな、そういうことで。",
+ why:"「それなら」が縮まった接続。<b>会話の区切りや別れ際</b>に。「ほな、さいなら」「ほな、また」で締める京都の日常。",
+ who:"立ち話を切り上げて",scene:"「ほな、うちはこれで。気ぃつけて帰りや。」",
+ rel:["さいなら","ぼちぼち"]},
+{k:"はばかりさん",y:"habakari-san",c:"greet",e:"🍵",h:3,
+ choku:"お疲れさま／ありがとう（恐れ入ります）",honne:"手間かけさせて、すんまへんなあ。",
+ why:"「憚（はばか）る」から。<b>相手の労をねぎらいつつ恐縮する</b>言葉。ありがとうと、ご苦労さまと、恐れ入りますが混ざった京都らしい機微。",
+ who:"荷物を運んでもらって",scene:"「あら、はばかりさん。おおきに助かりましたわ。」",
+ rel:["おおきに","おやかまっさん"]},
+{k:"おやかまっさん",y:"oyakamassan",c:"greet",e:"🚪",h:3,
+ choku:"お邪魔しました",honne:"長居してしもて、お騒がせしました。",
+ why:"「お喧（やか）ましさん」から。<b>人の家を辞去するとき</b>の挨拶。上がるときは「ごめんやす」、帰るときは「おやかまっさん」。",
+ who:"よそのお宅を出るときに",scene:"「ほな、おやかまっさん。またおいでやす、て言うてもろて。」",
+ rel:["ごめんやす","さいなら"]},
+{k:"ごめんやす",y:"gomen-yasu",c:"greet",e:"🏮",h:2,
+ choku:"ごめんください",honne:"入らせてもらいますえ、よろしいか。",
+ why:"訪問時の「ごめんください」。<b>玄関先で来訪を告げる</b>京ことば。「おいでやす」で迎え、「ごめんやす」で訪ねる対の関係。",
+ who:"よそのお宅を訪ねて",scene:"「ごめんやす〜。〇〇ですけど、おられますか。」",
+ rel:["おやかまっさん","おいでやす"]},
+{k:"さいなら",y:"sainara",c:"greet",e:"🌙",h:1,
+ choku:"さようなら",honne:"ほな、また会いましょ。",
+ why:"「さようならば」の名残。京都では<b>やわらかく伸ばして「さいなら〜」</b>と言うことが多い。別れの定番。",
+ who:"子どもを見送って",scene:"「気ぃつけてな、さいなら〜。」",
+ rel:["ほな","おやかまっさん"]},
+
+/* ---------- 京都の裏表・いけず ---------- */
+{k:"元気なお子さんやねぇ",y:"genki na okosan",c:"ikezu",e:"👶",h:4,
+ choku:"元気なお子さんですね",honne:"ちょっとうるさいわ。静かにさせてもらえますか。",
+ why:"褒め言葉の形をした<b>やんわり注意</b>の代表格。「元気」は“にぎやか＝騒がしい”のマイルドな言い換え。笑顔で言われるほど要注意。",
+ who:"電車で騒ぐ子の親に、隣の女性が",scene:"「まあ、元気なお子さんやこと（…お静かに）。」",
+ rel:["よう勉強してはりますなぁ","声、よう通らはるなあ"]},
+{k:"ええ時計してはりますなぁ",y:"ee tokei",c:"ikezu",e:"⌚",h:5,
+ choku:"良い時計をされていますね",honne:"話が長い。時計見なあかんくらいや、そろそろお開きに。",
+ why:"ネットでも有名な<b>「もう帰って」の合図</b>。時計を話題にすることで“時間が押している＝長居”を遠回しに伝える究極のいけず。",
+ who:"長話の客に、玄関先で",scene:"「ほんに、ええ時計してはりますなぁ（…もう遅おすえ）。」",
+ rel:["ぶぶ漬けでもどうどす","元気でよろしいなあ"]},
+{k:"ぶぶ漬けでもどうどす",y:"bubuzuke demo",c:"ikezu",e:"🍚",h:5,
+ choku:"お茶漬けでもいかがですか？",honne:"もてなしはこれでおしまい。そろそろお帰りやす。",
+ why:"京都いけずの<b>金字塔</b>。本気で出てくることは稀で、「そろそろお帰りを」の合図とされる社交辞令。真に受けると角が立つ。",
+ who:"長居の客に、女将が微笑んで",scene:"「よろしかったら、ぶぶ漬けでもどうどす？」",
+ rel:["ええ時計してはりますなぁ","よう来てくれはったなあ、こんな遠いとこまで"]},
+{k:"よう勉強してはりますなぁ",y:"you benkyou",c:"ikezu",e:"📚",h:4,
+ choku:"よく勉強されていますね",honne:"そんな細かいことまで…ケチやなあ／必死やなあ。",
+ why:"値切りや細かい指摘をする相手への<b>皮肉</b>。“勉強”は商売で「値引き」の意もあり、二重に効いた京都らしい一言。",
+ who:"しつこく値切る客に、店主が",scene:"「いや〜、よう勉強してはりますなぁ（…しつこいわ）。」",
+ rel:["元気なお子さんやねぇ","賢いお子さんやこと"]},
+{k:"きれいにしてはりますなぁ",y:"kirei ni",c:"ikezu",e:"🧹",h:5,
+ choku:"きれいにされていますね",honne:"（皮肉で）散らかってはりますなあ／生活感すごいわ。",
+ why:"文脈次第で<b>真逆の意味</b>になる要注意フレーズ。目が笑っていないときは、片付けが行き届いていないことへのやんわりした当てこすり。",
+ who:"散らかった部屋を見て、来客が",scene:"「まあ…きれいにしてはりますなぁ（…ほんまに？）。」",
+ rel:["センスええなあ、派手で","元気でよろしいなあ"]},
+{k:"元気でよろしいなあ",y:"genki de yoroshii",c:"ikezu",e:"🌀",h:4,
+ choku:"元気でよろしいですね",honne:"落ち着きがないなあ／せわしないわ。",
+ why:"「元気」を褒めるふりをした<b>“落ち着きのなさ”への指摘</b>。バタバタしている人へやんわり。ええ時計と同系統の遠回し。",
+ who:"せわしなく動く同僚を見て",scene:"「ほんに、元気でよろしいなあ（…ちょっと落ち着き）。」",
+ rel:["まめに動かはるなあ","ええ時計してはりますなぁ"]},
+{k:"お若く見えますなぁ",y:"owakaku mieru",c:"ikezu",e:"🎈",h:4,
+ choku:"お若く見えますね",honne:"（ほめ言葉と、軽い・幼いの含みの両方あり）",
+ why:"素直な褒め言葉のことも多いが、場面によっては<b>「振る舞いが幼い・軽い」</b>という含みを持たせられる、含みの効いた一言。",
+ who:"はしゃぐ大人に、ご近所さんが",scene:"「あらあ、お若く見えますなぁ（…お年の割に）。」",
+ rel:["賢いお子さんやこと","元気でよろしいなあ"]},
+{k:"センスええなあ、派手で",y:"sense ee na",c:"ikezu",e:"🎨",h:5,
+ choku:"センスが良いですね、派手で",honne:"ちょっと派手すぎるんとちゃう？地味にしとき。",
+ why:"「センスええ」で持ち上げつつ「派手で」で落とす<b>ほめ落とし</b>。京都では“地味・上品”が良しとされるため、派手は暗に否定になりがち。",
+ who:"目立つ服の相手に",scene:"「わあ、センスええなあ…派手で（…目立つわ）。」",
+ rel:["きれいにしてはりますなぁ","お若く見えますなぁ"]},
+{k:"賢いお子さんやこと",y:"kashikoi okosan",c:"ikezu",e:"🎓",h:4,
+ choku:"賢いお子さんですね",honne:"こまっしゃくれてるなあ／口が達者やなあ。",
+ why:"「賢い」を額面通り取れないことも。<b>大人びて生意気・口が回りすぎる子</b>へのやんわりした当てこすりに転じる場合がある。",
+ who:"理屈っぽい子を前にして",scene:"「まあ、賢いお子さんやこと（…ようしゃべらはる）。」",
+ rel:["よう勉強してはりますなぁ","お若く見えますなぁ"]},
+{k:"よう来てくれはったなあ、こんな遠いとこまで",y:"you kite kureharu",c:"ikezu",e:"🚃",h:4,
+ choku:"よく来てくれましたね、こんな遠くまで",honne:"（純粋な歓迎とも、“遠いのにわざわざ”の含みとも取れる）",
+ why:"心からの歓迎の定型句だが、<b>間や表情次第で「わざわざ来はって（…もう十分）」</b>の含みも。文脈で読む京都の距離感。",
+ who:"長居しそうな遠来の客に",scene:"「よう来てくれはったなあ、こんな遠いとこまで（…お帰りも大変やろ）。」",
+ rel:["ぶぶ漬けでもどうどす","おこしやす"]},
+{k:"声、よう通らはるなあ",y:"koe you tooru",c:"ikezu",e:"📢",h:4,
+ choku:"声がよく通りますね",honne:"声が大きい。ちょっとうるさいわ。",
+ why:"「よく通る声」を褒める形にした<b>“声が大きい”のやんわり指摘</b>。カフェや静かな席での定番いけず。",
+ who:"大声で話す隣席の人に",scene:"「ほんに、声、よう通らはるなあ（…ここ静かにしよ）。」",
+ rel:["元気なお子さんやねぇ","元気でよろしいなあ"]},
+{k:"まめに動かはるなあ",y:"mame ni ugoku",c:"ikezu",e:"🐜",h:4,
+ choku:"まめに動かれますね",honne:"せわしない／落ち着きがないなあ。",
+ why:"勤勉さを褒めるようでいて、<b>「じっとしてられへんなあ」</b>のやんわり。ばたばたと動き回る様子への京都流コメント。",
+ who:"忙しなく片付ける人に",scene:"「まめに動かはるなあ（…そんな慌てんでも）。」",
+ rel:["元気でよろしいなあ","声、よう通らはるなあ"]},
+
+/* ---------- 勘違い注意・地雷回避 ---------- */
+{k:"よう言わんわ",y:"you iwan wa",c:"trap",e:"🙄",h:3,
+ choku:"よく言えないなあ（と読むと誤解）",honne:"よくそんな図々しいこと言えるね。呆れたわ。",
+ why:"直訳の「言えない」ではなく<b>「呆れてものが言えない／よくもまあ」</b>の意。感心ではなく“あきれ”。真逆に受け取りやすい地雷。",
+ who:"厚かましい頼みごとに",scene:"「タダでやってくれ？…よう言わんわ（呆）。」",
+ rel:["かなん","いけず"]},
+{k:"考えときます",y:"kangaetokimasu",c:"trap",e:"🤔",h:3,
+ choku:"検討します",honne:"（99%）お断りします。",
+ why:"京都に限らず関西全般で有名な<b>やんわり拒否</b>。前向きな検討ではなく、その場を穏やかに収める社交辞令であることが多い。",
+ who:"勧誘や営業を受けて",scene:"「ええ話やけど…考えときますわ（＝結構です）。」",
+ rel:["よろしおすなあ","かまへんかまへん"]},
+{k:"かまへんかまへん",y:"kamahen",c:"trap",e:"🙅",h:2,
+ choku:"構いません／大丈夫です",honne:"気にせんといて（or 目が笑ってなければ「もうええわ」）。",
+ why:"基本は<b>「気にしないで」</b>のやさしい言葉。ただし表情や声色が固いときは「もういい（怒）」の可能性も。トーンで読む。",
+ who:"謝る相手をなだめて",scene:"「ええて、かまへんかまへん。気にせんとき。」",
+ rel:["だんない","考えときます"]},
+{k:"だんない",y:"dannai",c:"trap",e:"👍",h:3,
+ choku:"問題ない／差し支えない",honne:"大丈夫、平気やで。",
+ why:"「大事（だいじ）ない」から。<b>「かまへん」と同じく“問題ない”</b>の意。年配の方がよく使う、落ち着いた大丈夫の言い回し。",
+ who:"手伝いを遠慮する相手に",scene:"「そんくらい、だんないだんない。まかしとき。」",
+ rel:["かまへんかまへん","かなん"]},
+{k:"いけず",y:"ikezu",c:"trap",e:"😈",h:2,
+ choku:"意地悪",honne:"意地が悪いなあ（親しみを込めた軽口にも）。",
+ why:"京都文化を象徴する語。<b>「意地悪」</b>の意で、本気の非難から、じゃれ合いの軽口まで幅広い。「いけずせんといて〜」で甘えにも。",
+ who:"からかってくる相手に",scene:"「もう、いけずやなあ〜。ほんまに意地悪。」",
+ rel:["よう言わんわ","かなん"]},
+{k:"えらい",y:"erai",c:"trap",e:"😮‍💨",h:2,
+ choku:"偉い（と読むと誤解）",honne:"疲れた／大変や／ひどい。",
+ why:"「立派」ではなく<b>「疲れた・大変」</b>の意で使うのが関西・京都流。「今日はえらかったわ」は“偉かった”ではなく“しんどかった”。",
+ who:"仕事帰りにひと息ついて",scene:"「今日はえらかったわ〜（＝くたびれた）。」",
+ rel:["かなん","しんきくさい"]},
+{k:"なおす",y:"naosu",c:"trap",e:"📦",h:2,
+ choku:"直す・修理する（と読むと誤解）",honne:"片付ける／しまう。",
+ why:"京都・関西では<b>「片付ける・しまう」</b>の意。「これ、なおしといて」は修理ではなく“元の場所に戻して”。県外の人が最も戸惑う語。",
+ who:"食卓を片付けながら",scene:"「お皿、戸棚になおしといてな（＝しまって）。」",
+ rel:["ほかす","だんない"]},
+{k:"ほかす",y:"hokasu",c:"trap",e:"🗑️",h:2,
+ choku:"（意味の想像がつかない）",honne:"捨てる／放る。",
+ why:"「放（ほう）る」系の関西弁で<b>「捨てる」</b>の意。「これほかしといて」は“捨てておいて”。「なおす」と対で覚えると混乱しにくい。",
+ who:"ゴミを指さして",scene:"「その紙くず、ほかしといて（＝捨てて）。」",
+ rel:["なおす","かなん"]},
+{k:"かなん",y:"kanan",c:"trap",e:"😣",h:2,
+ choku:"（意味の想像がつかない）",honne:"困る／いやや／かなわん。",
+ why:"「かなわん（叶わない）」から。<b>「困る・うんざり・いやだ」</b>の気持ち。「雨はかなんなあ」で“雨は嫌やなあ”。",
+ who:"降り出した雨を見て",scene:"「あー、かなんなあ、傘持ってへんのに。」",
+ rel:["えらい","しんきくさい"]},
+{k:"いちびり",y:"ichibiri",c:"trap",e:"🤪",h:3,
+ choku:"（意味の想像がつかない）",honne:"調子に乗る人／お調子者・ふざける。",
+ why:"<b>「調子に乗ってふざける人」</b>や、その振る舞い。「いちびってんと（＝調子に乗ってないで）」のように動詞でも使う関西の定番。",
+ who:"はしゃぎすぎる友を止めて",scene:"「いちびってんと、ちゃんとしいや。」",
+ rel:["やんちゃ","えげつない"]},
+{k:"おぶ",y:"obu",c:"trap",e:"🍵",h:3,
+ choku:"（意味の想像がつかない）",honne:"お茶（白湯・番茶）。",
+ why:"「おぶう」とも。<b>「お茶」</b>の古風で丁寧な言い方。「おぶ、いれよか？」で“お茶淹れよか”。年配の京都の方の言葉。",
+ who:"来客にひと息すすめて",scene:"「まあ、おぶでも一杯どうどす。」",
+ rel:["はばかりさん","ぶぶ漬けでもどうどす"]},
+{k:"きずつない",y:"kizutsunai",c:"trap",e:"😳",h:4,
+ choku:"傷つかない（と読むと誤解）",honne:"気が引ける／恐縮する／申し訳ない。",
+ why:"「傷つかない」ではなく<b>「面映ゆい・気の毒で気が引ける」</b>の意。よくしてもらって恐縮するときの、奥ゆかしい京ことば。",
+ who:"手厚いもてなしを受けて",scene:"「そんなようしてもろて、きずつないわあ。」",
+ rel:["はばかりさん","おおきに"]},
+
+/* ---------- 京の単語・言い回し ---------- */
+{k:"はんなり",y:"hannari",c:"word",e:"🌸",h:3,
+ choku:"（雰囲気語）",honne:"上品で明るく、華やかやのに落ち着いてる様子。",
+ why:"京都らしさを象徴する形容。<b>「派手やのうて上品、それでいて明るく華やか」</b>という絶妙な塩梅。着物や所作、人柄を褒めるのに使う。",
+ who:"淡い色の着物姿を見て",scene:"「はんなりした、ええお着物どすなあ。」",
+ rel:["やんちゃ","ぼちぼち"]},
+{k:"ぼちぼち",y:"bochibochi",c:"word",e:"🐌",h:1,
+ choku:"まあまあ／そろそろ",honne:"ぼちぼちやってます（謙遜）／そろそろ行こか。",
+ why:"「儲かりまっか？」への返し「ぼちぼちでんな」で有名。<b>「まあまあ」の謙遜</b>と、<b>「そろそろ」の合図</b>の二役をこなす便利語。",
+ who:"調子を聞かれて謙遜し",scene:"「商売？ ぼちぼちでんなあ（＝まあまあです）。」",
+ rel:["ほな","〜してはる"]},
+{k:"なんぼ",y:"nanbo",c:"word",e:"💴",h:2,
+ choku:"いくら",honne:"これ、なんぼ？（値段は？）",
+ why:"<b>「いくら（値段・数量）」</b>の関西・京都弁。「なんぼのもんじゃい」で“大したもんか”の啖呵にも。買い物で日常的に飛び交う。",
+ who:"店先で値段を尋ねて",scene:"「これ、なんぼどす？ ちょっと勉強してえな。」",
+ rel:["ようけ","おおきに"]},
+{k:"ようけ",y:"youke",c:"word",e:"🈵",h:2,
+ choku:"たくさん",honne:"ようけ（いっぱい）あるわ。",
+ why:"<b>「たくさん・いっぱい」</b>の意。「ようけおおきに（＝どうもたくさんありがとう）」のように重ねても使う、あたたかい響き。",
+ who:"おすそ分けを渡して",scene:"「畑のもん、ようけあるし持って帰り。」",
+ rel:["なんぼ","ぼちぼち"]},
+{k:"やんちゃ",y:"yancha",c:"word",e:"😝",h:2,
+ choku:"わんぱく・いたずら",honne:"やんちゃ（腕白・やんちゃ坊主）やなあ。",
+ why:"全国区の語だが京都でも日常的。<b>子どものいたずらや、若気の無鉄砲</b>を、どこか許すニュアンスで。「やんちゃしてたわ」で昔の武勇伝にも。",
+ who:"元気な子を見て笑い",scene:"「よう動く、やんちゃな子やこと。」",
+ rel:["いちびり","こそばい"]},
+{k:"こそばい",y:"kosobai",c:"word",e:"🤭",h:2,
+ choku:"くすぐったい",honne:"こそばいっ！（くすぐったい）",
+ why:"<b>「くすぐったい」</b>の関西・京都弁。物理的なくすぐったさにも、褒められて照れる“こそばゆい”気持ちにも使える。",
+ who:"急にくすぐられて",scene:"「わっ、こそばいてやめてえな〜。」",
+ rel:["やんちゃ","きずつない"]},
+{k:"しんきくさい",y:"shinkikusai",c:"word",e:"🌀",h:3,
+ choku:"（意味の想像がつかない）",honne:"まどろっこしい／じれったい／辛気くさい。",
+ why:"「辛気（しんき）くさい」。<b>「じれったい・まどろっこしい・陰気」</b>の意。話や動作が遅くてイライラする様子に。",
+ who:"要領を得ない説明に",scene:"「もう、しんきくさいなあ。早う言うてえな。」",
+ rel:["えらい","かなん"]},
+{k:"えげつない",y:"egetsunai",c:"word",e:"😵",h:3,
+ choku:"（意味の想像がつかない）",honne:"どぎつい／度を越してる／すごい（良くも悪くも）。",
+ why:"元は<b>「あくどい・容赦ない」</b>。今は「えげつない量」「えげつなく旨い」のように<b>“ものすごい”の強調</b>としても広く使う。",
+ who:"驚くほどの盛りを見て",scene:"「うわ、この大盛りえげつないな（＝すごい）。」",
+ rel:["いちびり","しんきくさい"]},
+{k:"よろしおすなあ",y:"yoroshii-osu",c:"word",e:"✨",h:3,
+ choku:"いいですね",honne:"ええですなあ（本心の称賛にも、社交辞令にも）。",
+ why:"「よろしい」＋京の丁寧語「おす」。<b>穏やかな称賛</b>。ただし場面によっては当たり障りのない相づち＝深入りを避ける社交辞令にもなる。",
+ who:"相手の話に品よく相づち",scene:"「まあ、よろしおすなあ（＝ええですねえ）。」",
+ rel:["考えときます","はんなり"]},
+];
+
+const EXTRA_D = [
+/* ---------- 追加: 挨拶・語尾・日常 ---------- */
+{k:"おきばりやす",y:"okibariyasu",c:"greet",e:"💪",h:2,
+ choku:"頑張ってください",honne:"無理せん程度に、しっかりやりなはれ。",
+ why:"「気張る」から来た励ましの言葉。目下や同等の相手に、やわらかく背中を押す京ことば。",
+ who:"出かける相手や仕事前の人に",scene:"「お仕事、おきばりやすね。」",
+ rel:["おおきに","ほな"]},
+{k:"おはようおかえりやす",y:"ohayou-okaeriyasu",c:"greet",e:"🏠",h:4,
+ choku:"行ってらっしゃい",honne:"早う無事に帰ってきておくれやす。",
+ why:"送り出しの言葉に、帰りを待つ気持ちが込められた表現。京都らしい生活の祈りがある。",
+ who:"家族や近しい人を見送って",scene:"「気ぃつけて、おはようおかえりやす。」",
+ rel:["さいなら","ほな"]},
+{k:"めっそうな",y:"messouna",c:"greet",e:"🙌",h:3,
+ choku:"とんでもない／どういたしまして",honne:"そんな大層なことやありません。",
+ why:"「滅相もない」の京ことば調。褒められたり礼を言われたりした時に、謙遜して受ける。",
+ who:"お礼を言われて恐縮しながら",scene:"「めっそうなことでございます、滅相もない。」",
+ rel:["おおきに","きずつない"]},
+{k:"かんにん",y:"kannin",c:"greet",e:"🙇",h:1,
+ choku:"ごめんなさい／許してください",honne:"悪う思わんといて、堪忍してな。",
+ why:"既存の「かんにんね」より短く日常的な言い方。軽い謝罪から本気の詫びまで幅広い。",
+ who:"遅刻してしまって",scene:"「遅なってかんにんな。」",
+ rel:["かんにんね","めっそうな"]},
+{k:"堪忍しとくれやす",y:"kannin shitokureyasu",c:"greet",e:"🙇",h:4,
+ choku:"許してください",honne:"どうぞ堪忍しておくれやす。",
+ why:"「かんにん」をさらに丁寧にした言い方。昔ながらの響きがあり、申し訳なさを強く出す。",
+ who:"迷惑をかけた相手に深く詫びて",scene:"「ほんま堪忍しとくれやす。」",
+ rel:["かんにん","きずつない"]},
+{k:"ぼちぼちどす",y:"bochibochi-dosu",c:"greet",e:"🐌",h:2,
+ choku:"まあまあです／相変わらずです",honne:"良すぎも悪すぎもせん、いつも通りですわ。",
+ why:"景気や調子を聞かれた時の定番返答。控えめに濁すことで、深入りしすぎない距離感を作る。",
+ who:"商売の調子を聞かれて",scene:"「景気はどうどす？」「うーん、ぼちぼちどすな。」",
+ rel:["ぼちぼち","おおきに"]},
+{k:"〜どす",y:"dosu",c:"greet",e:"🗣️",h:2,
+ choku:"〜です",honne:"丁寧で京都らしい語尾どす。",
+ why:"京ことばを象徴する丁寧語尾。現代の日常では場面を選ぶが、雰囲気を作る力が強い。",
+ who:"品よく説明して",scene:"「そうでどす（そうです）。」",
+ rel:["〜おす","よろしおすなあ"]},
+{k:"〜おす",y:"osu",c:"greet",e:"🗣️",h:3,
+ choku:"〜です／〜ます",honne:"やわらかく上品に言い切る語尾。",
+ why:"「どす」と並ぶ京ことばの丁寧語尾。「よろしおす」のように形容にもつく。",
+ who:"相づちや評価をやわらかく",scene:"「よろしおすな（いいですね）。」",
+ rel:["〜どす","よろしおすなあ"]},
+{k:"〜へん",y:"hen",c:"trap",e:"🙅",h:1,
+ choku:"〜ない",honne:"行かへん、食べへん、のような否定表現。",
+ why:"関西・京都で広く使う否定の語尾。標準語の「ない」にあたる。",
+ who:"予定を聞かれて",scene:"「今日は行かへんわ。」",
+ rel:["〜してはる","あかん"]},
+
+/* ---------- 追加: 特徴的な単語・表現 ---------- */
+{k:"しぶちん",y:"shibuchin",c:"word",e:"💰",h:3,
+ choku:"ケチ／出し渋る人",honne:"お金や労力をなかなか出さへん人。",
+ why:"財布の紐が固い相手を少し茶化して言う語。軽口にも批判にもなる。",
+ who:"なかなか奢らない人を見て",scene:"「あの社長はしぶちんやし期待できひん。」",
+ rel:["なんぼ","始末"]},
+{k:"けったいな",y:"kettai-na",c:"word",e:"🌀",h:2,
+ choku:"変な／奇妙な",honne:"妙な感じやな、ちょっと普通やないな。",
+ why:"関西でよく使う「奇妙な」の表現。笑える変さから不審さまで幅がある。",
+ who:"不思議な話を聞いて",scene:"「けったいな話やなぁ。」",
+ rel:["えげつない","しんきくさい"]},
+{k:"かいらしい",y:"kairashii",c:"word",e:"🌸",h:2,
+ choku:"かわいらしい",honne:"愛らしくて、見ていてほほえましい。",
+ why:"「かわいらしい」がやわらかく崩れた言い方。子どもや小物、仕草に使いやすい。",
+ who:"赤ちゃんを見て",scene:"「かいらしい赤ちゃんやこと。」",
+ rel:["べっぴんさん","はんなり"]},
+{k:"ぬくい",y:"nukui",c:"word",e:"♨️",h:1,
+ choku:"暖かい／温かい",honne:"ほどよくあったかいわ。",
+ why:"気温や飲み物、布団などが温かい時に使う関西・京都の言い方。",
+ who:"春めいた日に",scene:"「今日はえらいぬくいなぁ。」",
+ rel:["ひやこい","ほっこり"]},
+{k:"ひやこい",y:"hiyakoi",c:"word",e:"🧊",h:2,
+ choku:"冷たい",honne:"手や水がひんやりしてる。",
+ why:"「冷たい」のやわらかい言い方。体感温度をそのまま伝える生活語。",
+ who:"冷えた手を触って",scene:"「手ぇがひやこい。」",
+ rel:["ぬくい","つべたい"]},
+{k:"つべたい",y:"tsubetai",c:"word",e:"🧊",h:2,
+ choku:"冷たい",honne:"ひやっと冷たいなあ。",
+ why:"「冷たい」が変化した言い方。水や風、手の冷たさに使う。",
+ who:"水を頼んで",scene:"「つべたい水ちょうだい。」",
+ rel:["ひやこい","おひや"]},
+{k:"しんどい",y:"shindoi",c:"word",e:"😮‍💨",h:1,
+ choku:"疲れた／苦しい／体調が悪い",honne:"もうちょっと休ませてほしい。",
+ why:"疲労や体調不良を表す日常語。関西ではかなり幅広く使う。",
+ who:"仕事帰りに",scene:"「あーしんど、ちょっと休むわ。」",
+ rel:["えらい","ほっこり"]},
+{k:"ぎょうさん",y:"gyousan",c:"word",e:"🧺",h:2,
+ choku:"たくさん",honne:"思ったよりいっぱいある。",
+ why:"量の多さを表す京ことば・関西弁。贈り物や食べ物に相性がいい。",
+ who:"おすそ分けを受け取って",scene:"「ぎょうさん貰うてしもた。」",
+ rel:["ようけ","たんと"]},
+{k:"よーけ",y:"youke",c:"word",e:"🧺",h:2,
+ choku:"たくさん",honne:"いっぱい入ってるなあ。",
+ why:"既存の「ようけ」と同じ意味の表記違い。会話では伸ばして聞こえることも多い。",
+ who:"袋の中を見て",scene:"「よーけ入ってるな。」",
+ rel:["ようけ","ぎょうさん"]},
+{k:"たんと",y:"tanto",c:"word",e:"🍚",h:2,
+ choku:"たくさん",honne:"遠慮せんといっぱいどうぞ。",
+ why:"食べ物や量に使う、あたたかい響きの言葉。すすめる時にぴったり。",
+ who:"食卓で料理をすすめて",scene:"「たんと食べよし。」",
+ rel:["ぎょうさん","まんま"]},
+{k:"おぶう",y:"obuu",c:"word",e:"🍵",h:3,
+ choku:"お茶／お湯",honne:"あたたかいお茶でもどうぞ。",
+ why:"既存の「おぶ」の別表記・伸ばした言い方。年配の方の言葉としても味わいがある。",
+ who:"来客にすすめて",scene:"「おぶうでも一杯あがってください。」",
+ rel:["おぶ","おひや"]},
+{k:"まんま",y:"manma",c:"word",e:"🍚",h:1,
+ choku:"ご飯",honne:"ごはん食べよか。",
+ why:"幼児語にも近い日常の食事表現。家庭的でやわらかい響きがある。",
+ who:"子どもに声をかけて",scene:"「まんま食べよか。」",
+ rel:["たんと","じぶんどき"]},
+{k:"おばんざい",y:"obanzai",c:"word",e:"🥢",h:2,
+ choku:"お惣菜／日常のおかず",honne:"家で食べるような普段のおかず。",
+ why:"京都の家庭料理として広く知られる言葉。観光向けにも使われるが、本来は日常のおかず。",
+ who:"夕飯の支度で",scene:"「今日のおばんざいは何？」",
+ rel:["おあげさん","おこうこ"]},
+{k:"あんじょう",y:"anjou",c:"word",e:"👌",h:3,
+ choku:"上手に／うまく／味よく",honne:"ええ具合に頼みます。",
+ why:"物事をうまく整えるニュアンス。仕事・料理・交渉など幅広く使える。",
+ who:"段取りを任せて",scene:"「あんじょうやっといてや。」",
+ rel:["せーだい","よろしおすなあ"]},
+{k:"せーだい",y:"seedai",c:"word",e:"💪",h:2,
+ choku:"たくさん／精いっぱい",honne:"できるだけしっかりやりなはれ。",
+ why:"「精出して」に近い励まし。努力量を表す時に使う。",
+ who:"応援して",scene:"「せーだい頑張りや。」",
+ rel:["おきばりやす","あんじょう"]},
+{k:"そーろと",y:"sooroto",c:"word",e:"👣",h:3,
+ choku:"ゆっくり／そっと",honne:"急がず静かに気ぃつけて。",
+ why:"動作を静かに、ゆっくり行う感じを出す言葉。足元の悪い時にも使う。",
+ who:"雨上がりの道で",scene:"「足元悪いし、そーろと歩きよし。」",
+ rel:["ぼちぼち","だんない"]},
+{k:"おつれ",y:"otsure",c:"word",e:"👥",h:2,
+ choku:"友達／同伴者",honne:"一緒に来てはる方。",
+ why:"店や案内で、同伴者を丁寧に指す言葉。接客で耳にすることがある。",
+ who:"店員が人数を確認して",scene:"「おつれさんはどちらですか？」",
+ rel:["おいでやす","おこしやす"]},
+{k:"あかん",y:"akan",c:"trap",e:"✋",h:1,
+ choku:"だめ／いけない",honne:"それはやめとき、もう無理や。",
+ why:"関西の基本語。禁止にも、失敗や限界にも使う便利な否定表現。",
+ who:"危ないことを止めて",scene:"「それしたらあかん。」",
+ rel:["〜へん","かなん"]},
+{k:"始末",y:"shimatsu",c:"word",e:"🧵",h:4,
+ choku:"節約してやりくりすること",honne:"もったいない精神で、無駄なく暮らす。",
+ why:"京都で語られる価値観の一つ。単なるケチではなく、物を大切に使う知恵を含む。",
+ who:"食材を使い切りながら",scene:"「京都人は始末せなあかん。」",
+ rel:["しぶちん","おばんざい"]},
+{k:"じぶんどき",y:"jibundoki",c:"word",e:"🍽️",h:4,
+ choku:"食事時／ご飯の時間",honne:"ちょうど食べる頃合い。",
+ why:"食事の時間帯を指す古風な言い方。訪問時には気遣いの文脈で出やすい。",
+ who:"昼時に訪ねて",scene:"「じぶんどきにお邪魔して堪忍な。」",
+ rel:["まんま","かんにん"]},
+{k:"にぬき",y:"ninuki",c:"word",e:"🥚",h:3,
+ choku:"ゆで卵",honne:"固ゆでの卵。",
+ why:"関西で使われるゆで卵の言い方。料理や食堂の会話に出る。",
+ who:"注文しながら",scene:"「ラーメンににぬきトッピングする？」",
+ rel:["まんま","おばんざい"]},
+{k:"むしやしない",y:"mushiyashinai",c:"word",e:"🥐",h:4,
+ choku:"間食／小腹を満たすもの",honne:"ちょっと食べて腹の虫をなだめる。",
+ why:"「虫養い」から。軽く食べて空腹をしのぐ、昔ながらの表現。",
+ who:"夕飯前に",scene:"「ちょっとむしやしないにパンでも食べよ。」",
+ rel:["じぶんどき","たんと"]},
+{k:"よばれる",y:"yobareru",c:"word",e:"🍡",h:3,
+ choku:"ご馳走になる／いただく",honne:"ありがたくいただきます。",
+ why:"食べ物やもてなしを受ける時に使う。招かれる意味が食事に寄った表現。",
+ who:"お菓子をすすめられて",scene:"「お菓子よばれます。」",
+ rel:["おおきに","おぶ"]},
+{k:"おあげさん",y:"oage-san",c:"word",e:"🟧",h:2,
+ choku:"油揚げ",honne:"お味噌汁や炊いたんに入れる油揚げ。",
+ why:"食材に「さん」をつける親しみある言い方。京都の食の言葉らしいやわらかさがある。",
+ who:"味噌汁を作りながら",scene:"「お味噌汁におあげさん入れよ。」",
+ rel:["おばんざい","おしたじ"]},
+{k:"おこうこ",y:"okouko",c:"word",e:"🥒",h:3,
+ choku:"たくあん／お漬物",honne:"ご飯のお供のお漬物。",
+ why:"香の物が変化した言葉。京都の食卓に似合う、素朴な食の表現。",
+ who:"食卓で",scene:"「おこうこ切って。」",
+ rel:["おばんざい","まんま"]},
+{k:"いっちょうら",y:"icchoura",c:"word",e:"👘",h:2,
+ choku:"一番良い服／勝負服",honne:"今日はこれぞという服で出かける。",
+ why:"特別な日に着る一張羅。着物にも普段着にも使える。",
+ who:"出かける前に",scene:"「今日はいっちょうら着て出かけるわ。」",
+ rel:["はんなり","べっぴんさん"]},
+{k:"ほっこり",y:"hokkori",c:"word",e:"♨️",h:2,
+ choku:"ほっとする／疲れが取れる",honne:"あたたかく落ち着いた気分になる。",
+ why:"全国的にも使われるが、京都では疲れがほどける感覚にも合う。",
+ who:"温泉のあとで",scene:"「温泉入ってほっこりしたわ。」",
+ rel:["ぬくい","しんどい"]},
+{k:"べっぴんさん",y:"beppin-san",c:"word",e:"🌺",h:2,
+ choku:"美人",honne:"品のあるきれいな人やね。",
+ why:"人を褒める言葉。語尾の「さん」でやわらかく、親しみも出る。",
+ who:"ご近所の評判で",scene:"「あそこの娘さん、べっぴんさんやね。」",
+ rel:["かいらしい","はんなり"]},
+{k:"おひや",y:"ohiya",c:"word",e:"💧",h:1,
+ choku:"お水",honne:"冷たい水をください。",
+ why:"飲食店で通じやすい水の言い方。京都に限らず広く使われる。",
+ who:"食堂で",scene:"「おひやおかわりください。」",
+ rel:["つべたい","おぶ"]},
+{k:"おしたじ",y:"oshitaji",c:"word",e:"🧂",h:4,
+ choku:"醤油",honne:"味つけの醤油。",
+ why:"醤油を指す古風な言い方。食卓の細かな語彙として味がある。",
+ who:"食卓で",scene:"「おしたじ取って。」",
+ rel:["おあげさん","おばんざい"]},
+{k:"どんつき",y:"dontsuki",c:"word",e:"↪️",h:2,
+ choku:"行き止まり／突き当たり",honne:"道の一番奥まで行ったところ。",
+ why:"道案内で便利な関西表現。京都の碁盤の目の道でもよく使える。",
+ who:"道を教えて",scene:"「この道のどんつきを右に曲がって。」",
+ rel:["上がる","下る"]},
+{k:"上がる",y:"agaru",c:"word",e:"⬆️",h:3,
+ choku:"北へ行く",honne:"京都の通りで北方向へ進む。",
+ why:"京都の住所・道案内で重要な方角表現。碁盤の目の街ならではの言い方。",
+ who:"場所を案内して",scene:"「四条通をちょっと上がった右側。」",
+ rel:["下る","西入る"]},
+{k:"下る",y:"sagaru",c:"word",e:"⬇️",h:3,
+ choku:"南へ行く",honne:"京都の通りで南方向へ進む。",
+ why:"「上がる」の反対。京都の住所表示にもよく出る。",
+ who:"道順を説明して",scene:"「烏丸通を下る。」",
+ rel:["上がる","東入る"]},
+{k:"西入る",y:"nishi-iru",c:"word",e:"⬅️",h:3,
+ choku:"西へ行く",honne:"通りから西方向に入る。",
+ why:"京都の住所・道案内で使われる方角表現。東西南北で覚えると便利。",
+ who:"店の場所を伝えて",scene:"「四条通から西入る。」",
+ rel:["東入る","上がる"]},
+{k:"東入る",y:"higashi-iru",c:"word",e:"➡️",h:3,
+ choku:"東へ行く",honne:"通りから東方向に入る。",
+ why:"「西入る」と対になる京都の道案内語。住所表記にも現れる。",
+ who:"待ち合わせ場所を伝えて",scene:"「河原町通から東入る。」",
+ rel:["西入る","下る"]},
+{k:"丸竹夷",y:"marutake-ebisu",c:"word",e:"🎵",h:4,
+ choku:"東西の通りの数え歌",honne:"通り名を歌で覚える京都の知恵。",
+ why:"京都の東西通りを覚えるための数え歌。土地勘の入口になるローカル知識。",
+ who:"通り名を思い出しながら",scene:"「まる たけ えびす に おし おいけ…で覚えたわ。」",
+ rel:["寺御幸","上がる"]},
+{k:"寺御幸",y:"teragoko",c:"word",e:"🎵",h:4,
+ choku:"南北の通りの数え歌",honne:"南北の通り名も歌でたどる。",
+ why:"南北の通りを覚える数え歌。京都の住所感覚を支えるローカル知識。",
+ who:"地図を見ながら",scene:"「てら ごこ ふや とみ やなぎ さかい…で探す。」",
+ rel:["丸竹夷","東入る"]},
+{k:"裏寺",y:"uratera",c:"word",e:"🛍️",h:3,
+ choku:"裏寺町通周辺",honne:"古着屋や店を巡るエリア。",
+ why:"河原町近くの通り・エリア名。街歩きの会話に出る。",
+ who:"休日の予定で",scene:"「裏寺の古着屋巡るわ。」",
+ rel:["木屋町","先斗町"]},
+{k:"木屋町",y:"kiyamachi",c:"word",e:"🍶",h:2,
+ choku:"高瀬川沿いの歓楽街",honne:"飲食店や夜の街のエリア。",
+ why:"京都中心部の飲食・歓楽街として知られる通り。夜の会話に出やすい。",
+ who:"飲み会の相談で",scene:"「木屋町で朝まで飲む。」",
+ rel:["先斗町","裏寺"]},
+{k:"先斗町",y:"pontocho",c:"word",e:"🏮",h:3,
+ choku:"花街・飲食店街",honne:"細い路地に店が並ぶ、少し緊張する京都らしい場所。",
+ why:"読み方も特徴的な京都の名所。観光と地元の飲食が交差するエリア。",
+ who:"食事の予定で",scene:"「先斗町でご飯はちょっと緊張する。」",
+ rel:["木屋町","よそさん"]},
+{k:"ちゃんばら",y:"chanbara",c:"word",e:"⚔️",h:2,
+ choku:"殺陣の俗称",honne:"時代劇の斬り合いごっこや練習。",
+ why:"太秦など映像文化の文脈でも聞く言葉。時代劇らしい京都ローカル感がある。",
+ who:"撮影所の話題で",scene:"「太秦でちゃんばらの練習してはる。」",
+ rel:["太秦のロケに遭遇する","〜してはる"]},
+{k:"よそさん",y:"yoso-san",c:"trap",e:"🏘️",h:4,
+ choku:"京都外の出身者・企業",honne:"外から来はった人ら、という距離感。",
+ why:"単なる外部者以上に、内と外の感覚を含む言い方。文脈次第で冷たくも聞こえる。",
+ who:"地元企業の話で",scene:"「あそこはよそさんの企業やさかいな。」",
+ rel:["洛中やから…","よそ者"]},
+{k:"よそ者",y:"yoso-mono",c:"trap",e:"🏘️",h:4,
+ choku:"外から来た人",honne:"まだ土地の内側とは見なしてへん人。",
+ why:"地域の内外意識を表す言葉。強く言うと排他的に響くので注意。",
+ who:"地元の距離感を語って",scene:"「京都では、よそ者扱いされることもあるわ。」",
+ rel:["よそさん","洛中やから…"]},
+
+/* ---------- 追加: 皮肉・ミーム ---------- */
+{k:"ぶぶ漬けでもどうどすか",y:"bubuzuke demo dou dosu ka",c:"ikezu",e:"🍚",h:5,
+ choku:"お茶漬けでもいかがですか",honne:"もう帰ってください、という都市伝説ミーム。",
+ why:"既存の「ぶぶ漬けでもどうどす」の言い換え。実際にはミームとして語られることが多い。",
+ who:"長居の客への定番ネタとして",scene:"「ぶぶ漬けでもどうどすか、と言われたら即帰るのがマナー、という話。」",
+ rel:["ぶぶ漬けでもどうどす","ええ時計してはりますなぁ"]},
+{k:"面白い人どすな",y:"omoshiroi hito dosu na",c:"ikezu",e:"🎭",h:4,
+ choku:"面白い人ですね",honne:"変わってるね／ちょっと変人ですね。",
+ why:"褒めているようで、距離を置いた評価にもなる含み言葉。声色で意味が変わる。",
+ who:"独特な人を評して",scene:"「〇〇さん、ほんま面白い人どすな。」",
+ rel:["けったいな","よう言わんわ"]},
+{k:"元気な子やねえ",y:"genki na ko ya nee",c:"ikezu",e:"🌀",h:4,
+ choku:"元気な子ですね",honne:"うるさい子やね、躾が気になるわ。",
+ why:"既存の「元気なお子さんやねぇ」の短い言い方。褒め言葉の形をした注意になり得る。",
+ who:"足音が響く場面で",scene:"「足音響くけど、元気な子やねえ。」",
+ rel:["元気なお子さんやねぇ","声、よう通らはるなあ"]},
+{k:"好きにしゃはったらよろしいやん",y:"suki ni shihattara yoroshii yan",c:"ikezu",e:"🪭",h:5,
+ choku:"好きにされたらいいじゃないですか",honne:"私は責任を持ちません。巻き込まんといて。",
+ why:"一見許可のようで、突き放しにも聞こえる強いいけず表現。責任の線引きがある。",
+ who:"強引な提案を受けて",scene:"「そこまで言うなら、好きにしゃはったらよろしいやん。」",
+ rel:["考えときます","かまへんかまへん"]},
+{k:"考えとくわ",y:"kangaetoku wa",c:"ikezu",e:"🤔",h:3,
+ choku:"考えておきます",honne:"ほぼ断りです。",
+ why:"既存の「考えときます」の会話形。前向きに聞こえても、その場を収める拒否であることが多い。",
+ who:"誘いや提案をやわらかく断って",scene:"「その件、また考えとくわ。」",
+ rel:["考えときます","好きにしゃはったらよろしいやん"]},
+{k:"毒ぶぶ漬け",y:"doku-bubuzuke",c:"ikezu",e:"🍚",h:5,
+ choku:"毒入りのお茶漬け",honne:"怒りのぶぶ漬けミーム。",
+ why:"ネット上の誇張表現。しつこい相手への怒りを、京都ミームとして笑いに変える。",
+ who:"しつこい客への冗談で",scene:"「しつこい客に毒ぶぶ漬け出すぞ。」",
+ rel:["ぶぶ漬けでもどうどすか","よう言わんわ"]},
+{k:"大文字焼き",y:"daimonji-yaki",c:"trap",e:"🔥",h:5,
+ choku:"大文字焼き",honne:"京都では五山送り火と言うのが無難。",
+ why:"観光客が言いがちなNGワードとして語られる。正式には「五山送り火」。",
+ who:"言い間違いを訂正して",scene:"「大文字焼きって言うたら、五山送り火やでって訂正されるで。」",
+ rel:["五山送り火","よそさん"]},
+{k:"五山送り火",y:"gozan okuribi",c:"word",e:"🔥",h:4,
+ choku:"京都の送り火行事",honne:"大文字焼きではなく、五山送り火。",
+ why:"お盆の精霊を送る京都の行事。呼び方の違いがローカル感を強く出す。",
+ who:"夏の行事を説明して",scene:"「あれは五山送り火って言うんやで。」",
+ rel:["大文字焼き","上がる"]},
+{k:"ここらへん、昔は海やってんけどな",y:"mukashi wa umi",c:"trap",e:"🌊",h:5,
+ choku:"この辺りは昔は海だった",honne:"京都の昔はスケールが長すぎる、というネットミーム。",
+ why:"京都の時間感覚を茶化す表現。平安以前まで含めて「昔」と言うネタとして扱われる。",
+ who:"地質や歴史を語って",scene:"「ここらへん、昔は海やってんけどな。」",
+ rel:["洛中やから…","丸竹夷"]},
+{k:"ながーーーーーーーーい、おつきあい",y:"nagai otsukiai",c:"word",e:"📺",h:3,
+ choku:"長いお付き合い",honne:"京都銀行のCMフレーズとして脳内再生される。",
+ why:"ローカルCMとして知られるフレーズ。世代や地域で共有される記憶の言葉。",
+ who:"CMの話題で",scene:"「京都人なら全員あのメロディで脳内再生されるフレーズ。」",
+ rel:["そうだ 京都、行こう。","木屋町"]},
+{k:"そうだ 京都、行こう。",y:"souda kyoto ikou",c:"word",e:"🚄",h:2,
+ choku:"京都へ行こう",honne:"京都の美しいイメージを呼び起こす有名キャッチコピー。",
+ why:"観光イメージと強く結びついたフレーズ。美しい写真とセットで思い出されやすい。",
+ who:"旅の話題で",scene:"「綺麗な写真見たら『そうだ 京都、行こう。』って言いたくなる。」",
+ rel:["ながーーーーーーーーい、おつきあい","五山送り火"]},
+
+/* ---------- 追加: 大学・街のローカルあるある ---------- */
+{k:"一乗寺でラーメン食べて百万遍で飲も",y:"ichijoji hyakumanben",c:"word",e:"🍜",h:3,
+ choku:"一乗寺でラーメン、百万遍で飲む",honne:"左京区学生の王道ルート。",
+ why:"学生街の移動と食文化がまとまったローカルあるある。地名だけで生活感が出る。",
+ who:"放課後の相談で",scene:"「今日の放課後、一乗寺でラーメン食べて百万遍で飲もか。」",
+ rel:["百万遍交差点xy軸","天一こってり"]},
+{k:"百万遍交差点xy軸",y:"hyakumanben xy",c:"word",e:"📍",h:4,
+ choku:"百万遍交差点の座標指定",honne:"待ち合わせ場所を角で細かく指定するローカル感。",
+ why:"交差点のどの角かを座標っぽく言うネタ。学生街らしい待ち合わせ表現。",
+ who:"待ち合わせで",scene:"「百万遍の東北角（x軸y軸）で待ってるわ。」",
+ rel:["一乗寺でラーメン食べて百万遍で飲も","ルネで昼飯"]},
+{k:"たくたくでライブ",y:"takutaku live",c:"word",e:"🎸",h:3,
+ choku:"磔磔でライブを見る",honne:"京都のライブハウスへ行く。",
+ why:"磔磔（たくたく）は京都の有名ライブハウス。音楽好きのローカル会話に出る。",
+ who:"週末の予定で",scene:"「今週末、たくたくでライブあんねん。」",
+ rel:["西院・大宮でせんべろ","木屋町"]},
+{k:"西院・大宮でせんべろ",y:"saiin omiya senbero",c:"word",e:"🍻",h:2,
+ choku:"西院や大宮で安く飲む",honne:"給料日前の味方。",
+ why:"中心部から少し外れた飲みエリアの実用感。安く飲むローカルな選択肢。",
+ who:"飲み代を抑えたい時に",scene:"「給料日前やし、西院か大宮でせんべろな。」",
+ rel:["木屋町","たくたくでライブ"]},
+{k:"バルで服買って藤井大丸で寄る",y:"bal fujii daimaru",c:"word",e:"🛍️",h:3,
+ choku:"河原町の買い物ルート",honne:"休日の街中ショッピング導線。",
+ why:"京都BALと藤井大丸を巡る買い物あるある。河原町周辺の街使いを感じる。",
+ who:"休日の予定で",scene:"「休日やしバルで服買って藤井大丸寄って帰る。」",
+ rel:["裏寺","錦市場はもうインバウンドの場所やな"]},
+{k:"精華の学生みたいなセンス",y:"seika no gakusei",c:"ikezu",e:"🎨",h:4,
+ choku:"京都精華大の学生みたいな感性",honne:"独特でアート系、時に褒めで時に皮肉。",
+ why:"アート系ファッションや感性を評するローカルないじり。文脈で褒めにも皮肉にもなる。",
+ who:"個性的な服を見て",scene:"「あの服、精華の学生みたいなセンスやな。」",
+ rel:["センスええなあ、派手で","けったいな"]},
+{k:"洛中やから…",y:"rakuchu yakara",c:"ikezu",e:"🗺️",h:5,
+ choku:"洛中だから",honne:"中心部プライドと境界線の話。",
+ why:"京都の内外意識を茶化すフレーズ。場所の境界をめぐる自負や冗談が含まれる。",
+ who:"住所マウント気味に",scene:"「うちは洛中やから、そこは洛外やな。」",
+ rel:["よそさん","よそ者"]},
+{k:"タテカン",y:"tatekan",c:"word",e:"🪧",h:3,
+ choku:"立て看板",honne:"京大周辺の巨大看板文化。",
+ why:"京都大学周辺の景観・表現文化として語られる立て看板。撤去話も話題になりやすい。",
+ who:"大学周辺のニュースで",scene:"「また京大のタテカン撤去されたらしいで。」",
+ rel:["ルネで昼飯","百万遍交差点xy軸"]},
+{k:"ルネで昼飯",y:"renais lunch",c:"word",e:"🍛",h:3,
+ choku:"京大生協食堂で昼食",honne:"講義前後の学生ルーティン。",
+ why:"京大生協食堂ルネの略称としてのローカル語。大学生活の手触りがある。",
+ who:"講義前に",scene:"「ルネで昼飯食うてから講義行くわ。」",
+ rel:["タテカン","百万遍交差点xy軸"]},
+{k:"鴨川等間隔の法則",y:"kamogawa toukankaku",c:"word",e:"🦆",h:3,
+ choku:"鴨川沿いの人の間隔が等しくなる現象",honne:"カップルや人々が自然に距離を取る京都名物。",
+ why:"三条から四条あたりの鴨川でよく語られる景色。京都あるあるとして強い。",
+ who:"鴨川を眺めて",scene:"「今日も鴨川等間隔の法則が発動してるわ。」",
+ rel:["木屋町","先斗町"]},
+{k:"カルネ買っといて",y:"karune",c:"word",e:"🥖",h:2,
+ choku:"志津屋の定番パンを買っておいて",honne:"京都駅などで買える安心の定番。",
+ why:"志津屋のカルネは京都の手土産・軽食として知られる。指定買いのあるある。",
+ who:"駅で合流する相手に",scene:"「駅の志津屋でカルネ買っといて。」",
+ rel:["ふたばの豆餅もろた","おぶ"]},
+{k:"フレスコで買い物",y:"fresco",c:"word",e:"🛒",h:1,
+ choku:"ローカルスーパーで買い物",honne:"日常の京都生活。",
+ why:"京都市内でよく見かけるスーパー名。観光ではなく暮らし側の京都を感じる語。",
+ who:"帰り道に",scene:"「帰りフレスコで買い物してくわ。」",
+ rel:["おばんざい","おこうこ"]},
+{k:"天一こってり",y:"tenichi kotteri",c:"word",e:"🍜",h:2,
+ choku:"天下一品のこってりラーメン",honne:"今日は濃い味でいきたい気分。",
+ why:"京都発祥のラーメンチェーンとして知られる天下一品の定番注文。",
+ who:"ラーメン気分の日に",scene:"「今日は天一こってりの気分やわ。」",
+ rel:["一乗寺でラーメン食べて百万遍で飲も","王将1号店行こ"]},
+{k:"王将1号店行こ",y:"ohsho ichigouten",c:"word",e:"🥟",h:2,
+ choku:"餃子の王将1号店へ行こう",honne:"四条大宮の聖地巡礼。",
+ why:"餃子の王将発祥の地として語られる四条大宮。食のローカルネタとして強い。",
+ who:"食事の誘いで",scene:"「やっぱり王将1号店は味が違うわ。」",
+ rel:["天一こってり","西院・大宮でせんべろ"]},
+{k:"たかばし",y:"takabashi",c:"word",e:"🍜",h:3,
+ choku:"京都駅近くのラーメンエリア",honne:"第一旭か新福菜館かで迷う。",
+ why:"京都駅近くのラーメン店が並ぶエリアとして知られる。派閥トークになりやすい。",
+ who:"朝ラーメンの相談で",scene:"「今日は第一旭の気分やな」「いや新福菜館にしよ。」",
+ rel:["天一こってり","一乗寺でラーメン食べて百万遍で飲も"]},
+{k:"ふたばの豆餅もろた",y:"futaba mamemochi",c:"word",e:"🍡",h:2,
+ choku:"出町ふたばの豆餅をもらった",honne:"かなり嬉しい手土産。",
+ why:"京都の定番手土産として知られる豆餅。もらうと強い喜びがある。",
+ who:"お茶の時間に",scene:"「ふたばの豆餅もろたしお茶にしよ！」",
+ rel:["カルネ買っといて","おぶ"]},
+{k:"206系統は絶対混む",y:"206 keitou",c:"trap",e:"🚌",h:3,
+ choku:"市バス206系統は混む",honne:"観光地方面の混雑を避けたい。",
+ why:"清水寺方面などを通る市バスの混雑あるある。移動の実感が強いローカルネタ。",
+ who:"観光ルートを考えて",scene:"「清水行くなら206系統は絶対混むし避けや。」",
+ rel:["四条通が渋滞で進まへん","地下鉄が高い"]},
+{k:"四つ葉のタクシー",y:"yotsuba taxi",c:"word",e:"🍀",h:2,
+ choku:"ヤサカタクシーの珍しい車両",honne:"見たらちょっとええことありそう。",
+ why:"ヤサカタクシーのレア車両として知られる。見かけた時の小さな幸運ネタ。",
+ who:"街中で見かけて",scene:"「今日四つ葉のタクシー見たしええことあるわ。」",
+ rel:["木屋町","四条通が渋滞で進まへん"]},
+{k:"四条通が渋滞で進まへん",y:"shijo dori jutai",c:"trap",e:"🚗",h:2,
+ choku:"四条通の渋滞がひどい",honne:"バスや車が全然進まない不満。",
+ why:"歩道拡張後の渋滞ネタとして語られやすい。中心部移動のあるある。",
+ who:"バス移動中に",scene:"「市バス乗ったけど四条通が渋滞で全然進まへん。」",
+ rel:["206系統は絶対混む","地下鉄が高い"]},
+{k:"地下鉄が高い",y:"chikatetsu takai",c:"trap",e:"🚇",h:2,
+ choku:"市営地下鉄の運賃が高い",honne:"便利やけど財布にくる。",
+ why:"京都市営地下鉄へのよくある不満。移動手段の選択で話題になる。",
+ who:"交通費を見て",scene:"「京都はほんま地下鉄が高いわ。」",
+ rel:["四条通が渋滞で進まへん","206系統は絶対混む"]},
+{k:"錦市場はもうインバウンドの場所やな",y:"nishiki inbound",c:"trap",e:"🛍️",h:3,
+ choku:"錦市場は観光客向けになった",honne:"昔とは違って地元の日常から少し遠くなった。",
+ why:"観光地化への地元目線の評価。便利さと寂しさが混ざるローカル感がある。",
+ who:"街の変化を話して",scene:"「昔と違って、錦市場はもうインバウンドの場所やな。」",
+ rel:["よそさん","フレスコで買い物"]},
+{k:"実家は佐々木酒造やねん",y:"sasaki shuzo",c:"word",e:"🍶",h:2,
+ choku:"佐々木蔵之介の実家の話",honne:"京都人が出しがちな鉄板小ネタ。",
+ why:"俳優・佐々木蔵之介さんの実家が佐々木酒造という話題。ローカル雑談の定番ネタ。",
+ who:"芸能人の話題で",scene:"「佐々木蔵之介って実家は佐々木酒造やねんで。」",
+ rel:["木屋町","おぶ"]},
+{k:"太秦のロケに遭遇する",y:"uzumasa location",c:"word",e:"🎬",h:2,
+ choku:"太秦で撮影に出会う",honne:"映画・時代劇の街らしい日常の一コマ。",
+ why:"太秦の撮影所文化に根ざしたあるある。街中でロケに出会う楽しさがある。",
+ who:"昨日の出来事として",scene:"「昨日、太秦のロケに遭遇して俳優さん見たわ。」",
+ rel:["ちゃんばら","そうだ 京都、行こう。"]}
+];
+D.push(...EXTRA_D.filter(x=>!D.some(d=>d.k===x.k)));
+const RECATEGORIZE = {
+  greet:["おいでやす","おこしやす","おおきに","かんにんね","ほな","はばかりさん","おやかまっさん","ごめんやす","さいなら","おきばりやす","おはようおかえりやす","めっそうな","かんにん","堪忍しとくれやす","ぼちぼちどす","〜してはる","〜どす","〜おす","〜へん"],
+  nuance:["元気なお子さんやねぇ","ええ時計してはりますなぁ","ぶぶ漬けでもどうどす","よう勉強してはりますなぁ","きれいにしてはりますなぁ","元気でよろしいなあ","お若く見えますなぁ","センスええなあ、派手で","賢いお子さんやこと","よう来てくれはったなあ、こんな遠いとこまで","声、よう通らはるなあ","まめに動かはるなあ","ぶぶ漬けでもどうどすか","面白い人どすな","元気な子やねえ","好きにしゃはったらよろしいやん","考えとくわ","毒ぶぶ漬け","精華の学生みたいなセンス","洛中やから…"],
+  trap:["よう言わんわ","考えときます","かまへんかまへん","だんない","いけず","えらい","なおす","ほかす","かなん","いちびり","おぶ","きずつない","あかん","よそさん","よそ者","大文字焼き","ここらへん、昔は海やってんけどな","206系統は絶対混む","四条通が渋滞で進まへん","地下鉄が高い","錦市場はもうインバウンドの場所やな"],
+  life:["はんなり","ぼちぼち","なんぼ","ようけ","やんちゃ","こそばい","しんきくさい","えげつない","よろしおすなあ","しぶちん","けったいな","かいらしい","ぬくい","ひやこい","つべたい","しんどい","ぎょうさん","よーけ","たんと","あんじょう","せーだい","そーろと","おつれ","始末","いっちょうら","ほっこり","べっぴんさん"],
+  food:["おぶう","まんま","おばんざい","じぶんどき","にぬき","むしやしない","よばれる","おあげさん","おこうこ","おひや","おしたじ"],
+  place:["どんつき","上がる","下る","西入る","東入る","丸竹夷","寺御幸","裏寺","木屋町","先斗町","五山送り火","そうだ 京都、行こう。"],
+  local:["ちゃんばら","ながーーーーーーーーい、おつきあい","一乗寺でラーメン食べて百万遍で飲も","百万遍交差点xy軸","たくたくでライブ","西院・大宮でせんべろ","バルで服買って藤井大丸で寄る","タテカン","ルネで昼飯","鴨川等間隔の法則","カルネ買っといて","フレスコで買い物","天一こってり","王将1号店行こ","たかばし","ふたばの豆餅もろた","四つ葉のタクシー","実家は佐々木酒造やねん","太秦のロケに遭遇する"]
+};
+for(const [cat,keys] of Object.entries(RECATEGORIZE)){
+  const set = new Set(keys);
+  D.forEach(d=>{if(set.has(d.k)) d.c = cat;});
+}
+
+/* ------- state ------- */
+let ikezu = false;     // 意訳モード
+let hlevel = 5;        // はんなり度 上限
+let activeTab = "all"; // カテゴリ
+let query = "";
+
+const gridEl = document.getElementById("grid");
+const tabsEl = document.getElementById("tabs");
+const chipsEl = document.getElementById("chips");
+
+/* ------- tabs ------- */
+const tabDefs = [["all","すべて",""]].concat(Object.keys(CATS).map(k=>[k,CATS[k].label,CATS[k].seal]));
+tabsEl.innerHTML = tabDefs.map(([id,label,emo])=>
+  `<button class="tab${id==="all"?" on":""}" data-tab="${id}">${emo?emo+" ":""}${label}</button>`).join("");
+tabsEl.addEventListener("click",e=>{
+  const b=e.target.closest(".tab"); if(!b) return;
+  activeTab=b.dataset.tab;
+  tabsEl.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t===b));
+  render();
+});
+
+/* ------- trending chips ------- */
+const trending = ["ぶぶ漬けでもどうどす","おおきに","よう言わんわ","ええ時計してはりますなぁ","なおす","はんなり","考えときます","おいでやす"];
+chipsEl.innerHTML = trending.map(t=>`<button class="chip" data-q="${t}">${t}</button>`).join("");
+chipsEl.addEventListener("click",e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  document.getElementById("q").value=b.dataset.q;
+  query=b.dataset.q; render();
+  document.querySelector(".tabs").scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+/* ------- 意訳モード toggle ------- */
+const ikT = document.getElementById("ikToggle");
+function setIkezu(v){
+  ikezu=v; ikT.classList.toggle("on",v); ikT.setAttribute("aria-checked",v);
+  ikT.querySelector(".tt").textContent = v?"ON":"OFF";
+  render();
+}
+ikT.addEventListener("click",()=>setIkezu(!ikezu));
+ikT.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();setIkezu(!ikezu);}});
+
+/* ------- はんなり度 slider ------- */
+const hs = document.getElementById("hslider");
+const hval = document.getElementById("hval");
+hs.addEventListener("input",()=>{
+  hlevel=+hs.value;
+  hval.textContent = `Lv.${hlevel} ${HANNARI[hlevel]}まで`;
+  render();
+});
+
+/* ------- search ------- */
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim();render();});
+
+/* ------- render ------- */
+function matches(d){
+  if(d.h>hlevel) return false;
+  if(activeTab!=="all" && d.c!==activeTab) return false;
+  if(query){
+    const q=query.toLowerCase();
+    const hay=(d.k+" "+d.y+" "+d.choku+" "+d.honne+" "+d.why).toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+const MOTIFS = {
+  "おいでやす":"gate","おこしやす":"blossom","〜してはる":"rain","おおきに":"hands","かんにんね":"bow","ほな":"path","はばかりさん":"tray","おやかまっさん":"door","ごめんやす":"knock","さいなら":"moon",
+  "元気なお子さんやねぇ":"pinwheel","ええ時計してはりますなぁ":"clock","ぶぶ漬けでもどうどす":"bowl","よう勉強してはりますなぁ":"book","きれいにしてはりますなぁ":"broom","元気でよろしいなあ":"swirl","お若く見えますなぁ":"sprout","センスええなあ、派手で":"fan","賢いお子さんやこと":"cap","よう来てくれはったなあ、こんな遠いとこまで":"train","声、よう通らはるなあ":"voice","まめに動かはるなあ":"steps",
+  "よう言わんわ":"mouth","考えときます":"cloud","かまへんかまへん":"wave","だんない":"stone","いけず":"thorn","えらい":"sweat","なおす":"box","ほかす":"basket","かなん":"umbrella","いちびり":"spark","おぶ":"tea","きずつない":"wrapped",
+  "はんなり":"flower","ぼちぼち":"snail","なんぼ":"coin","ようけ":"sheaf","やんちゃ":"kite","こそばい":"feather","しんきくさい":"knot","えげつない":"mountain","よろしおすなあ":"leaf"
+};
+const ILLUSTRATIONS = {
+  "おいでやす":"assets/illustrations/oideyasu.png",
+  "おこしやす":"assets/illustrations/okoshiyasu.png",
+  "〜してはる":"assets/illustrations/shite-haru.png",
+  "おおきに":"assets/illustrations/ookini.png",
+  "かんにんね":"assets/illustrations/kannin-ne.png",
+  "ほな":"assets/illustrations/hona.png",
+  "はばかりさん":"assets/illustrations/habakari-san.png",
+  "おやかまっさん":"assets/illustrations/oyakamassan.png",
+  "ごめんやす":"assets/illustrations/gomen-yasu.png",
+  "さいなら":"assets/illustrations/sainara.png",
+  "元気なお子さんやねぇ":"assets/illustrations/genki-na-okosan.png",
+  "ええ時計してはりますなぁ":"assets/illustrations/ee-tokei.png",
+  "ぶぶ漬けでもどうどす":"assets/illustrations/bubuzuke-demo.png",
+  "よう勉強してはりますなぁ":"assets/illustrations/you-benkyou.png",
+  "きれいにしてはりますなぁ":"assets/illustrations/kirei-ni.png",
+  "元気でよろしいなあ":"assets/illustrations/genki-de-yoroshii.png",
+  "お若く見えますなぁ":"assets/illustrations/owakaku-mieru.png",
+  "センスええなあ、派手で":"assets/illustrations/sense-ee-na.png",
+  "賢いお子さんやこと":"assets/illustrations/kashikoi-okosan.png",
+  "よう来てくれはったなあ、こんな遠いとこまで":"assets/illustrations/you-kite-kurehatta.png",
+  "声、よう通らはるなあ":"assets/illustrations/koe-you-tooru.png",
+  "まめに動かはるなあ":"assets/illustrations/mame-ni-ugoku.png",
+  "よう言わんわ":"assets/illustrations/you-iwan-wa.png",
+  "考えときます":"assets/illustrations/kangaetokimasu.png",
+  "かまへんかまへん":"assets/illustrations/kamahen.png",
+  "だんない":"assets/illustrations/dannai.png",
+  "いけず":"assets/illustrations/ikezu.png",
+  "えらい":"assets/illustrations/erai.png",
+  "なおす":"assets/illustrations/naosu.png",
+  "ほかす":"assets/illustrations/hokasu.png",
+  "かなん":"assets/illustrations/kanan.png",
+  "いちびり":"assets/illustrations/ichibiri.png",
+  "おぶ":"assets/illustrations/obu.png",
+  "きずつない":"assets/illustrations/kizutsunai.png",
+  "はんなり":"assets/illustrations/hannari.png",
+  "ぼちぼち":"assets/illustrations/bochibochi.png",
+  "なんぼ":"assets/illustrations/nanbo.png",
+  "ようけ":"assets/illustrations/youke.png",
+  "やんちゃ":"assets/illustrations/yancha.png",
+  "こそばい":"assets/illustrations/kosobai.png",
+  "しんきくさい":"assets/illustrations/shinkikusai.png",
+  "えげつない":"assets/illustrations/egetsunai.png",
+  "よろしおすなあ":"assets/illustrations/yoroshii-osu.png"
+};
+Object.assign(ILLUSTRATIONS,{
+  "おきばりやす":"assets/illustrations/okibariyasu.png",
+  "おはようおかえりやす":"assets/illustrations/ohayou-okaeriyasu.png",
+  "めっそうな":"assets/illustrations/messouna.png",
+  "かんにん":"assets/illustrations/kannin.png",
+  "堪忍しとくれやす":"assets/illustrations/kannin-shitokureyasu.png",
+  "ぼちぼちどす":"assets/illustrations/bochibochi-dosu.png",
+  "〜どす":"assets/illustrations/dosu.png",
+  "〜おす":"assets/illustrations/osu.png",
+  "〜へん":"assets/illustrations/hen.png",
+  "しぶちん":"assets/illustrations/shibuchin.png",
+  "けったいな":"assets/illustrations/kettai-na.png",
+  "かいらしい":"assets/illustrations/kairashii.png",
+  "ぬくい":"assets/illustrations/nukui.png",
+  "ひやこい":"assets/illustrations/hiyakoi.png",
+  "つべたい":"assets/illustrations/tsubetai.png",
+  "しんどい":"assets/illustrations/shindoi.png",
+  "ぎょうさん":"assets/illustrations/gyousan.png",
+  "よーけ":"assets/illustrations/yo-ke.png",
+  "たんと":"assets/illustrations/tanto.png",
+  "おぶう":"assets/illustrations/obuu.png",
+  "まんま":"assets/illustrations/manma.png",
+  "おばんざい":"assets/illustrations/obanzai.png",
+  "あんじょう":"assets/illustrations/anjou.png",
+  "せーだい":"assets/illustrations/seedai.png",
+  "そーろと":"assets/illustrations/sooroto.png",
+  "おつれ":"assets/illustrations/otsure.png",
+  "あかん":"assets/illustrations/akan.png",
+  "始末":"assets/illustrations/shimatsu.png",
+  "じぶんどき":"assets/illustrations/jibundoki.png",
+  "にぬき":"assets/illustrations/ninuki.png",
+  "むしやしない":"assets/illustrations/mushiyashinai.png",
+  "よばれる":"assets/illustrations/yobareru.png",
+  "おあげさん":"assets/illustrations/oage-san.png",
+  "おこうこ":"assets/illustrations/okouko.png",
+  "いっちょうら":"assets/illustrations/icchoura.png",
+  "ほっこり":"assets/illustrations/hokkori.png",
+  "べっぴんさん":"assets/illustrations/beppin-san.png",
+  "おひや":"assets/illustrations/ohiya.png",
+  "おしたじ":"assets/illustrations/oshitaji.png",
+  "どんつき":"assets/illustrations/dontsuki.png",
+  "上がる":"assets/illustrations/agaru.png",
+  "下る":"assets/illustrations/sagaru.png",
+  "西入る":"assets/illustrations/nishi-iru.png",
+  "東入る":"assets/illustrations/higashi-iru.png",
+  "丸竹夷":"assets/illustrations/marutake-ebisu.png",
+  "寺御幸":"assets/illustrations/teragoko.png",
+  "裏寺":"assets/illustrations/uratera.png",
+  "木屋町":"assets/illustrations/kiyamachi.png",
+  "先斗町":"assets/illustrations/pontocho.png",
+  "ちゃんばら":"assets/illustrations/chanbara.png",
+  "よそさん":"assets/illustrations/yoso-san.png",
+  "よそ者":"assets/illustrations/yoso-mono.png",
+  "ぶぶ漬けでもどうどすか":"assets/illustrations/bubuzuke-demo-dou-dosu-ka.png",
+  "面白い人どすな":"assets/illustrations/omoshiroi-hito-dosu-na.png",
+  "元気な子やねえ":"assets/illustrations/genki-na-ko.png",
+  "好きにしゃはったらよろしいやん":"assets/illustrations/suki-ni-shihattara.png",
+  "考えとくわ":"assets/illustrations/kangaetoku-wa.png",
+  "毒ぶぶ漬け":"assets/illustrations/doku-bubuzuke.png",
+  "大文字焼き":"assets/illustrations/daimonjiyaki.png",
+  "五山送り火":"assets/illustrations/gozan-okuribi.png",
+  "ここらへん、昔は海やってんけどな":"assets/illustrations/mukashi-wa-umi.png",
+  "ながーーーーーーーーい、おつきあい":"assets/illustrations/nagai-otsukiai.png",
+  "そうだ 京都、行こう。":"assets/illustrations/souda-kyoto-ikou.png",
+  "一乗寺でラーメン食べて百万遍で飲も":"assets/illustrations/ichijoji-hyakumanben.png",
+  "百万遍交差点xy軸":"assets/illustrations/hyakumanben-xy.png",
+  "たくたくでライブ":"assets/illustrations/takutaku-live.png",
+  "西院・大宮でせんべろ":"assets/illustrations/saiin-omiya-senbero.png",
+  "バルで服買って藤井大丸で寄る":"assets/illustrations/bal-fujii-daimaru.png",
+  "精華の学生みたいなセンス":"assets/illustrations/seika-no-gakusei.png",
+  "洛中やから…":"assets/illustrations/rakuchu-yakara.png",
+  "タテカン":"assets/illustrations/tatekan.png",
+  "ルネで昼飯":"assets/illustrations/rene-lunch.png",
+  "鴨川等間隔の法則":"assets/illustrations/kamogawa-toukankaku.png",
+  "カルネ買っといて":"assets/illustrations/karune.png",
+  "フレスコで買い物":"assets/illustrations/fresco.png",
+  "天一こってり":"assets/illustrations/tenichi-kotteri.png",
+  "王将1号店行こ":"assets/illustrations/ohsho-ichigouten.png",
+  "たかばし":"assets/illustrations/takabashi.png",
+  "ふたばの豆餅もろた":"assets/illustrations/futaba-mamemochi.png",
+  "206系統は絶対混む":"assets/illustrations/bus-206.png",
+  "四つ葉のタクシー":"assets/illustrations/yotsuba-taxi.png",
+  "四条通が渋滞で進まへん":"assets/illustrations/shijo-jutai.png",
+  "地下鉄が高い":"assets/illustrations/chikatetsu-takai.png",
+  "錦市場はもうインバウンドの場所やな":"assets/illustrations/nishiki-inbound.png",
+  "実家は佐々木酒造やねん":"assets/illustrations/sasaki-shuzo.png",
+  "太秦のロケに遭遇する":"assets/illustrations/uzumasa-location.png"
+});
+function hashTerm(s){return [...s].reduce((a,ch)=>(a*31+ch.charCodeAt(0))%997,7);}
+function termLines(s){
+  if(s.length<=7) return s;
+  const cut = s.includes("、") ? s.indexOf("、")+1 : Math.ceil(s.length/2);
+  return `${s.slice(0,cut)}<br>${s.slice(cut)}`;
+}
+function beansHTML(h){return Array.from({length:5},(_,i)=>`<span class="b${i<h?" on":""}"></span>`).join("");}
+function motifBody(kind,v){
+  const wiggle = (v%9)-4;
+  const dot = (x,y)=>`<circle class="goldfill" cx="${x}" cy="${y}" r="1.8"/>`;
+  const common = {
+    bowl:`<path class="ink-thin" d="M62 44 q-7 -9 1 -17 q7 -8 0 -17"/><path class="ink-thin" d="M75 40 q-7 -9 1 -17 q7 -8 0 -17"/><path class="ink-thin" d="M88 44 q-7 -9 1 -17 q7 -8 0 -17"/><path class="ink" d="M55 84 q20 -16 40 0"/><ellipse class="ink" cx="75" cy="86" rx="32" ry="7"/><path class="ink" d="M45 86 q4 24 30 24 q26 0 30 -24"/><path class="ink" d="M64 110 l2 8 h18 l2 -8"/>${dot(68,79)}${dot(80,80)}`,
+    gate:`<path class="ink" d="M45 112 v-54 h60 v54"/><path class="ink" d="M38 58 h74"/><path class="ink-thin" d="M52 72 h46 M52 86 h46"/><path class="ink" d="M62 112 v-28 h26 v28"/>`,
+    blossom:`<path class="ink" d="M75 75 q-18 -24 0 -44 q18 20 0 44 q24 -18 44 0 q-20 18 -44 0 q18 24 0 44 q-18 -20 0 -44 q-24 18 -44 0 q20 -18 44 0"/><circle class="goldfill" cx="75" cy="75" r="4"/>`,
+    rain:`<path class="ink" d="M44 60 q31 -32 62 0"/><path class="ink-thin" d="M55 76 l-10 18 M75 76 l-10 22 M96 76 l-10 18"/><path class="ink" d="M47 112 q28 10 56 0"/>`,
+    hands:`<path class="ink" d="M55 95 q-11 -18 4 -35 l16 22"/><path class="ink" d="M95 95 q11 -18 -4 -35 l-16 22"/><path class="ink-thin" d="M62 102 q13 12 26 0"/><path class="gold" d="M75 42 v20"/>`,
+    bow:`<path class="ink" d="M56 55 q19 -16 38 0"/><path class="ink" d="M49 112 q26 -36 52 0"/><path class="ink-thin" d="M75 58 v35 M58 80 h34"/>`,
+    path:`<path class="ink" d="M48 112 q40 -24 30 -74"/><path class="ink" d="M80 112 q-6 -38 24 -62"/><path class="ink-thin" d="M50 91 h43 M59 73 h36 M67 55 h25"/>`,
+    tray:`<path class="ink" d="M44 88 h62 q-4 22 -31 22 q-27 0 -31 -22"/><path class="ink-thin" d="M52 76 h46"/><circle class="gold" cx="75" cy="58" r="14"/>`,
+    door:`<path class="ink" d="M54 112 v-68 h42 v68"/><path class="ink-thin" d="M62 52 h26 v60"/><circle class="goldfill" cx="84" cy="82" r="2.4"/>`,
+    knock:`<path class="ink" d="M52 112 v-70 h46 v70"/><path class="ink-thin" d="M63 64 q12 -12 24 0"/><path class="ink" d="M69 78 q7 -8 14 0 q-7 10 -14 0"/>`,
+    moon:`<path class="ink" d="M92 38 q-34 11 -34 43 q0 28 29 39 q-47 -5 -47 -42 q0 -38 52 -40"/><path class="gold" d="M98 76 h14"/>`,
+    pinwheel:`<path class="ink" d="M75 75 l-30 -16 q16 -18 30 16 l16 -30 q18 16 -16 30 l30 16 q-16 18 -30 -16 l-16 30 q-18 -16 16 -30"/><circle class="goldfill" cx="75" cy="75" r="3"/>`,
+    clock:`<circle class="ink" cx="75" cy="75" r="37"/><path class="ink" d="M75 75 v-24 M75 75 h22"/><path class="ink-thin" d="M75 34 v8 M75 108 v8 M34 75 h8 M108 75 h8"/>`,
+    book:`<path class="ink" d="M43 48 q18 -8 32 6 v58 q-15 -13 -32 -5z"/><path class="ink" d="M107 48 q-18 -8 -32 6 v58 q15 -13 32 -5z"/><path class="ink-thin" d="M55 66 h14 M55 80 h14 M82 66 h14 M82 80 h14"/>`,
+    broom:`<path class="ink" d="M91 36 l-35 56"/><path class="ink" d="M49 91 q19 4 36 21"/><path class="ink-thin" d="M47 101 l29 18 M55 86 l37 22"/>`,
+    swirl:`<path class="ink" d="M102 72 q-12 -31 -43 -18 q-24 10 -13 34 q9 20 33 12 q17 -6 10 -22 q-5 -12 -18 -8"/><path class="gold" d="M52 114 q26 10 52 -2"/>`,
+    sprout:`<path class="ink" d="M75 112 v-50"/><path class="ink" d="M75 70 q-29 -20 -36 -1 q20 15 36 1"/><path class="ink" d="M75 82 q30 -22 38 -2 q-22 17 -38 2"/>`,
+    fan:`<path class="ink" d="M48 107 q27 -68 54 0 z"/><path class="ink-thin" d="M75 107 V43 M62 107 L56 58 M88 107 l6 -49"/><path class="gold" d="M57 81 q18 -12 36 0"/>`,
+    cap:`<path class="ink" d="M38 68 l37 -18 l37 18 l-37 18z"/><path class="ink" d="M55 78 v19 q20 12 40 0 V78"/><path class="gold" d="M102 72 v25"/>`,
+    train:`<path class="ink" d="M48 48 h54 q10 0 10 12 v35 H38 V60 q0 -12 10 -12z"/><path class="ink-thin" d="M52 60 h46"/><circle class="ink" cx="58" cy="103" r="5"/><circle class="ink" cx="92" cy="103" r="5"/>`,
+    voice:`<path class="ink" d="M46 78 h16 l20 -18 v54 l-20 -18 H46z"/><path class="ink-thin" d="M91 68 q12 8 0 18 M99 58 q25 20 0 48"/>`,
+    steps:`<ellipse class="ink" cx="62" cy="66" rx="9" ry="15" transform="rotate(-18 62 66)"/><ellipse class="ink" cx="88" cy="92" rx="9" ry="15" transform="rotate(18 88 92)"/><path class="gold" d="M44 114 q31 -12 62 0"/>`,
+    mouth:`<path class="ink" d="M46 78 q29 24 58 0"/><path class="ink-thin" d="M56 72 q19 -12 38 0"/><path class="ink" d="M75 88 v18"/><path class="gold" d="M52 54 h46"/>`,
+    cloud:`<path class="ink" d="M48 92 q-16 -18 9 -30 q10 -26 36 -9 q26 0 27 25 q20 16 -3 30 H55"/><path class="ink-thin" d="M62 78 h28 M58 92 h42"/>`,
+    wave:`<path class="ink" d="M40 88 q18 -22 36 0 q18 22 36 0"/><path class="ink-thin" d="M42 104 q16 -14 32 0 q16 14 32 0"/><path class="gold" d="M75 44 v24"/>`,
+    stone:`<path class="ink" d="M48 96 q-4 -35 31 -48 q31 14 26 48 q-28 18 -57 0z"/><path class="ink-thin" d="M61 76 q16 -8 32 0"/>`,
+    thorn:`<path class="ink" d="M75 116 q-28 -28 -18 -60 q24 6 18 60 q28 -28 18 -60 q-24 6 -18 60"/><path class="gold" d="M48 76 h54"/>`,
+    sweat:`<path class="ink" d="M75 36 q28 32 0 70 q-28 -38 0 -70z"/><path class="ink-thin" d="M63 100 q12 9 24 0"/>`,
+    box:`<path class="ink" d="M45 65 l30 -18 l30 18 v42 H45z"/><path class="ink-thin" d="M45 65 l30 18 l30 -18 M75 83 v32"/>`,
+    basket:`<path class="ink" d="M48 70 h54 l-8 42 H56z"/><path class="ink" d="M58 70 q17 -30 34 0"/><path class="ink-thin" d="M60 84 h30 M58 98 h34"/>`,
+    umbrella:`<path class="ink" d="M38 76 q37 -46 74 0 q-18 -8 -37 0 q-19 -8 -37 0"/><path class="ink" d="M75 76 v38 q12 8 18 -4"/><path class="gold" d="M75 36 v14"/>`,
+    spark:`<path class="ink" d="M75 36 l8 27 l27 8 l-27 8 l-8 27 l-8 -27 l-27 -8 l27 -8z"/><path class="gold" d="M48 104 l54 -66"/>`,
+    tea:`<path class="ink-thin" d="M64 48 q-8 -10 0 -22 M82 48 q8 -10 0 -22"/><path class="ink" d="M48 75 h50 q-2 28 -25 28 q-23 0 -25 -28"/><path class="ink" d="M98 78 q21 3 9 22 q-8 9 -20 3"/>`,
+    wrapped:`<path class="ink" d="M46 70 q29 -30 58 0 v38 H46z"/><path class="ink-thin" d="M46 70 q29 22 58 0 M75 70 v38"/><path class="gold" d="M58 55 q17 14 34 0"/>`,
+    flower:`<path class="ink" d="M75 75 q-18 -26 0 -42 q18 16 0 42 q26 -18 42 0 q-16 18 -42 0 q18 26 0 42 q-18 -16 0 -42 q-26 18 -42 0 q16 -18 42 0"/><circle class="goldfill" cx="75" cy="75" r="4"/>`,
+    snail:`<path class="ink" d="M51 94 q21 -30 46 -8 q-3 23 -31 23 H45"/><path class="ink-thin" d="M74 92 q13 -10 4 -20 q-12 -9 -22 2 q-8 12 6 20"/><path class="ink" d="M94 84 l12 -14 M100 86 l16 -4"/>`,
+    coin:`<circle class="ink" cx="75" cy="75" r="36"/><circle class="gold" cx="75" cy="75" r="25"/><path class="ink" d="M75 52 v46 M58 75 h34"/>`,
+    sheaf:`<path class="ink" d="M75 112 V46"/><path class="ink-thin" d="M75 78 q-28 -28 -34 -5 q19 20 34 5 M75 70 q29 -28 35 -5 q-20 21 -35 5 M75 92 q-22 -20 -32 -3 q17 18 32 3"/>`,
+    kite:`<path class="ink" d="M75 38 l34 42 l-34 38 l-34 -38z"/><path class="ink-thin" d="M75 38 v80 M41 80 h68"/><path class="gold" d="M75 118 q-8 12 -20 16"/>`,
+    feather:`<path class="ink" d="M42 112 q36 -78 70 -74 q-4 44 -70 74"/><path class="ink-thin" d="M57 92 l36 -36 M67 82 l-15 -5 M78 70 l-14 -8"/>`,
+    knot:`<path class="ink" d="M51 58 q49 0 49 34 q0 21 -25 21 q-25 0 -25 -21 q0 -34 49 -34"/><path class="ink-thin" d="M50 92 h50"/>`,
+    mountain:`<path class="ink" d="M38 110 l28 -56 l18 32 l12 -20 l20 44z"/><path class="ink-thin" d="M66 54 l8 56 M96 66 l-4 44"/>`,
+    leaf:`<path class="ink" d="M44 92 q34 -50 70 -36 q-6 42 -70 36z"/><path class="ink-thin" d="M47 91 q31 -14 57 -30"/><path class="gold" d="M68 102 q8 8 18 0"/>`
+  };
+  return common[kind] || common.flower.replaceAll("75",String(75+wiggle));
+}
+function monSVG(d){
+  const v = hashTerm(d.k);
+  const pool = ["gate","blossom","rain","hands","bow","path","tray","door","knock","moon","pinwheel","clock","bowl","book","broom","swirl","sprout","fan","cap","train","voice","steps","mouth","cloud","wave","stone","thorn","sweat","box","basket","umbrella","spark","tea","wrapped","flower","snail","coin","sheaf","kite","feather","knot","mountain","leaf"];
+  const kind = MOTIFS[d.k] || pool[v % pool.length];
+  const rotate = (v%7)-3;
+  return `<svg viewBox="0 0 150 150" aria-hidden="true">
+    <circle class="ringink" cx="75" cy="75" r="${59 + (v%3)}"/>
+    <circle class="gold" cx="75" cy="75" r="${64 + (v%2)}"/>
+    <g transform="rotate(${rotate} 75 75)">${motifBody(kind,v)}</g>
+  </svg>`;
+}
+function monHTML(d){
+  const src = ILLUSTRATIONS[d.k];
+  if(src) return `<span class="mon illus"><img src="${src}" alt="" loading="lazy"></span>`;
+  return `<span class="mon">${monSVG(d)}</span>`;
+}
+function cardHTML(d){
+  const lead = ikezu ? "意訳" : "直訳";
+  const body = ikezu ? d.honne : d.choku;
+  const cat=CATS[d.c];
+  return `<article class="card${ikezu?" honne":""}" style="--cc:var(--${cat.css})" data-cat="${d.c}" data-k="${encodeURIComponent(d.k)}" tabindex="0" role="button" aria-label="${d.k}の詳細を開く">
+    <span class="fuda-band"></span>
+    <span class="frame"></span>
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <span class="inner">
+      <span class="seal"><span>${cat.seal}</span></span>
+      <span class="rank">${HANNARI[d.h].replace("レベル","")}</span>
+      ${monHTML(d)}
+      <span class="term">${termLines(d.k)}</span>
+      <span class="yomi">${d.y}</span>
+      <span class="rule"></span>
+      <span class="line"><span class="lead">${lead}</span><span class="txt">${body}</span></span>
+      <span class="beans"><span class="lb">はんなり</span>${beansHTML(d.h)}</span>
+    </span>
+    <button class="card-share" type="button" data-share="${encodeURIComponent(d.k)}" aria-label="${d.k}をSNSで共有">共有</button>
+  </article>`;
+}
+function render(){
+  const list = D.filter(matches);
+  if(!list.length){
+    gridEl.innerHTML=`<div class="empty"><span class="big"></span>そのお言葉は、まだ辞典におへんなあ。<br>別の京ことばで探してみておくれやす。</div>`;
+    return;
+  }
+  // カテゴリ別セクション（すべて表示 & 検索なしのとき）
+  if(activeTab==="all" && !query){
+    let html="";
+    for(const c of Object.keys(CATS)){
+      const items=list.filter(d=>d.c===c);
+      if(!items.length) continue;
+      html+=`<div class="sechead" style="--cc:var(--${CATS[c].css})">
+        <h2 data-seal="${CATS[c].seal}">${CATS[c].label}</h2><span class="cnt">${items.length}語</span></div>`;
+      html+=items.map(cardHTML).join("");
+    }
+    gridEl.innerHTML=html;
+  } else {
+    gridEl.innerHTML=list.map(cardHTML).join("");
+  }
+}
+
+/* ------- modal ------- */
+const mback=document.getElementById("mback");
+const modal=document.getElementById("modal");
+function openModal(k){
+  const d=D.find(x=>x.k===k); if(!d) return;
+  const cat=CATS[d.c];
+  const beans=Array.from({length:5},(_,i)=>`<span class="${i<d.h?'on':''}"></span>`).join("");
+  const rel=(d.rel||[]).filter(r=>D.some(x=>x.k===r))
+    .map(r=>`<button data-rel="${encodeURIComponent(r)}">${r}</button>`).join("");
+  modal.innerHTML=`
+    <div class="modal-card" style="--cc:var(--${cat.css})">
+      <div class="modal-fuda">
+        <span class="fuda-band" style="opacity:.82"></span>
+        <span class="frame"></span>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+        <div class="inner">
+          <div class="seal"><span>${cat.seal}</span></div>
+          <div class="rank">${HANNARI[d.h].replace("レベル","")}</div>
+          ${monHTML(d).replace('<span class="mon','<div class="mon').replace('</span>','</div>')}
+          <div class="term">${termLines(d.k)}</div>
+          <div class="yomi">${d.y}</div>
+          <div class="rule"></div>
+          <div class="line"><span class="lead">${cat.label}</span><span class="txt">${d.scene}</span></div>
+          <div class="beans"><span class="lb">はんなり</span>${beansHTML(d.h)}</div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="mhead">
+          <h2>${d.k}</h2>
+          <span class="yomi">${d.y}</span>
+          <button class="close" aria-label="閉じる">✕</button>
+        </div>
+        <div class="block">
+          <span class="blabel"><span class="bnum n1">1</span>直訳</span>
+          <div class="choku">${d.choku}</div>
+        </div>
+        <div class="block">
+          <span class="blabel"><span class="bnum n2">2</span>意訳</span>
+          <div class="honne"><span class="warn">意訳</span>${d.honne}</div>
+        </div>
+        <div class="block">
+          <span class="blabel"><span class="bnum n3">3</span>なんでそう言う？</span>
+          <div class="why">${d.why}</div>
+        </div>
+        <div class="block">
+          <span class="blabel"><span class="bnum n4">4</span>こんな場面で</span>
+          <div class="scene"><span class="who">${d.who}</span>${d.scene}</div>
+        </div>
+        <div class="block">
+          <span class="blabel">はんなり度</span>
+          <div class="hmeter"><div class="hbeans">${beans}</div><span class="htxt">Lv.${d.h}・${HANNARI[d.h]}</span></div>
+        </div>
+        ${rel?`<div class="block"><span class="blabel">関連する京ことば</span><div class="rel">${rel}</div></div>`:""}
+      </div>
+    </div>`;
+  mback.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeModal(){mback.classList.remove("open");document.body.style.overflow="";}
+function shareText(d){
+  return `京ことば「${d.k}」\n直訳: ${d.choku}\n意訳: ${d.honne}\n#京ふれーず`;
+}
+async function shareEntry(k){
+  const d=D.find(x=>x.k===k); if(!d) return;
+  const data={title:`京ふれーず: ${d.k}`,text:shareText(d),url:location.href};
+  if(navigator.share){
+    try{await navigator.share(data);return;}catch(e){if(e.name==="AbortError") return;}
+  }
+  const url=`https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
+  window.open(url,"_blank","noopener,noreferrer");
+}
+async function shareSite(){
+  const data={title:"京ふれーず ～洛中リアル・京ことば辞典～",text:"京都の方言・京ことばを、直訳と意訳で読み解く辞典。",url:location.href};
+  if(navigator.share){
+    try{await navigator.share(data);return;}catch(e){if(e.name==="AbortError") return;}
+  }
+  const url=`https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
+  window.open(url,"_blank","noopener,noreferrer");
+}
+gridEl.addEventListener("click",e=>{
+  const s=e.target.closest("[data-share]");
+  if(s){e.stopPropagation();shareEntry(decodeURIComponent(s.dataset.share));return;}
+  const c=e.target.closest(".card"); if(!c) return;
+  openModal(decodeURIComponent(c.dataset.k));
+});
+gridEl.addEventListener("keydown",e=>{
+  if(e.key!=="Enter" && e.key!==" ") return;
+  if(e.target.closest("[data-share]")) return;
+  const c=e.target.closest(".card"); if(!c) return;
+  e.preventDefault();
+  openModal(decodeURIComponent(c.dataset.k));
+});
+document.getElementById("shareSite").addEventListener("click",shareSite);
+modal.addEventListener("click",e=>{
+  if(e.target.closest(".close")){closeModal();return;}
+  const r=e.target.closest("[data-rel]");
+  if(r){openModal(decodeURIComponent(r.dataset.rel));}
+});
+mback.addEventListener("click",e=>{if(e.target===mback)closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+
+/* init */
+render();
+</script>
+</body>
+</html>

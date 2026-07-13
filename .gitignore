@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local/editor files
+.vscode/
+.idea/
+
+# Codex/agent working folders are intentionally not part of this clean package.
+.codex/
+.agents/
+work/
+outputs/
