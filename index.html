@@ -411,6 +411,8 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 .hero{
   max-width:900px;
   padding-top:44px;
+  position:relative;
+  isolation:isolate;
 }
 .hero::before{
   content:"直訳と意訳で、京の空気をめくる。";
@@ -428,24 +430,262 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   box-shadow:0 6px 0 rgba(38,35,58,.12);
   transform:rotate(-1.4deg);
 }
+.hero::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:28px;
+  width:min(760px,92vw);
+  height:260px;
+  transform:translateX(-50%);
+  z-index:-2;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent,rgba(255,253,248,.48) 18%,rgba(255,253,248,.58) 82%,transparent),
+    radial-gradient(ellipse at 50% 100%,rgba(255,253,248,.72),transparent 65%);
+  border-radius:0 0 42px 42px;
+}
 .hero .kicker{
   display:none;
 }
-.hero h1{
+.hero-art{
+  position:relative;
+  min-height:270px;
+  padding:8px 0 22px;
+}
+.hero-copy{
+  position:relative;
+  z-index:3;
+  max-width:720px;
+}
+.hero-title{
   font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
-  font-size:clamp(34px,5.5vw,62px);
-  line-height:1.16;
+  margin:0;
+  line-height:1;
   font-weight:900;
-  letter-spacing:.01em;
+  letter-spacing:0;
+  text-wrap:balance;
 }
-.hero h1 .u{
-  background:linear-gradient(transparent 58%, rgba(244,211,94,.82) 58%);
-  padding:0 .08em;
+.hero-title .title-main{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  font-size:clamp(46px,8vw,92px);
+  line-height:.96;
+  color:#FFFDF8;
+  -webkit-text-stroke:2px var(--pop-ink);
+  text-shadow:
+    4px 4px 0 var(--pop-sakura),
+    8px 8px 0 rgba(38,35,58,.14);
+  transform:rotate(-1.4deg);
 }
-.hero p{
+.hero-title .title-sub{
+  display:inline-block;
+  margin-top:12px;
+  padding:.18em .36em .22em;
+  font-size:clamp(24px,4.2vw,44px);
+  line-height:1.12;
+  color:var(--pop-ink);
+  background:linear-gradient(transparent 46%,rgba(244,211,94,.92) 46%);
+  text-shadow:2px 2px 0 rgba(255,253,248,.9);
+  box-decoration-break:clone;
+  -webkit-box-decoration-break:clone;
+  transform:rotate(.6deg);
+}
+.hero-lead{
+  position:relative;
+  display:block;
+  margin-top:18px;
+  padding:14px 18px;
+  max-width:640px;
   color:#655B50;
   font-weight:700;
   font-size:15px;
+  line-height:1.9;
+  background:rgba(255,253,248,.68);
+  border:2px solid rgba(38,35,58,.12);
+  border-radius:18px;
+  box-shadow:0 7px 0 rgba(38,35,58,.10);
+  backdrop-filter:blur(8px);
+}
+.hero-lead::before{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:10px;
+  height:7px;
+  z-index:-1;
+  background:linear-gradient(90deg,var(--pop-aqua),var(--pop-yuzu),var(--pop-sakura));
+  opacity:.28;
+  border-radius:999px;
+}
+.hero-stage{
+  position:absolute;
+  right:-14px;
+  bottom:0;
+  width:min(430px,50vw);
+  height:220px;
+  z-index:1;
+  pointer-events:none;
+}
+.hero-sun{
+  position:absolute;
+  right:34px;
+  top:0;
+  width:86px;
+  height:86px;
+  border:3px solid var(--pop-ink);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 38% 34%,#FFF6C6 0 18%,transparent 19%),
+    repeating-radial-gradient(circle at 50% 50%,rgba(38,35,58,.12) 0 2px,transparent 2px 6px),
+    var(--pop-mikan);
+  box-shadow:0 8px 0 rgba(38,35,58,.14);
+  animation:hero-float 5.8s ease-in-out infinite;
+}
+.hero-cloud{
+  position:absolute;
+  width:86px;
+  height:24px;
+  border:3px solid var(--pop-ink);
+  border-radius:999px;
+  background:#FFFDF8;
+  box-shadow:0 5px 0 rgba(38,35,58,.12);
+  opacity:.92;
+  animation:hero-drift 7s ease-in-out infinite;
+}
+.hero-cloud.c1{right:138px;top:34px}
+.hero-cloud.c2{right:6px;top:82px;width:70px;animation-delay:-2.4s}
+.hero-town{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:42px;
+  height:122px;
+  --town-scale:1;
+  transform-origin:50% 100%;
+  animation:kyoto-sway 4.8s ease-in-out infinite;
+}
+.machiya{
+  position:absolute;
+  bottom:0;
+  height:74px;
+  border:3px solid var(--pop-ink);
+  border-radius:8px 8px 4px 4px;
+  background:linear-gradient(180deg,#FFF3D0,#F2C989);
+  box-shadow:0 7px 0 rgba(38,35,58,.14);
+}
+.machiya::before{
+  content:"";
+  position:absolute;
+  left:-6px;
+  right:-6px;
+  top:-19px;
+  height:24px;
+  border:3px solid var(--pop-ink);
+  border-radius:6px 6px 2px 2px;
+  background:linear-gradient(90deg,var(--pop-ai),#23364B);
+  transform:skewX(-14deg);
+}
+.machiya::after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:13px;
+  height:30px;
+  background:repeating-linear-gradient(90deg,var(--pop-ink) 0 4px,rgba(255,253,248,.75) 4px 11px);
+  border-radius:3px;
+}
+.machiya.m1{left:8px;width:118px}
+.machiya.m2{left:126px;width:98px;height:62px;animation-delay:-.4s}
+.machiya.m3{right:6px;width:112px;height:68px;animation-delay:-.8s}
+.pagoda{
+  position:absolute;
+  left:220px;
+  bottom:0;
+  width:86px;
+  height:122px;
+}
+.pagoda span{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  border:3px solid var(--pop-ink);
+  background:linear-gradient(180deg,var(--pop-sakura),#D84D6E);
+  box-shadow:0 5px 0 rgba(38,35,58,.14);
+}
+.pagoda .roof{
+  height:18px;
+  border-radius:999px 999px 5px 5px;
+  background:var(--pop-ai);
+}
+.pagoda .r1{top:0;width:56px}.pagoda .r2{top:30px;width:74px}.pagoda .r3{top:62px;width:86px}
+.pagoda .body{bottom:0;width:48px;height:96px;border-radius:8px}
+.lantern{
+  position:absolute;
+  bottom:86px;
+  width:26px;
+  height:38px;
+  border:3px solid var(--pop-ink);
+  border-radius:14px;
+  background:linear-gradient(180deg,var(--pop-yuzu),var(--pop-mikan));
+  box-shadow:0 5px 0 rgba(38,35,58,.12);
+  animation:lantern-bob 2.8s ease-in-out infinite;
+}
+.lantern::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:-22px;
+  width:3px;
+  height:22px;
+  background:var(--pop-ink);
+}
+.lantern.l1{left:72px}
+.lantern.l2{right:92px;animation-delay:-1.2s}
+.hero-river{
+  position:absolute;
+  left:18px;
+  right:8px;
+  bottom:10px;
+  height:38px;
+  border:3px solid var(--pop-ink);
+  border-radius:999px;
+  background:
+    repeating-linear-gradient(135deg,rgba(255,253,248,.38) 0 8px,transparent 8px 18px),
+    linear-gradient(90deg,var(--pop-aqua),#5AC9D2);
+  box-shadow:0 7px 0 rgba(38,35,58,.14);
+  overflow:hidden;
+}
+.hero-river::after{
+  content:"";
+  position:absolute;
+  inset:8px -40px auto;
+  height:12px;
+  background:repeating-linear-gradient(90deg,transparent 0 18px,#FFFDF8 18px 34px,transparent 34px 48px);
+  opacity:.72;
+  animation:river-slide 3.4s linear infinite;
+}
+@keyframes kyoto-sway{
+  0%,100%{transform:translateY(0) rotate(-.35deg) scale(var(--town-scale))}
+  50%{transform:translateY(-5px) rotate(.45deg) scale(var(--town-scale))}
+}
+@keyframes hero-float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-8px) rotate(4deg)}
+}
+@keyframes hero-drift{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(-16px)}
+}
+@keyframes lantern-bob{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-7px) rotate(4deg)}
+}
+@keyframes river-slide{
+  to{transform:translateX(48px)}
 }
 .controls{
   max-width:760px;
@@ -737,10 +977,34 @@ footer .discl{
 @media (prefers-reduced-motion: reduce){
   .card{animation:none}
   .chip:hover,.tab:hover,.card:hover{transform:none}
+  .hero-sun,.hero-cloud,.hero-town,.lantern,.hero-river::after{animation:none}
 }
 @media (max-width:720px){
   .hero h1{font-size:clamp(31px,10vw,46px)}
   .hero::before{font-size:11px}
+  .hero::after{top:46px;height:360px}
+  .hero-art{min-height:auto;padding-bottom:12px}
+  .hero-copy{max-width:none}
+  .hero-title .title-main{
+    font-size:clamp(44px,16vw,68px);
+    -webkit-text-stroke:1.4px var(--pop-ink);
+    text-shadow:3px 3px 0 var(--pop-sakura),6px 6px 0 rgba(38,35,58,.14);
+  }
+  .hero-title .title-sub{font-size:clamp(23px,8vw,34px)}
+  .hero-lead{font-size:14px;padding:13px 15px;margin-top:14px}
+  .hero-stage{
+    position:relative;
+    right:auto;
+    bottom:auto;
+    width:100%;
+    height:168px;
+    margin-top:10px;
+  }
+  .hero-sun{right:18px;width:66px;height:66px}
+  .hero-cloud.c1{right:94px;top:28px}
+  .hero-cloud.c2{right:2px;top:70px}
+  .hero-town{bottom:34px;--town-scale:.82;transform-origin:50% 100%}
+  .hero-river{left:8px;right:8px;bottom:4px}
   .grid{gap:14px}
   .card{border-radius:16px;box-shadow:0 8px 0 rgba(38,35,58,.12),0 20px 40px -34px rgba(38,35,58,.7)}
   .seal{width:42px;height:42px}
@@ -774,8 +1038,26 @@ footer .discl{
 <main class="wrap">
   <section class="hero">
     <div class="kicker">Kyoto Dialect, Decoded</div>
-    <h1>京ふれーず<br><span class="u">洛中リアル</span>・京ことば辞典。</h1>
-    <p>おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。京都ことばの奥ゆかしさと、街のリアルな空気を味わえます。</p>
+    <div class="hero-art">
+      <div class="hero-copy">
+        <h1 class="hero-title"><span class="title-main">京ふれーず</span><span class="title-sub">洛中リアル・京ことば辞典。</span></h1>
+        <p class="hero-lead">おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。京都ことばの奥ゆかしさと、街のリアルな空気を味わえます。</p>
+      </div>
+      <div class="hero-stage" aria-hidden="true">
+        <span class="hero-sun"></span>
+        <span class="hero-cloud c1"></span>
+        <span class="hero-cloud c2"></span>
+        <span class="lantern l1"></span>
+        <span class="lantern l2"></span>
+        <div class="hero-town">
+          <span class="machiya m1"></span>
+          <span class="machiya m2"></span>
+          <span class="pagoda"><span class="body"></span><span class="roof r1"></span><span class="roof r2"></span><span class="roof r3"></span></span>
+          <span class="machiya m3"></span>
+        </div>
+        <span class="hero-river"></span>
+      </div>
+    </div>
 
     <div class="controls">
       <div class="ctrlrow">
