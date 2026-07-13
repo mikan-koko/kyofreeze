@@ -91,7 +91,7 @@ header::after{content:"";display:block;height:3px;
 .hero h1 .u{background:linear-gradient(transparent 66%, rgba(201,162,75,.38) 66%);padding:0 3px}
 .hero p{color:var(--muted);font-size:14.5px;max-width:580px;margin:0 auto}
 
-/* controls: 意訳モード */
+/* controls */
 .controls{max-width:640px;margin:26px auto 4px;display:flex;flex-direction:column;gap:14px;
   background:linear-gradient(160deg,#FFFFFF,#FBF6EC);border:1.5px solid rgba(40,50,74,.10);
   border-radius:18px;padding:18px 20px;box-shadow:0 8px 24px rgba(40,50,74,.08);position:relative;overflow:hidden}
@@ -476,34 +476,31 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   width:max-content;
   max-width:100%;
   font-size:clamp(46px,8vw,92px);
-  line-height:.96;
-  color:var(--pop-sakura);
-  -webkit-text-stroke:2.5px var(--pop-ink);
+  line-height:.98;
+  color:var(--pop-ink);
+  -webkit-text-stroke:0;
   paint-order:stroke fill;
-  text-shadow:
-    3px 3px 0 #FFFDF8,
-    7px 7px 0 var(--pop-yuzu),
-    11px 11px 0 rgba(38,35,58,.16);
-  filter:drop-shadow(0 6px 0 rgba(255,253,248,.82));
-  transform:rotate(-1.4deg);
+  text-shadow:4px 4px 0 #FFFDF8,8px 8px 0 var(--pop-yuzu);
+  filter:drop-shadow(0 8px 0 rgba(38,35,58,.13));
+  transform:rotate(-.7deg);
 }
 .hero-title .title-sub{
   display:inline-block;
-  margin-top:12px;
-  padding:.20em .46em .24em;
+  margin-top:14px;
+  padding:.10em .12em .18em;
   font-size:clamp(24px,4.2vw,44px);
   line-height:1.12;
-  color:#FFFDF8;
-  -webkit-text-stroke:1.3px var(--pop-ink);
-  paint-order:stroke fill;
-  background:linear-gradient(135deg,var(--pop-ai),#243B57);
-  border:3px solid var(--pop-ink);
-  border-radius:16px;
-  box-shadow:6px 6px 0 var(--pop-mikan),10px 10px 0 rgba(38,35,58,.13);
-  text-shadow:2px 2px 0 rgba(38,35,58,.22);
+  color:var(--pop-ink);
+  -webkit-text-stroke:0;
+  paint-order:normal;
+  background:linear-gradient(transparent 54%,rgba(242,109,136,.72) 54%,rgba(242,109,136,.72) 82%,rgba(244,211,94,.74) 82%);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  text-shadow:2px 2px 0 #FFFDF8;
   box-decoration-break:clone;
   -webkit-box-decoration-break:clone;
-  transform:rotate(.6deg);
+  transform:rotate(.25deg);
 }
 .hero-lead{
   position:relative;
@@ -944,14 +941,6 @@ footer .discl{
       </div>
     </div>
 
-    <div class="controls">
-      <div class="ctrlrow">
-        <span class="clabel">意訳モード <span class="chelp">直訳 → 意訳を表示</span></span>
-        <label class="toggle" id="ikToggle" role="switch" aria-checked="false" tabindex="0">
-          <span class="tt">OFF</span><span class="tswitch"></span>
-        </label>
-      </div>
-    </div>
     <div class="site-share">
       <button class="share-site-btn" id="shareSite" type="button">この辞典を共有</button>
     </div>
@@ -983,7 +972,7 @@ footer .discl{
 <script>
 const CATS = {
   greet:{label:"あいさつ・語尾", seal:"挨拶", css:"pop-aqua"},
-  nuance:{label:"含み・意訳表現", seal:"含み", css:"pop-sakura"},
+  nuance:{label:"意訳表現", seal:"含み", css:"pop-sakura"},
   trap:{label:"勘違い注意", seal:"注意", css:"pop-mikan"},
   life:{label:"暮らしのことば", seal:"暮し", css:"pop-ume"},
   food:{label:"食べもの・お茶", seal:"食", css:"pop-yuzu"},
@@ -1673,7 +1662,6 @@ for(const [cat,keys] of Object.entries(RECATEGORIZE)){
 }
 
 /* ------- state ------- */
-let ikezu = false;     // 意訳モード
 let activeTab = "all"; // カテゴリ
 let query = "";
 
@@ -1697,20 +1685,12 @@ const trending = ["ぶぶ漬けでもどうどす","おおきに","よう言わ�
 chipsEl.innerHTML = trending.map(t=>`<button class="chip" data-q="${t}">${t}</button>`).join("");
 chipsEl.addEventListener("click",e=>{
   const b=e.target.closest(".chip"); if(!b) return;
+  activeTab="all";
+  tabsEl.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.tab==="all"));
   document.getElementById("q").value=b.dataset.q;
   query=b.dataset.q; render();
   document.querySelector(".tabs").scrollIntoView({behavior:"smooth",block:"start"});
 });
-
-/* ------- 意訳モード toggle ------- */
-const ikT = document.getElementById("ikToggle");
-function setIkezu(v){
-  ikezu=v; ikT.classList.toggle("on",v); ikT.setAttribute("aria-checked",v);
-  ikT.querySelector(".tt").textContent = v?"ON":"OFF";
-  render();
-}
-ikT.addEventListener("click",()=>setIkezu(!ikezu));
-ikT.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();setIkezu(!ikezu);}});
 
 /* ------- search ------- */
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim();render();});
@@ -1938,10 +1918,10 @@ function monHTML(d){
   return `<span class="mon">${monSVG(d)}</span>`;
 }
 function cardHTML(d){
-  const lead = ikezu ? "意訳" : "直訳";
-  const body = ikezu ? d.honne : d.choku;
+  const lead = "直訳";
+  const body = d.choku;
   const cat=CATS[d.c];
-  return `<article class="card${ikezu?" honne":""}" style="--cc:var(--${cat.css})" data-cat="${d.c}" data-k="${encodeURIComponent(d.k)}" tabindex="0" role="button" aria-label="${d.k}の詳細を開く">
+  return `<article class="card" style="--cc:var(--${cat.css})" data-cat="${d.c}" data-k="${encodeURIComponent(d.k)}" tabindex="0" role="button" aria-label="${d.k}の詳細を開く">
     <span class="fuda-band"></span>
     <span class="frame"></span>
     <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
