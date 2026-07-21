@@ -138,6 +138,11 @@ header::after{content:"";display:block;height:3px;
   background:#fff;color:var(--muted);border:1.5px solid rgba(40,50,74,.15);transition:all .2s}
 .tab:hover{color:var(--ink)}
 .tab.on{background:var(--ai);color:#fff;border-color:var(--ai);box-shadow:0 4px 16px rgba(28,43,74,.25)}
+.view-switch{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:24px 0 6px}
+.view-btn{padding:10px 18px;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;font-weight:800;background:#fff;color:var(--muted);border:1.5px solid rgba(40,50,74,.15);transition:all .2s}
+.view-btn:hover{color:var(--ink)}
+.view-btn.on{background:var(--ai);color:#fff;border-color:var(--ai);box-shadow:0 4px 16px rgba(28,43,74,.25)}
+.is-hidden{display:none!important}
 
 /* cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding-bottom:70px}
@@ -176,6 +181,34 @@ header::after{content:"";display:block;height:3px;
   background:linear-gradient(90deg, rgba(255,255,255,.9), rgba(255,255,255,.35) 70%);border-left:4px solid var(--cc,var(--gold));box-shadow:0 2px 8px rgba(40,50,74,.05)}
 .sechead h2{font-family:"Shippori Mincho",serif;font-size:17px;font-weight:800}
 .sechead .cnt{font-size:12px;color:var(--muted)}
+.cat-section{grid-column:1/-1}
+.cat-section .cards-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:14px 0 8px}
+.cat-section.collapsed .cards-wrap{display:none}
+.cat-section .sechead{width:100%;border:0;text-align:left;cursor:pointer;justify-content:space-between;align-items:center}
+.sechead .cnt::after{content:"";display:inline-block;width:8px;height:8px;margin-left:10px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+.cat-section.collapsed .sechead .cnt::after{transform:rotate(-45deg)}
+.sechead:focus-visible{outline:4px solid rgba(38,35,58,.28);outline-offset:4px}
+
+/* rakuchu map */
+.map-view{padding:18px 0 78px}
+.map-head{max-width:780px;margin:0 auto 18px;text-align:left}
+.map-head h2{font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;font-size:clamp(25px,4vw,40px);font-weight:900;line-height:1.2;color:var(--pop-ink)}
+.map-head p{margin-top:8px;color:#655B50;font-weight:700;font-size:14px;line-height:1.8}
+.rakuchu-map{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:18px;align-items:stretch}
+.map-canvas{position:relative;min-height:520px;border:2px solid rgba(38,35,58,.16);border-radius:22px;overflow:hidden;background:#F6E7CB;box-shadow:0 12px 0 rgba(38,35,58,.10),0 28px 56px -38px rgba(38,35,58,.72)}
+.map-canvas img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.03) contrast(1.02)}
+.map-canvas::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,253,248,.04),rgba(38,35,58,.08))}
+.map-pin{position:absolute;left:var(--x);top:var(--y);z-index:3;transform:translate(-50%,-50%);border:2px solid var(--pop-ink);border-radius:999px;background:#FFFDF8;color:var(--pop-ink);font:inherit;font-size:12px;font-weight:900;line-height:1;padding:9px 11px;box-shadow:0 5px 0 rgba(38,35,58,.18);cursor:pointer;white-space:nowrap;transition:transform .16s,background .16s}
+.map-pin:hover,.map-pin.on{transform:translate(-50%,-56%);background:var(--pop-yuzu)}
+.map-pin:focus-visible{outline:4px solid rgba(38,35,58,.30);outline-offset:4px}
+.map-panel{border:2px solid rgba(38,35,58,.14);border-radius:20px;background:rgba(255,253,248,.82);box-shadow:0 10px 0 rgba(38,35,58,.10);padding:20px;align-self:stretch}
+.map-panel .seal-mini{display:inline-grid;place-items:center;min-width:38px;height:32px;margin-bottom:12px;border-radius:9px;background:var(--pop-ai);color:#FFFDF8;font-size:13px;font-weight:900}
+.map-panel h3{font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;font-size:24px;font-weight:900;line-height:1.25;color:var(--pop-ink)}
+.map-panel .yomi{margin-top:3px;color:#6C6075;font-size:12px;font-weight:900;letter-spacing:.08em}
+.map-panel dl{display:grid;gap:12px;margin-top:18px}
+.map-panel dt{font-size:11px;font-weight:900;color:var(--pop-ai);letter-spacing:.14em}
+.map-panel dd{font-size:14px;font-weight:700;line-height:1.75;color:#4E4653}
+.map-open{margin-top:18px;border:2px solid rgba(38,35,58,.14);border-radius:999px;background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan));color:#FFFDF8;font:inherit;font-size:13px;font-weight:900;padding:10px 14px;cursor:pointer;box-shadow:0 5px 0 rgba(38,35,58,.14)}
 
 /* modal */
 .mback{position:fixed;inset:0;background:rgba(28,32,44,.5);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:4vh 16px 6vh}
@@ -451,12 +484,12 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 .hero-art{
   position:relative;
   min-height:360px;
-  padding:34px 28px 28px;
+  padding:38px 32px 30px;
   overflow:hidden;
-  border:3px solid rgba(38,35,58,.16);
-  border-radius:28px;
-  background:#FFF3DC;
-  box-shadow:0 14px 0 rgba(38,35,58,.12),0 32px 60px -42px rgba(38,35,58,.74);
+  border:1px solid rgba(38,35,58,.18);
+  border-radius:24px;
+  background:#F6E7CB;
+  box-shadow:0 16px 36px -24px rgba(38,35,58,.72),0 2px 0 rgba(255,253,248,.72) inset;
 }
 .hero-copy{
   position:relative;
@@ -468,39 +501,50 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   margin:0;
   line-height:1;
   font-weight:900;
-  letter-spacing:0;
+  letter-spacing:.02em;
   text-wrap:balance;
 }
 .hero-title .title-main{
+  position:relative;
   display:block;
   width:max-content;
   max-width:100%;
-  font-size:clamp(46px,8vw,92px);
-  line-height:.98;
+  padding:0 .05em .08em 0;
+  font-size:clamp(48px,8vw,88px);
+  line-height:1.02;
   color:var(--pop-ink);
   -webkit-text-stroke:0;
-  paint-order:stroke fill;
-  text-shadow:4px 4px 0 #FFFDF8,8px 8px 0 var(--pop-yuzu);
-  filter:drop-shadow(0 8px 0 rgba(38,35,58,.13));
-  transform:rotate(-.7deg);
+  text-shadow:0 2px 0 rgba(255,253,248,.88),0 12px 28px rgba(38,35,58,.22);
+  transform:none;
+}
+.hero-title .title-main::after{
+  content:"";
+  position:absolute;
+  left:.03em;
+  right:.02em;
+  bottom:0;
+  height:.12em;
+  z-index:-1;
+  background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan));
+  border-radius:999px;
+  box-shadow:0 2px 0 rgba(255,253,248,.78);
 }
 .hero-title .title-sub{
   display:inline-block;
-  margin-top:14px;
-  padding:.10em .12em .18em;
-  font-size:clamp(24px,4.2vw,44px);
-  line-height:1.12;
-  color:var(--pop-ink);
+  margin-top:16px;
+  padding:.24em .52em .30em;
+  font-size:clamp(22px,3.9vw,40px);
+  line-height:1.08;
+  color:#FFFDF8;
   -webkit-text-stroke:0;
-  paint-order:normal;
-  background:linear-gradient(transparent 54%,rgba(242,109,136,.72) 54%,rgba(242,109,136,.72) 82%,rgba(244,211,94,.74) 82%);
-  border:0;
-  border-radius:0;
-  box-shadow:none;
-  text-shadow:2px 2px 0 #FFFDF8;
+  background:linear-gradient(135deg,#26233A,#334967);
+  border:1px solid rgba(255,253,248,.58);
+  border-radius:999px;
+  box-shadow:0 8px 20px -12px rgba(38,35,58,.72),0 0 0 3px rgba(38,35,58,.12);
+  text-shadow:none;
   box-decoration-break:clone;
   -webkit-box-decoration-break:clone;
-  transform:rotate(.25deg);
+  transform:none;
 }
 .hero-lead{
   position:relative;
@@ -542,8 +586,8 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   inset:0;
   z-index:2;
   background:
-    linear-gradient(90deg,rgba(255,243,220,.96) 0%,rgba(255,243,220,.82) 28%,rgba(255,243,220,.30) 54%,rgba(255,243,220,.02) 100%),
-    linear-gradient(180deg,rgba(255,253,248,.36),rgba(255,253,248,0) 42%,rgba(38,35,58,.06));
+    linear-gradient(90deg,rgba(246,231,203,.80) 0%,rgba(246,231,203,.56) 28%,rgba(246,231,203,.12) 58%,rgba(246,231,203,0) 100%),
+    linear-gradient(180deg,rgba(255,253,248,.16),rgba(255,253,248,0) 44%,rgba(38,35,58,.08));
 }
 .hero-stage::after{
   content:"";
@@ -561,7 +605,7 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   height:calc(100% + 34px);
   object-fit:cover;
   object-position:center;
-  filter:saturate(1.08) contrast(1.03);
+  filter:saturate(1.04) contrast(1.02);
   transform-origin:65% 55%;
   animation:hero-image-sway 9s ease-in-out infinite;
 }
@@ -577,8 +621,8 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   animation:hero-shine 6.5s ease-in-out infinite;
 }
 @keyframes hero-image-sway{
-  0%,100%{transform:scale(1.02) translate3d(0,0,0) rotate(-.35deg)}
-  50%{transform:scale(1.055) translate3d(-10px,-7px,0) rotate(.35deg)}
+  0%,100%{transform:scale(1.015) translate3d(0,0,0)}
+  50%{transform:scale(1.045) translate3d(-8px,-5px,0)}
 }
 @keyframes hero-shine{
   0%,42%{transform:translateX(0) skewX(-18deg);opacity:0}
@@ -632,6 +676,19 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   border:2px solid rgba(38,35,58,.14);
   border-radius:14px;
   background:rgba(255,253,248,.88);
+}
+.view-btn{
+  border:2px solid rgba(38,35,58,.14);
+  border-radius:999px;
+  background:rgba(255,253,248,.88);
+  box-shadow:0 5px 0 rgba(38,35,58,.10);
+  color:var(--pop-ink);
+}
+.view-btn.on{
+  background:var(--pop-ink);
+  border-color:var(--pop-ink);
+  color:#FFFDF8;
+  box-shadow:0 6px 0 rgba(38,35,58,.22);
 }
 .chip{
   box-shadow:0 5px 0 rgba(38,35,58,.10);
@@ -740,6 +797,7 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   background:rgba(255,253,248,.70);
   box-shadow:0 7px 0 rgba(38,35,58,.10);
 }
+.cat-section .cards-wrap{grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:24px}
 .sechead h2{
   font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
   font-weight:900;
@@ -885,19 +943,23 @@ footer .discl{
   .hero-art{min-height:auto;padding:22px 16px 18px}
   .hero-copy{max-width:none}
   .hero-title .title-main{
-    font-size:clamp(44px,16vw,68px);
-    -webkit-text-stroke:1.4px var(--pop-ink);
-    text-shadow:3px 3px 0 var(--pop-sakura),6px 6px 0 rgba(38,35,58,.14);
+    font-size:clamp(43px,15vw,64px);
+    text-shadow:0 2px 0 rgba(255,253,248,.88),0 10px 24px rgba(38,35,58,.20);
   }
-  .hero-title .title-sub{font-size:clamp(23px,8vw,34px)}
+  .hero-title .title-sub{font-size:clamp(21px,7vw,32px);border-radius:18px}
   .hero-lead{font-size:14px;padding:13px 15px;margin-top:14px}
   .hero-stage{
     position:absolute;
     inset:0;
   }
-  .hero-stage::before{background:linear-gradient(180deg,rgba(255,243,220,.95),rgba(255,243,220,.76) 48%,rgba(255,243,220,.42))}
-  .hero-illustration{object-position:62% center;opacity:.78}
+  .hero-stage::before{background:linear-gradient(180deg,rgba(246,231,203,.90),rgba(246,231,203,.66) 50%,rgba(246,231,203,.30))}
+  .hero-illustration{object-position:64% center;opacity:.82}
   .grid{gap:14px}
+  .cat-section .cards-wrap{grid-template-columns:1fr 1fr;gap:14px}
+  .rakuchu-map{grid-template-columns:1fr}
+  .map-canvas{min-height:420px}
+  .map-pin{font-size:11px;padding:8px 9px}
+  .map-panel{padding:17px}
   .card{border-radius:16px;box-shadow:0 8px 0 rgba(38,35,58,.12),0 20px 40px -34px rgba(38,35,58,.7)}
   .seal{width:42px;height:42px}
   .seal span{font-size:13px}
@@ -907,6 +969,10 @@ footer .discl{
   .card .line .txt{-webkit-line-clamp:2}
   .card-share{right:14px;bottom:11px;padding:7px 9px}
   .site-share{justify-content:flex-start}
+}
+@media (max-width:420px){
+  .cat-section .cards-wrap{grid-template-columns:1fr}
+  .map-canvas{min-height:360px}
 }
 </style>
 </head>
@@ -936,7 +1002,7 @@ footer .discl{
         <p class="hero-lead">おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。京都ことばの奥ゆかしさと、街のリアルな空気を味わえます。</p>
       </div>
       <div class="hero-stage" aria-hidden="true">
-        <img class="hero-illustration" src="assets/hero/kyoto-town-pop.png" alt="" loading="eager">
+        <img class="hero-illustration" src="assets/hero/kyoto-town-real-pop.png" alt="" loading="eager">
         <span class="hero-shine"></span>
       </div>
     </div>
@@ -946,13 +1012,33 @@ footer .discl{
     </div>
   </section>
 
-  <section class="trend">
-    <div class="tlabel"><span class="dot"></span> いま解読されてる京ことば</div>
-    <div class="chips" id="chips"></div>
+  <div class="view-switch" aria-label="表示切り替え">
+    <button class="view-btn on" type="button" data-view="dict">辞典カード</button>
+    <button class="view-btn" type="button" data-view="map">洛中地図</button>
+  </div>
+
+  <section id="dictView">
+    <section class="trend">
+      <div class="tlabel"><span class="dot"></span> いま解読されてる京ことば</div>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <div class="tabs" id="tabs"></div>
+    <section class="grid" id="grid"></section>
   </section>
 
-  <div class="tabs" id="tabs"></div>
-  <section class="grid" id="grid"></section>
+  <section class="map-view is-hidden" id="mapView">
+    <div class="map-head">
+      <h2>洛中ことば地図</h2>
+      <p>地名や名所にまつわる京ことばを、洛中の空気に重ねて眺められる地図です。気になる札を押すと、その場所にまつわるフレーズが開きます。</p>
+    </div>
+    <div class="rakuchu-map">
+      <div class="map-canvas" id="mapCanvas" aria-label="洛中地図のフレーズピン">
+        <img src="assets/map/rakuchu-map-pop.png" alt="" loading="lazy">
+      </div>
+      <aside class="map-panel" id="mapPanel" aria-live="polite"></aside>
+    </div>
+  </section>
 </main>
 
 <div class="mback" id="mback">
@@ -1664,10 +1750,25 @@ for(const [cat,keys] of Object.entries(RECATEGORIZE)){
 /* ------- state ------- */
 let activeTab = "all"; // カテゴリ
 let query = "";
+let activeView = "dict";
+const collapsedCats = new Set(["trap","life","food","place","local"]);
 
 const gridEl = document.getElementById("grid");
 const tabsEl = document.getElementById("tabs");
 const chipsEl = document.getElementById("chips");
+const dictViewEl = document.getElementById("dictView");
+const mapViewEl = document.getElementById("mapView");
+const mapCanvasEl = document.getElementById("mapCanvas");
+const mapPanelEl = document.getElementById("mapPanel");
+const viewBtns = document.querySelectorAll("[data-view]");
+
+viewBtns.forEach(btn=>btn.addEventListener("click",()=>{
+  activeView=btn.dataset.view;
+  viewBtns.forEach(b=>b.classList.toggle("on",b===btn));
+  dictViewEl.classList.toggle("is-hidden",activeView!=="dict");
+  mapViewEl.classList.toggle("is-hidden",activeView!=="map");
+  if(activeView==="map") renderMap();
+}));
 
 /* ------- tabs ------- */
 const tabDefs = [["all","すべて",""]].concat(Object.keys(CATS).map(k=>[k,CATS[k].label,CATS[k].seal]));
@@ -1950,9 +2051,13 @@ function render(){
     for(const c of Object.keys(CATS)){
       const items=list.filter(d=>d.c===c);
       if(!items.length) continue;
-      html+=`<div class="sechead" style="--cc:var(--${CATS[c].css})">
-        <h2 data-seal="${CATS[c].seal}">${CATS[c].label}</h2><span class="cnt">${items.length}語</span></div>`;
-      html+=items.map(cardHTML).join("");
+      const closed=collapsedCats.has(c);
+      html+=`<section class="cat-section${closed?" collapsed":""}" data-cat-section="${c}" style="--cc:var(--${CATS[c].css})">
+        <button class="sechead" type="button" data-collapse="${c}" aria-expanded="${!closed}">
+          <h2 data-seal="${CATS[c].seal}">${CATS[c].label}</h2><span class="cnt">${items.length}語</span>
+        </button>
+        <div class="cards-wrap">${items.map(cardHTML).join("")}</div>
+      </section>`;
     }
     gridEl.innerHTML=html;
   } else {
@@ -2039,7 +2144,61 @@ async function shareSite(){
   const url=`https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
   window.open(url,"_blank","noopener,noreferrer");
 }
+const MAP_SPOTS = [
+  {k:"先斗町",x:74,y:34,note:"川沿いの花街らしい、少し背筋が伸びる場所。"},
+  {k:"木屋町",x:70,y:48,note:"高瀬川沿いの夜の空気まで含めて覚えたい地名。"},
+  {k:"裏寺",x:48,y:47,note:"買い物や寄り道の記憶と結びつく、河原町近くの路地感。"},
+  {k:"錦市場はもうインバウンドの場所やな",x:44,y:58,note:"市場の変化を、地元目線でさらっと言うフレーズ。"},
+  {k:"四条通が渋滞で進まへん",x:55,y:62,note:"洛中移動あるある。歩いたほうが早い日もあります。"},
+  {k:"鴨川等間隔の法則",x:82,y:56,note:"川べりの距離感まで京都の景色になる定番ミーム。"},
+  {k:"丸竹夷",x:36,y:30,note:"東西の通りを覚える、洛中の地図感覚そのもの。"},
+  {k:"寺御幸",x:57,y:24,note:"南北の通りをたどる時の、昔ながらの道しるべ。"},
+  {k:"上がる",x:39,y:42,note:"北へ行く、という京都式の方角表現。"},
+  {k:"下る",x:39,y:72,note:"南へ行く、という京都式の方角表現。"},
+  {k:"西入る",x:28,y:55,note:"通り名と組み合わせると急に京都の住所っぽくなる言い方。"},
+  {k:"東入る",x:65,y:55,note:"東西南北を街の碁盤目でつかむための言い方。"}
+];
+function renderMap(){
+  if(!mapCanvasEl || !mapPanelEl || mapCanvasEl.dataset.ready) return;
+  mapCanvasEl.insertAdjacentHTML("beforeend",MAP_SPOTS.map((s,i)=>
+    `<button class="map-pin${i===0?" on":""}" type="button" data-map="${encodeURIComponent(s.k)}" style="--x:${s.x}%;--y:${s.y}%">${s.k.length>8?s.k.slice(0,7)+"…":s.k}</button>`
+  ).join(""));
+  mapCanvasEl.dataset.ready="1";
+  showMapSpot(MAP_SPOTS[0].k);
+}
+function showMapSpot(k){
+  const spot=MAP_SPOTS.find(s=>s.k===k) || MAP_SPOTS[0];
+  const d=D.find(x=>x.k===spot.k);
+  if(!d) return;
+  mapCanvasEl.querySelectorAll(".map-pin").forEach(p=>p.classList.toggle("on",decodeURIComponent(p.dataset.map)===spot.k));
+  mapPanelEl.innerHTML=`
+    <span class="seal-mini">${CATS[d.c].seal}</span>
+    <h3>${d.k}</h3>
+    <div class="yomi">${d.y}</div>
+    <dl>
+      <div><dt>地図メモ</dt><dd>${spot.note}</dd></div>
+      <div><dt>直訳</dt><dd>${d.choku}</dd></div>
+      <div><dt>意訳</dt><dd>${d.honne}</dd></div>
+      <div><dt>場面</dt><dd>${d.scene}</dd></div>
+    </dl>
+    <button class="map-open" type="button" data-map-open="${encodeURIComponent(d.k)}">詳しく見る</button>`;
+}
+mapCanvasEl.addEventListener("click",e=>{
+  const p=e.target.closest("[data-map]"); if(!p) return;
+  showMapSpot(decodeURIComponent(p.dataset.map));
+});
+mapPanelEl.addEventListener("click",e=>{
+  const b=e.target.closest("[data-map-open]"); if(!b) return;
+  openModal(decodeURIComponent(b.dataset.mapOpen));
+});
 gridEl.addEventListener("click",e=>{
+  const t=e.target.closest("[data-collapse]");
+  if(t){
+    const c=t.dataset.collapse;
+    if(collapsedCats.has(c)) collapsedCats.delete(c); else collapsedCats.add(c);
+    render();
+    return;
+  }
   const s=e.target.closest("[data-share]");
   if(s){e.stopPropagation();shareEntry(decodeURIComponent(s.dataset.share));return;}
   const c=e.target.closest(".card"); if(!c) return;
