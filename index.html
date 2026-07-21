@@ -187,9 +187,9 @@ header::after{content:"";display:block;height:3px;
 .sechead .cnt{font-size:12px;color:var(--muted)}
 .cat-section{grid-column:1/-1}
 .cat-section .cards-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:14px 0 8px}
-.cat-section.collapsed .cards-wrap{display:none}
+.cat-section.collapsed .cards-wrap > .card:nth-child(n+5){display:none}
 .cat-section .sechead{width:100%;border:0;text-align:left;cursor:pointer;justify-content:space-between;align-items:center}
-.sechead .cnt::after{content:"";display:inline-block;width:8px;height:8px;margin-left:10px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+.cat-section.expandable .sechead .cnt::after{content:"";display:inline-block;width:8px;height:8px;margin-left:10px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
 .cat-section.collapsed .sechead .cnt::after{transform:rotate(-45deg)}
 .sechead:focus-visible{outline:4px solid rgba(38,35,58,.28);outline-offset:4px}
 
@@ -627,7 +627,7 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 }
 .hero-name{
   position:absolute;
-  left:clamp(92px,13vw,158px);
+  left:clamp(118px,16vw,190px);
   bottom:24px;
   z-index:5;
   display:inline-flex;
@@ -1029,7 +1029,7 @@ footer .discl{
   .hero-stage::before{background:linear-gradient(180deg,rgba(246,231,203,.68),rgba(246,231,203,.42) 48%,rgba(246,231,203,.16))}
   .hero-illustration{object-position:64% center;opacity:.92}
   .hero-character{width:clamp(145px,40vw,215px);left:-22px;bottom:-30px;opacity:.82}
-  .hero-name{left:74px;bottom:11px;padding:7px 10px;border-left-width:6px;gap:7px}
+  .hero-name{left:92px;bottom:11px;padding:7px 10px;border-left-width:6px;gap:7px}
   .hero-name small{font-size:9px}
   .hero-name b{font-size:17px}
   .grid{gap:14px}
@@ -1140,13 +1140,13 @@ footer .discl{
 
 <script>
 const CATS = {
-  greet:{label:"あいさつ・語尾", seal:"挨拶", css:"pop-aqua"},
-  nuance:{label:"意訳表現", seal:"含み", css:"pop-sakura"},
-  trap:{label:"勘違い注意", seal:"注意", css:"pop-mikan"},
-  life:{label:"暮らしのことば", seal:"暮し", css:"pop-ume"},
-  food:{label:"食べもの・お茶", seal:"食", css:"pop-yuzu"},
-  place:{label:"地名・道案内", seal:"地名", css:"pop-ai"},
-  local:{label:"街・学生あるある", seal:"街", css:"matcha"}
+  greet:{label:"あいさつ・語尾", seal:"礼", css:"pop-aqua"},
+  nuance:{label:"意訳表現", seal:"裏", css:"pop-sakura"},
+  trap:{label:"勘違い注意", seal:"注", css:"pop-mikan"},
+  life:{label:"日々のことば", seal:"暮", css:"pop-ume"},
+  food:{label:"食べもの・お茶", seal:"膳", css:"pop-yuzu"},
+  place:{label:"地名・道案内", seal:"道", css:"pop-ai"},
+  local:{label:"街・学生あるある", seal:"京", css:"matcha"}
 };
 const HANNARI = ["","観光客レベル","ご近所さんレベル","京都人レベル","老舗の旦那さんレベル","祇園の女将レベル"];
 
@@ -1834,7 +1834,7 @@ for(const [cat,keys] of Object.entries(RECATEGORIZE)){
 let activeTab = "all"; // カテゴリ
 let query = "";
 let activeView = "dict";
-const collapsedCats = new Set(["trap","life","food","place","local"]);
+const collapsedCats = new Set(Object.keys(CATS));
 
 const gridEl = document.getElementById("grid");
 const tabsEl = document.getElementById("tabs");
@@ -2134,10 +2134,12 @@ function render(){
     for(const c of Object.keys(CATS)){
       const items=list.filter(d=>d.c===c);
       if(!items.length) continue;
-      const closed=collapsedCats.has(c);
-      html+=`<section class="cat-section${closed?" collapsed":""}" data-cat-section="${c}" style="--cc:var(--${CATS[c].css})">
-        <button class="sechead" type="button" data-collapse="${c}" aria-expanded="${!closed}">
-          <h2 data-seal="${CATS[c].seal}">${CATS[c].label}</h2><span class="cnt">${items.length}語</span>
+      const closed=collapsedCats.has(c) && items.length>4;
+      const countLabel=items.length>4 ? (closed ? `4/${items.length}語 表示` : `${items.length}語 すべて表示`) : `${items.length}語`;
+      const expandable=items.length>4;
+      html+=`<section class="cat-section${expandable?" expandable":""}${closed?" collapsed":""}" data-cat-section="${c}" style="--cc:var(--${CATS[c].css})">
+        <button class="sechead" type="button" ${expandable?`data-collapse="${c}" aria-expanded="${!closed}"`:"aria-expanded=\"true\""}>
+          <h2 data-seal="${CATS[c].seal}">${CATS[c].label}</h2><span class="cnt">${countLabel}</span>
         </button>
         <div class="cards-wrap">${items.map(cardHTML).join("")}</div>
       </section>`;
