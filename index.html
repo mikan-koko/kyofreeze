@@ -498,7 +498,7 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 }
 .hero-copy{
   position:relative;
-  z-index:3;
+  z-index:4;
   max-width:820px;
 }
 .hero-title{
@@ -629,6 +629,20 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   z-index:1;
   pointer-events:none;
 }
+.hero-character{
+  position:absolute;
+  right:clamp(8px,4vw,46px);
+  bottom:-34px;
+  z-index:3;
+  width:clamp(220px,29vw,340px);
+  max-height:108%;
+  object-fit:contain;
+  object-position:right bottom;
+  filter:drop-shadow(0 18px 20px rgba(38,35,58,.22)) drop-shadow(0 5px 0 rgba(255,253,248,.78));
+  transform-origin:70% 80%;
+  animation:hero-guide-float 7.5s ease-in-out infinite;
+  pointer-events:none;
+}
 .hero-stage::before{
   content:"";
   position:absolute;
@@ -677,6 +691,10 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   0%,42%{transform:translateX(0) skewX(-18deg);opacity:0}
   52%{opacity:.95}
   76%,100%{transform:translateX(320%) skewX(-18deg);opacity:0}
+}
+@keyframes hero-guide-float{
+  0%,100%{transform:translate3d(0,0,0) rotate(.6deg)}
+  50%{transform:translate3d(0,-9px,0) rotate(-1.2deg)}
 }
 .controls{
   max-width:520px;
@@ -977,7 +995,7 @@ footer .discl{
 @media (prefers-reduced-motion: reduce){
   .card{animation:none}
   .chip:hover,.tab:hover,.card:hover{transform:none}
-  .hero-illustration,.hero-shine{animation:none}
+  .hero-illustration,.hero-shine,.hero-character{animation:none}
 }
 @media (max-width:720px){
   .hbar{gap:9px}
@@ -999,6 +1017,7 @@ footer .discl{
   }
   .hero-stage::before{background:linear-gradient(180deg,rgba(246,231,203,.68),rgba(246,231,203,.42) 48%,rgba(246,231,203,.16))}
   .hero-illustration{object-position:64% center;opacity:.92}
+  .hero-character{width:clamp(150px,42vw,230px);right:-18px;bottom:-28px;opacity:.86}
   .grid{gap:14px}
   .cat-section .cards-wrap{grid-template-columns:1fr 1fr;gap:14px}
   .rakuchu-map{grid-template-columns:1fr}
@@ -1046,6 +1065,7 @@ footer .discl{
         <h1 class="hero-title"><span class="title-sub">洛中リアル・京ことば辞典。</span></h1>
         <p class="hero-lead">おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。京都ことばの奥ゆかしさと、街のリアルな空気を味わえます。</p>
       </div>
+      <img class="hero-character" src="assets/characters/kyofreeze-guide.png" alt="" loading="eager">
       <div class="hero-stage" aria-hidden="true">
         <img class="hero-illustration" src="assets/hero/kyoto-town-real-pop.png" alt="" loading="eager">
         <span class="hero-shine"></span>
