@@ -76,13 +76,14 @@ header::after{content:"";display:block;height:3px;
   background:linear-gradient(92deg,var(--shu) 0%,var(--goldd) 52%,var(--matchad) 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;}
 .logo small{display:block;color:#A79C86;font-size:10px;letter-spacing:.28em;font-family:"Cormorant Garamond",serif;font-weight:600}
-.search{flex:1;position:relative}
+.search{flex:1 1 360px;position:relative;max-width:520px;margin-left:auto}
 .search input{width:100%;padding:10px 14px 10px 40px;border-radius:999px;background:#fff;
   border:1.5px solid rgba(40,50,74,.16);color:var(--ink);font:inherit;font-size:14px;outline:none;
   transition:border-color .2s, box-shadow .2s;}
 .search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.20)}
 .search input::placeholder{color:#B3A891}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55}
+.header-share{flex:none}
 
 /* hero */
 .hero{padding:42px 0 6px;text-align:center}
@@ -495,7 +496,7 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
 .hero-copy{
   position:relative;
   z-index:3;
-  max-width:650px;
+  max-width:590px;
 }
 .hero-title{
   font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
@@ -542,12 +543,12 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   color:var(--pop-ink);
   -webkit-text-stroke:0;
   background:
-    linear-gradient(135deg,rgba(255,253,248,.95),rgba(255,244,214,.82)),
+    linear-gradient(135deg,rgba(255,253,248,.88),rgba(255,244,214,.72)),
     repeating-linear-gradient(0deg,rgba(38,35,58,.04) 0 1px,transparent 1px 5px);
   border:2px solid rgba(38,35,58,.18);
   border-left:10px solid var(--pop-sakura);
   border-radius:20px;
-  box-shadow:0 8px 0 rgba(38,35,58,.12),0 24px 46px -34px rgba(38,35,58,.72),inset 0 0 0 2px rgba(255,253,248,.74);
+  box-shadow:0 7px 0 rgba(38,35,58,.10),0 22px 42px -34px rgba(38,35,58,.68),inset 0 0 0 2px rgba(255,253,248,.58);
   text-shadow:none;
   box-decoration-break:clone;
   -webkit-box-decoration-break:clone;
@@ -594,11 +595,11 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   font-weight:700;
   font-size:15px;
   line-height:1.9;
-  background:rgba(255,253,248,.68);
-  border:2px solid rgba(38,35,58,.12);
+  background:rgba(255,253,248,.50);
+  border:2px solid rgba(38,35,58,.10);
   border-radius:18px;
   box-shadow:0 7px 0 rgba(38,35,58,.10);
-  backdrop-filter:blur(8px);
+  backdrop-filter:blur(5px);
 }
 .hero-lead::before{
   content:"";
@@ -624,8 +625,8 @@ header::after{height:4px;background:linear-gradient(90deg,var(--pop-sakura),var(
   inset:0;
   z-index:2;
   background:
-    linear-gradient(90deg,rgba(246,231,203,.80) 0%,rgba(246,231,203,.56) 28%,rgba(246,231,203,.12) 58%,rgba(246,231,203,0) 100%),
-    linear-gradient(180deg,rgba(255,253,248,.16),rgba(255,253,248,0) 44%,rgba(38,35,58,.08));
+    linear-gradient(90deg,rgba(246,231,203,.56) 0%,rgba(246,231,203,.34) 25%,rgba(246,231,203,.08) 48%,rgba(246,231,203,0) 72%),
+    linear-gradient(180deg,rgba(255,253,248,.08),rgba(255,253,248,0) 42%,rgba(38,35,58,.06));
 }
 .hero-stage::after{
   content:"";
@@ -950,12 +951,6 @@ footer .discl{
   transform:translateY(-2px);
   box-shadow:0 6px 0 rgba(38,35,58,.12);
 }
-.site-share{
-  max-width:760px;
-  margin:16px auto 0;
-  display:flex;
-  justify-content:flex-end;
-}
 .share-site-btn{
   border:2px solid rgba(38,35,58,.16);
   border-radius:999px;
@@ -975,6 +970,9 @@ footer .discl{
   .hero-illustration,.hero-shine{animation:none}
 }
 @media (max-width:720px){
+  .hbar{gap:9px}
+  .search{order:3;flex-basis:100%;max-width:none;margin-left:0}
+  .header-share{margin-left:auto;padding:8px 11px;font-size:12px;box-shadow:0 4px 0 rgba(38,35,58,.14)}
   .hero h1{font-size:clamp(31px,10vw,46px)}
   .hero::before{font-size:11px}
   .hero::after{top:46px;height:360px}
@@ -987,8 +985,8 @@ footer .discl{
     position:absolute;
     inset:0;
   }
-  .hero-stage::before{background:linear-gradient(180deg,rgba(246,231,203,.90),rgba(246,231,203,.66) 50%,rgba(246,231,203,.30))}
-  .hero-illustration{object-position:64% center;opacity:.82}
+  .hero-stage::before{background:linear-gradient(180deg,rgba(246,231,203,.68),rgba(246,231,203,.42) 48%,rgba(246,231,203,.16))}
+  .hero-illustration{object-position:64% center;opacity:.92}
   .grid{gap:14px}
   .cat-section .cards-wrap{grid-template-columns:1fr 1fr;gap:14px}
   .rakuchu-map{grid-template-columns:1fr}
@@ -1003,7 +1001,6 @@ footer .discl{
   .card .line{max-height:3.75em;margin-bottom:6px}
   .card .line .txt{-webkit-line-clamp:2}
   .card-share{right:14px;bottom:11px;padding:7px 9px}
-  .site-share{justify-content:flex-start}
 }
 @media (max-width:420px){
   .cat-section .cards-wrap{grid-template-columns:1fr}
@@ -1025,6 +1022,7 @@ footer .discl{
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C7361" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       <input id="q" type="search" placeholder="京ことばを検索（例：ぶぶ漬け、おおきに、よう言わんわ…）" autocomplete="off">
     </div>
+    <button class="share-site-btn header-share" id="shareSite" type="button">この辞典を共有</button>
   </div>
 </header>
 
@@ -1040,10 +1038,6 @@ footer .discl{
         <img class="hero-illustration" src="assets/hero/kyoto-town-real-pop.png" alt="" loading="eager">
         <span class="hero-shine"></span>
       </div>
-    </div>
-
-    <div class="site-share">
-      <button class="share-site-btn" id="shareSite" type="button">この辞典を共有</button>
     </div>
   </section>
 
