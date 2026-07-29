@@ -78,6 +78,12 @@ async function runViewport(browser, viewport) {
   await page.waitForTimeout(1000);
   screenshots.push(await shot(page, `${prefix}-dict`));
   results.push(await auditLayout(page, `${prefix}-dict`));
+  await page.getByText("おおきに", { exact: true }).first().click().catch(() => null);
+  await page.waitForTimeout(500);
+  screenshots.push(await shot(page, `${prefix}-dict-detail`));
+  results.push(await auditLayout(page, `${prefix}-dict-detail`));
+  await page.getByText("×", { exact: true }).click().catch(() => null);
+  await page.waitForTimeout(250);
 
   await openTab(page, "洛中地図");
   await page.getByText("祇園", { exact: true }).click().catch(() => null);

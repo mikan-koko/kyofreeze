@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Animated,
+  Easing,
   FlatList,
   Image,
   ImageBackground,
@@ -45,122 +47,42 @@ type CatFilter = keyof typeof CATS;
 
 type MapSpot = {
   id: string;
-  name: string;
-  kana: string;
-  area: string;
+  termKey: string;
   x: number;
   y: number;
   color: string;
-  phrases: string[];
   note: string;
 };
 
 const TERMS = termsJson as Term[];
 const GUIDE = require("./assets/characters/kyofreeze-guide-bold.png");
+const GUIDE_MAP = require("./assets/characters/kotoha-guide-map-pose.png");
 const HERO_TOWN = require("./assets/hero/kyoto-town-pop.png");
 const APP_ICON = require("./assets/icon.png");
 const RAKUCHU_MAP = require("./assets/map/rakuchu-map-current-pop.png");
+const HANNARI = {
+  1: "おぶう一杯レベル",
+  2: "町内会レベル",
+  3: "四条通すいすいレベル",
+  4: "先斗町の常連レベル",
+  5: "祇園の女将レベル",
+} as const;
 
 const MAP_SPOTS: MapSpot[] = [
-  {
-    id: "demachi",
-    name: "出町柳",
-    kana: "demachiyanagi",
-    area: "北東",
-    x: 61,
-    y: 14,
-    color: "#42B8A8",
-    phrases: ["ふたばの豆餅もろた", "鴨川等間隔の法則"],
-    note: "鴨川と学生街が近い、手土産と待ち合わせの気配が濃い場所。",
-  },
-  {
-    id: "hyakumanben",
-    name: "百万遍",
-    kana: "hyakumanben",
-    area: "左京",
-    x: 72,
-    y: 22,
-    color: "#335C81",
-    phrases: ["百万遍交差点xy軸", "ルネで昼飯"],
-    note: "京大周辺の座標感覚と学生ことばが混ざる交差点。",
-  },
-  {
-    id: "ichijoji",
-    name: "一乗寺",
-    kana: "ichijoji",
-    area: "北東",
-    x: 82,
-    y: 10,
-    color: "#F6A23A",
-    phrases: ["一乗寺でラーメン食べて百万遍で飲も", "天一こってり"],
-    note: "ラーメンの記憶で地図が動く、左京区らしい寄り道地点。",
-  },
-  {
-    id: "gion",
-    name: "祇園",
-    kana: "gion",
-    area: "東山",
-    x: 70,
-    y: 55,
-    color: "#A84E8A",
-    phrases: ["おこしやす", "おいでやす", "はんなり"],
-    note: "観光の入口でもあり、言葉の丁寧さがもっとも目立つ界隈。",
-  },
-  {
-    id: "pontocho",
-    name: "先斗町",
-    kana: "pontocho",
-    area: "河原町",
-    x: 57,
-    y: 49,
-    color: "#F26D88",
-    phrases: ["先斗町でご飯はちょっと緊張する", "木屋町で朝まで飲む"],
-    note: "細い路地、店の明かり、ちょっと背筋が伸びる夜のことば。",
-  },
-  {
-    id: "nishiki",
-    name: "錦市場",
-    kana: "nishiki",
-    area: "四条",
-    x: 47,
-    y: 52,
-    color: "#D9B43A",
-    phrases: ["錦市場はもうインバウンドの場所やな", "おこうこ", "おあげさん"],
-    note: "食の京都と観光地化の実感が同時に出る通り。",
-  },
-  {
-    id: "karasuma",
-    name: "烏丸御池",
-    kana: "karasuma-oike",
-    area: "洛中",
-    x: 42,
-    y: 42,
-    color: "#26233A",
-    phrases: ["上がる / 下る / 西入る / 東入る", "丸竹夷"],
-    note: "通り名と方角で会話が進む、洛中の座標の中心。",
-  },
-  {
-    id: "saiin",
-    name: "西院・大宮",
-    kana: "saiin-omiya",
-    area: "西",
-    x: 24,
-    y: 62,
-    color: "#788A56",
-    phrases: ["西院・大宮でせんべろ", "王将1号店行こ"],
-    note: "安く飲む、濃いめに食べる。普段着の京都が出るエリア。",
-  },
-  {
-    id: "kyoto-station",
-    name: "京都駅",
-    kana: "kyoto-station",
-    area: "南",
-    x: 47,
-    y: 84,
-    color: "#E35D3B",
-    phrases: ["206系統は絶対混む", "地下鉄が高い", "カルネ買っといて"],
-    note: "市バス、地下鉄、手土産。移動の愚痴と便利さが集まる玄関口。",
-  },
+  { id: "marutake", termKey: "丸竹夷", x: 43, y: 24, color: "#42B8A8", note: "御所の南側へ広がる東西の通りを覚える、洛中の地図感覚そのもの。" },
+  { id: "teragoko", termKey: "寺御幸", x: 57, y: 27, color: "#335C81", note: "河原町より西の南北通りをたどる時の、昔ながらの道しるべ。" },
+  { id: "agaru", termKey: "上がる", x: 49, y: 39, color: "#F6A23A", note: "北へ行く、という京都式の方角表現。碁盤目の街で生きる言い方です。" },
+  { id: "pontocho", termKey: "先斗町", x: 79, y: 48, color: "#F26D88", note: "鴨川のすぐ西側、細い路地と花街らしい少し背筋が伸びる場所。" },
+  { id: "kiyamachi", termKey: "木屋町", x: 76, y: 53, color: "#A84E8A", note: "鴨川に寄り添う高瀬川沿いの夜の空気まで含めて覚えたい地名。" },
+  { id: "uradera", termKey: "裏寺", x: 66, y: 55, color: "#788A56", note: "河原町近くの買い物や寄り道の記憶と結びつく路地感。" },
+  { id: "nishiki", termKey: "錦市場はもうインバウンドの場所やな", x: 60, y: 58, color: "#D9B43A", note: "四条河原町に近い市場の変化を、地元目線でさらっと言うフレーズ。" },
+  { id: "kamogawa", termKey: "鴨川等間隔の法則", x: 86, y: 59, color: "#42B8A8", note: "川べりの距離感まで京都の景色になる定番ミーム。" },
+  { id: "shijo", termKey: "四条通が渋滞で進まへん", x: 57, y: 63, color: "#E35D3B", note: "四条通の洛中移動あるある。歩いたほうが早い日もあります。" },
+  { id: "ohsho", termKey: "王将1号店行こ", x: 48, y: 67, color: "#26233A", note: "四条大宮の聖地巡礼として語られる、街のローカルフレーズ。" },
+  { id: "nishiiru", termKey: "西入る", x: 36, y: 56, color: "#335C81", note: "通り名と組み合わせると急に京都の住所っぽくなる言い方。" },
+  { id: "higashiiru", termKey: "東入る", x: 69, y: 56, color: "#335C81", note: "東西南北を街の碁盤目でつかむための言い方。" },
+  { id: "sagaru", termKey: "下る", x: 49, y: 74, color: "#F6A23A", note: "南へ行く、という京都式の方角表現。駅方面へ下がる感覚にもつながります。" },
+  { id: "takabashi", termKey: "たかばし", x: 57, y: 86, color: "#A84E8A", note: "京都駅の東寄りで語られる、第一旭と新福菜館のラーメン派閥。" },
 ];
 
 const MONETIZATION_ITEMS = [
@@ -193,9 +115,17 @@ function findTerm(name: string) {
   return TERMS.find((term) => term.k === name || term.k.includes(name) || name.includes(term.k));
 }
 
+function termForSpot(spot: MapSpot) {
+  return findTerm(spot.termKey) ?? TERMS[0];
+}
+
 function illustrationFor(term?: Term | null) {
   if (!term) return null;
   return ILLUSTRATIONS[term.k as keyof typeof ILLUSTRATIONS] ?? null;
+}
+
+function shortMapLabel(value: string) {
+  return value.length > 8 ? `${value.slice(0, 7)}…` : value;
 }
 
 function buildOptions(term: Term, field: "choku" | "honne", index: number) {
@@ -216,6 +146,7 @@ export default function App() {
   const [selectedCat, setSelectedCat] = useState<CatFilter>("greet");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Term>(TERMS[0]);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState<MapSpot>(MAP_SPOTS[6]);
   const [quizIndex, setQuizIndex] = useState(0);
   const [answer, setAnswer] = useState<string | null>(null);
@@ -230,7 +161,7 @@ export default function App() {
     );
   }, [query, selectedCat]);
 
-  const mapTerms = selectedSpot.phrases.map((phrase) => findTerm(phrase)).filter(Boolean) as Term[];
+  const mapTerm = termForSpot(selectedSpot);
   const quizTerm = TERMS[(quizIndex * 17) % TERMS.length];
   const quizField: "choku" | "honne" = quizIndex % 2 === 0 ? "honne" : "choku";
   const quizAnswer = stripHtml(quizTerm[quizField]);
@@ -238,8 +169,32 @@ export default function App() {
   const answered = answer !== null;
   const progress = Math.min(100, ((quizIndex % 10) + (answered ? 1 : 0)) * 10);
   const selectedArt = illustrationFor(selected);
+  const mapArt = illustrationFor(mapTerm);
   const quizArt = illustrationFor(quizTerm);
   const selectedCatMeta = CATS[selectedCat];
+  const float = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(float, { toValue: 1, duration: 1700, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+        Animated.timing(float, { toValue: 0, duration: 1700, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [float]);
+
+  const floatStyle = {
+    transform: [
+      {
+        translateY: float.interpolate({ inputRange: [0, 1], outputRange: [0, -6] }),
+      },
+      {
+        rotate: float.interpolate({ inputRange: [0, 1], outputRange: ["-1deg", "1deg"] }),
+      },
+    ],
+  };
 
   function chooseAnswer(value: string) {
     if (answered) return;
@@ -271,7 +226,13 @@ export default function App() {
                 </View>
               </View>
             </View>
-            <Image source={GUIDE} style={styles.headerGuide} />
+            <View style={styles.headerGuideWrap}>
+              <Animated.Image source={GUIDE} style={[styles.headerGuide, floatStyle]} />
+              <View style={styles.guideName}>
+                <Text style={styles.guideRole}>案内役</Text>
+                <Text style={styles.guideText}>ことは</Text>
+              </View>
+            </View>
           </View>
           <View style={styles.headerStripe} />
 
@@ -310,6 +271,7 @@ export default function App() {
                               setQuery("");
                               const first = TERMS.find((term) => term.c === id);
                               if (first) setSelected(first);
+                              setDetailOpen(false);
                             }}
                             style={[styles.catChip, active && styles.catChipActive, { borderColor: cat.color }]}
                           >
@@ -334,7 +296,10 @@ export default function App() {
                   const art = illustrationFor(item);
                   return (
                     <Pressable
-                      onPress={() => setSelected(item)}
+                      onPress={() => {
+                        setSelected(item);
+                        setDetailOpen(true);
+                      }}
                       style={[styles.termCard, isSelected && styles.termCardActive, { borderColor: isSelected ? cat.color : "#26233A" }]}
                     >
                       <View style={styles.cornerTop} />
@@ -359,29 +324,95 @@ export default function App() {
                     </Pressable>
                   );
                 }}
+                numColumns={2}
+                columnWrapperStyle={styles.cardGridRow}
               />
-              <View style={styles.detail}>
-                <View style={styles.detailFuda}>
-                  {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
-                  <View style={[styles.detailSeal, { backgroundColor: CATS[selected.c].color }]}>
-                    <Text style={styles.detailSealText}>{CATS[selected.c].seal}</Text>
+              {detailOpen && (
+                <View style={styles.detailOverlay}>
+                  <View style={styles.detail}>
+                    <Pressable onPress={() => setDetailOpen(false)} style={styles.closeButton}>
+                      <Text style={styles.closeButtonText}>×</Text>
+                    </Pressable>
+                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.detailScroll}>
+                      <View style={styles.detailFuda}>
+                        <View style={[styles.fudaBandTall, { backgroundColor: CATS[selected.c].color }]} />
+                        <View style={styles.detailFrame} />
+                        <View style={styles.detailCornerTop} />
+                        <View style={styles.detailCornerBottom} />
+                        <View style={[styles.detailSeal, { backgroundColor: CATS[selected.c].color }]}>
+                          <Text style={styles.detailSealText}>{CATS[selected.c].seal}</Text>
+                        </View>
+                        <Text style={styles.detailRank}>{HANNARI[selected.h as keyof typeof HANNARI].replace("レベル", "")}</Text>
+                        {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
+                        <Text style={styles.detailFudaTitle}>{selected.k}</Text>
+                        <Text style={styles.detailFudaYomi}>{selected.y}</Text>
+                        <Text style={[styles.detailFudaCat, { color: CATS[selected.c].color }]}>{CATS[selected.c].label}</Text>
+                        <Text style={styles.detailFudaScene}>「{stripHtml(selected.scene)}」</Text>
+                        <View style={styles.fudaBeans}>
+                          <Text style={styles.fudaBeansLabel}>はんなり</Text>
+                          {[1, 2, 3, 4, 5].map((level) => (
+                            <View key={level} style={[styles.fudaBean, selected.h >= level && styles.fudaBeanOn]} />
+                          ))}
+                        </View>
+                      </View>
+                      <View style={styles.detailCopy}>
+                        <View style={styles.mhead}>
+                          <View style={{ flex: 1 }}>
+                            <Text style={styles.detailTitle}>{selected.k}</Text>
+                            <Text style={styles.detailYomi}>{selected.y}</Text>
+                          </View>
+                        </View>
+                        <View style={styles.detailBlock}>
+                          <Text style={styles.detailLabel}><Text style={styles.bnum}>1</Text> 直訳</Text>
+                          <Text style={styles.detailText}>{stripHtml(selected.choku)}</Text>
+                        </View>
+                        <View style={styles.detailBlockHonne}>
+                          <Text style={styles.detailLabel}><Text style={styles.bnum}>2</Text> 意訳</Text>
+                          <Text style={styles.honneWarn}>意訳</Text>
+                          <Text style={styles.honneText}>{stripHtml(selected.honne)}</Text>
+                        </View>
+                        <View style={styles.detailPlainBlock}>
+                          <Text style={styles.detailLabel}><Text style={styles.bnum}>3</Text> なんでそう言う？</Text>
+                          <Text style={styles.whyText}>{stripHtml(selected.why)}</Text>
+                        </View>
+                        <View style={styles.detailSceneBlock}>
+                          <Text style={styles.detailLabel}><Text style={styles.bnum}>4</Text> こんな場面で</Text>
+                          {!!selected.who && <Text style={styles.sceneWho}>{stripHtml(selected.who)}</Text>}
+                          <Text style={styles.sceneText}>{stripHtml(selected.scene)}</Text>
+                        </View>
+                        <View style={styles.hannariBox}>
+                          <Text style={styles.detailLabel}>はんなり度</Text>
+                          <View style={styles.hMeter}>
+                            {[1, 2, 3, 4, 5].map((level) => (
+                              <View key={level} style={[styles.hGold, selected.h >= level && styles.hGoldOn]} />
+                            ))}
+                            <Text style={styles.hText}>Lv.{selected.h}・{HANNARI[selected.h as keyof typeof HANNARI]}</Text>
+                          </View>
+                        </View>
+                        {!!selected.rel?.length && (
+                          <View style={styles.relBox}>
+                            <Text style={styles.detailLabel}>関連する京ことば</Text>
+                            <View style={styles.relRail}>
+                              {selected.rel.filter((rel) => findTerm(rel)).map((rel) => (
+                                <Pressable
+                                  key={rel}
+                                  style={styles.relChip}
+                                  onPress={() => {
+                                    const next = findTerm(rel);
+                                    if (next) setSelected(next);
+                                  }}
+                                >
+                                  <Text style={styles.relChipText}>{rel}</Text>
+                                </Pressable>
+                              ))}
+                            </View>
+                          </View>
+                        )}
+                      </View>
+                    </ScrollView>
                   </View>
                 </View>
-                <View style={styles.detailCopy}>
-                  <Text style={styles.detailCat}>{CATS[selected.c].label}</Text>
-                  <Text style={styles.detailTitle}>{selected.k}</Text>
-                  <Text style={styles.detailYomi}>{selected.y}</Text>
-                  <View style={styles.detailBlock}>
-                    <Text style={styles.detailLabel}>直訳</Text>
-                    <Text style={styles.detailText}>{stripHtml(selected.choku)}</Text>
-                  </View>
-                  <View style={styles.detailBlockHonne}>
-                    <Text style={styles.detailLabel}>意訳</Text>
-                    <Text style={styles.detailText}>{stripHtml(selected.honne)}</Text>
-                  </View>
-                  <Text style={styles.sceneText}>{stripHtml(selected.scene)}</Text>
-                </View>
-              </View>
+              )}
             </View>
           )}
 
@@ -389,16 +420,18 @@ export default function App() {
         <ScrollView contentContainerStyle={styles.mapScreen}>
           <View style={styles.mapHero}>
             <View style={styles.mapHeroCopy}>
-              <Text style={styles.mapEyebrow}>洛中リアル地図</Text>
-              <Text style={styles.mapTitle}>地名から京ことばをひらく</Text>
+              <Text style={styles.mapEyebrow}>洛中ことば地図</Text>
+              <Text style={styles.mapTitle}>今の地理から、京ことばをひらく</Text>
+              <Text style={styles.mapLead}>地名・通り名・街のあるあるにピンを置いた、デフォルメ概略地図です。</Text>
             </View>
-            <Image source={GUIDE} style={styles.mapGuide} />
+            <Animated.Image source={GUIDE_MAP} style={[styles.mapGuide, floatStyle]} />
           </View>
 
           <ImageBackground source={RAKUCHU_MAP} resizeMode="cover" imageStyle={styles.mapBoardImage} style={styles.mapBoard}>
             <View style={styles.mapImageShade} />
             {MAP_SPOTS.map((spot) => {
               const active = selectedSpot.id === spot.id;
+              const term = termForSpot(spot);
               return (
                 <Pressable
                   key={spot.id}
@@ -413,47 +446,49 @@ export default function App() {
                     },
                   ]}
                 >
-                  <Text style={[styles.mapPinText, active && styles.mapPinTextActive]}>{spot.area}</Text>
+                  <Text style={[styles.mapPinText, active && styles.mapPinTextActive]}>{shortMapLabel(term.k)}</Text>
                 </Pressable>
               );
             })}
           </ImageBackground>
 
-          <View style={styles.spotCard}>
-            <View style={styles.spotHeader}>
-              <View>
-                <Text style={styles.spotArea}>{selectedSpot.area}</Text>
-                <Text style={styles.spotName}>{selectedSpot.name}</Text>
-                <Text style={styles.spotKana}>{selectedSpot.kana}</Text>
+            <View style={styles.spotCard}>
+              <View style={styles.spotHeader}>
+              <View style={styles.spotTitleBlock}>
+                <Text style={styles.spotArea}>地図メモ</Text>
+                <Text style={styles.spotName}>{mapTerm.k}</Text>
+                <Text style={styles.spotKana}>{mapTerm.y}</Text>
               </View>
-              <View style={[styles.spotBadge, { backgroundColor: selectedSpot.color }]}>
-                <Text style={styles.spotBadgeText}>現</Text>
+              <View style={[styles.spotBadge, { backgroundColor: CATS[mapTerm.c].color }]}>
+                <Text style={styles.spotBadgeText}>{CATS[mapTerm.c].seal}</Text>
               </View>
             </View>
+            {mapArt && <Image source={mapArt} style={styles.mapPanelArt} />}
             <Text style={styles.spotNote}>{selectedSpot.note}</Text>
-            <View style={styles.phraseRail}>
-              {selectedSpot.phrases.map((phrase) => (
-                <Pressable
-                  key={phrase}
-                  style={styles.phraseChip}
-                  onPress={() => {
-                    const term = findTerm(phrase);
-                    if (term) {
-                      setSelected(term);
-                      setMode("dict");
-                    }
-                  }}
-                >
-                  <Text style={styles.phraseChipText}>{phrase}</Text>
-                </Pressable>
-              ))}
-            </View>
-            {mapTerms.map((term) => (
-              <View key={term.k} style={styles.mapTerm}>
-                <Text style={styles.mapTermTitle}>{term.k}</Text>
-                <Text style={styles.mapTermText}>{stripHtml(term.honne || term.choku)}</Text>
+            <View style={styles.mapInfoGrid}>
+              <View style={styles.mapInfoBlock}>
+                <Text style={styles.mapInfoLabel}>直訳</Text>
+                <Text style={styles.mapTermText}>{stripHtml(mapTerm.choku)}</Text>
               </View>
-            ))}
+              <View style={styles.mapInfoBlockPink}>
+                <Text style={styles.mapInfoLabel}>意訳</Text>
+                <Text style={styles.mapTermText}>{stripHtml(mapTerm.honne)}</Text>
+              </View>
+              <View style={styles.mapInfoBlock}>
+                <Text style={styles.mapInfoLabel}>場面</Text>
+                <Text style={styles.mapTermText}>{stripHtml(mapTerm.scene)}</Text>
+              </View>
+            </View>
+            <Pressable
+              style={styles.mapOpen}
+              onPress={() => {
+                setSelected(mapTerm);
+                setMode("dict");
+                setDetailOpen(true);
+              }}
+            >
+              <Text style={styles.mapOpenText}>詳しく見る</Text>
+            </Pressable>
           </View>
         </ScrollView>
       )}
@@ -467,7 +502,7 @@ export default function App() {
               <Text style={styles.quizTitle}>第{(quizIndex % 10) + 1}問</Text>
               <Text style={styles.quizScore}>正解 {score} / 挑戦 {quizIndex}</Text>
             </View>
-            <Image source={GUIDE} style={styles.quizGuide} />
+            <Animated.Image source={GUIDE_MAP} style={[styles.quizGuide, floatStyle]} />
           </ImageBackground>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress}%` }]} />
@@ -586,7 +621,24 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
     flex: 1,
   },
-  headerGuide: { width: 58, height: 78, resizeMode: "contain" },
+  headerGuideWrap: { width: 72, alignItems: "center", justifyContent: "center" },
+  headerGuide: { width: 58, height: 72, resizeMode: "contain" },
+  guideName: {
+    marginTop: -10,
+    borderRadius: 999,
+    backgroundColor: "#FFFDF8",
+    borderWidth: 2,
+    borderColor: "#26233A",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    alignItems: "center",
+    shadowColor: "#26233A",
+    shadowOpacity: 0.16,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  guideRole: { color: "#335C81", fontSize: 8, fontWeight: "900", lineHeight: 10 },
+  guideText: { color: "#F26D88", fontSize: 13, fontWeight: "900", lineHeight: 15 },
   headerStripe: { height: 5, backgroundColor: "#F26D88", borderBottomWidth: 1, borderBottomColor: "#E7D3C3" },
   bottomNav: {
     flexDirection: "row",
@@ -659,7 +711,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   termList: { flex: 1 },
-  list: { gap: 10, paddingVertical: 12 },
+  list: { paddingVertical: 12, paddingBottom: 110 },
+  cardGridRow: { gap: 10, marginBottom: 10 },
   catRail: { flexDirection: "row", flexWrap: "wrap", gap: 7, paddingVertical: 12 },
   catChip: {
     minHeight: 42,
@@ -698,12 +751,12 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   termCard: {
-    flexDirection: "row",
-    gap: 12,
-    minHeight: 136,
-    padding: 12,
+    flex: 1,
+    maxWidth: "48.8%",
+    minHeight: 238,
+    padding: 10,
     borderRadius: 12,
-    backgroundColor: "rgba(255,253,248,.94)",
+    backgroundColor: "rgba(255,248,232,.96)",
     borderWidth: 2,
     borderColor: "#26233A",
     shadowColor: "#26233A",
@@ -711,6 +764,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 7 },
     overflow: "hidden",
+    alignItems: "center",
   },
   termCardActive: { backgroundColor: "#FFF4F7" },
   cornerTop: {
@@ -733,10 +787,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderColor: "#D9B43A",
   },
-  fudaBand: { position: "absolute", left: 0, top: 0, bottom: 0, width: 5 },
+  fudaBand: { position: "absolute", left: 0, top: 0, bottom: 0, width: 7, opacity: 0.82 },
   termThumb: {
-    width: 88,
-    height: 108,
+    width: "100%",
+    height: 104,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#26233A",
@@ -745,38 +799,103 @@ const styles = StyleSheet.create({
   },
   seal: { width: 36, height: 36, borderRadius: 10, alignItems: "center", justifyContent: "center" },
   sealText: { color: "#FFFFFF", fontWeight: "900" },
-  termBody: { flex: 1 },
-  termCat: { fontSize: 10, fontWeight: "900", letterSpacing: 1 },
-  term: { marginTop: 2, fontSize: 21, fontWeight: "900", color: "#26233A" },
-  yomi: { marginTop: 2, fontSize: 11, fontWeight: "800", color: "#8A7D8D", letterSpacing: 1 },
-  rule: { width: 54, height: 1, backgroundColor: "rgba(38,35,58,.26)", marginTop: 8, marginBottom: 6 },
-  meaning: { color: "#514754", fontSize: 13, fontWeight: "800", lineHeight: 19 },
-  beans: { flexDirection: "row", gap: 4, marginTop: 8 },
+  termBody: { flex: 1, width: "100%", alignItems: "center" },
+  termCat: { marginTop: 7, fontSize: 9, fontWeight: "900", letterSpacing: 1 },
+  term: { marginTop: 3, fontSize: 18, lineHeight: 23, fontWeight: "900", color: "#26233A", textAlign: "center" },
+  yomi: { marginTop: 2, fontSize: 10, fontWeight: "800", color: "#8A7D8D", letterSpacing: 1, textAlign: "center" },
+  rule: { width: 48, height: 1, backgroundColor: "rgba(38,35,58,.26)", marginTop: 7, marginBottom: 6 },
+  meaning: { color: "#514754", fontSize: 11, fontWeight: "800", lineHeight: 16, textAlign: "center" },
+  beans: { flexDirection: "row", gap: 4, marginTop: 7 },
   bean: { width: 10, height: 10, borderRadius: 999, borderWidth: 1, borderColor: "#D8CFC7", backgroundColor: "#F3EBDD" },
   beanOn: { backgroundColor: "#26233A", borderColor: "#26233A" },
-  hannari: { color: "#F26D88", fontWeight: "900" },
+  hannari: { position: "absolute", right: 12, bottom: 8, fontSize: 11, fontWeight: "900" },
+  detailOverlay: {
+    position: "absolute",
+    top: 8,
+    right: 0,
+    bottom: 8,
+    left: 0,
+    zIndex: 30,
+    justifyContent: "center",
+    backgroundColor: "rgba(38,35,58,.18)",
+    paddingHorizontal: 4,
+  },
   detail: {
-    marginBottom: 12,
-    borderRadius: 14,
-    padding: 12,
-    backgroundColor: "rgba(255,253,248,.96)",
+    maxHeight: "98%",
+    borderRadius: 18,
+    backgroundColor: "#FFFDF8",
     borderWidth: 3,
     borderColor: "#26233A",
-    flexDirection: "row",
-    gap: 12,
     shadowColor: "#26233A",
-    shadowOpacity: 0.16,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: -8 },
+    shadowOpacity: 0.28,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 14 },
+    overflow: "hidden",
   },
-  detailFuda: { width: 116, minHeight: 172, position: "relative" },
-  detailArt: { width: 116, height: 172, borderRadius: 10, resizeMode: "cover", backgroundColor: "#F6E7CB" },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 40,
+    width: 42,
+    height: 42,
+    borderRadius: 999,
+    backgroundColor: "#F0ECE6",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#E4DAD0",
+  },
+  closeButtonText: { color: "#26233A", fontSize: 26, lineHeight: 28, fontWeight: "500" },
+  detailScroll: { padding: 10, gap: 12 },
+  detailFuda: {
+    minHeight: 414,
+    borderRadius: 12,
+    position: "relative",
+    overflow: "hidden",
+    alignItems: "center",
+    paddingTop: 24,
+    paddingHorizontal: 24,
+    backgroundColor: "#F6E7CB",
+  },
+  detailFrame: { position: "absolute", top: 8, right: 8, bottom: 8, left: 8, borderWidth: 1, borderColor: "#F26D88", borderRadius: 9 },
+  detailCornerTop: {
+    position: "absolute",
+    left: 14,
+    top: 14,
+    width: 24,
+    height: 24,
+    borderTopWidth: 3,
+    borderLeftWidth: 3,
+    borderColor: "#FF7E9C",
+  },
+  detailCornerBottom: {
+    position: "absolute",
+    right: 14,
+    bottom: 14,
+    width: 24,
+    height: 24,
+    borderRightWidth: 3,
+    borderBottomWidth: 3,
+    borderColor: "#FF7E9C",
+  },
+  fudaBandTall: { position: "absolute", left: 0, top: 0, bottom: 0, width: 8, opacity: 0.9 },
+  detailArt: {
+    width: 154,
+    height: 154,
+    borderRadius: 999,
+    resizeMode: "cover",
+    backgroundColor: "#FFF3D0",
+    borderWidth: 7,
+    borderColor: "rgba(255,253,248,.92)",
+    marginTop: 28,
+  },
   detailSeal: {
     position: "absolute",
-    left: 8,
-    top: 8,
-    width: 34,
-    height: 34,
+    left: 18,
+    top: 18,
+    width: 42,
+    height: 56,
     borderRadius: 9,
     alignItems: "center",
     justifyContent: "center",
@@ -784,31 +903,69 @@ const styles = StyleSheet.create({
     borderColor: "#FFFDF8",
   },
   detailSealText: { color: "#FFFDF8", fontWeight: "900" },
-  detailCopy: { flex: 1 },
-  detailCat: { color: "#F26D88", fontSize: 11, fontWeight: "900", letterSpacing: 1 },
-  detailTitle: { fontSize: 24, fontWeight: "900", color: "#26233A" },
-  detailYomi: { marginTop: 1, color: "#8A7D8D", fontSize: 11, fontWeight: "900", letterSpacing: 1.4 },
-  detailBlock: { marginTop: 10, borderRadius: 12, backgroundColor: "rgba(66,184,168,.12)", padding: 10 },
-  detailBlockHonne: { marginTop: 8, borderRadius: 12, backgroundColor: "rgba(242,109,136,.10)", borderWidth: 1, borderColor: "rgba(242,109,136,.35)", padding: 10 },
-  detailLabel: { fontSize: 11, fontWeight: "900", color: "#F26D88" },
-  detailText: { marginTop: 4, color: "#514754", fontSize: 14, fontWeight: "700", lineHeight: 22 },
-  sceneText: { marginTop: 8, color: "#8A7357", fontSize: 12, fontWeight: "800", lineHeight: 18 },
+  detailRank: {
+    position: "absolute",
+    right: 14,
+    top: 20,
+    color: "#335C81",
+    fontSize: 11,
+    fontWeight: "900",
+    writingDirection: "rtl",
+  },
+  detailFudaTitle: { marginTop: 14, color: "#26233A", fontSize: 25, lineHeight: 32, fontWeight: "900", textAlign: "center" },
+  detailFudaYomi: { marginTop: 3, color: "#514754", fontSize: 13, letterSpacing: 1.3 },
+  detailFudaCat: { marginTop: 22, fontSize: 12, fontWeight: "900" },
+  detailFudaScene: { marginTop: 14, color: "#4E4653", fontSize: 15, lineHeight: 24, textAlign: "center", fontWeight: "900" },
+  fudaBeans: { position: "absolute", bottom: 18, flexDirection: "row", alignItems: "center", gap: 6 },
+  fudaBeansLabel: { color: "#B89A5A", fontSize: 11, fontWeight: "900", marginRight: 4 },
+  fudaBean: { width: 11, height: 11, borderRadius: 999, backgroundColor: "#F3D3DB" },
+  fudaBeanOn: { backgroundColor: "#F26D88" },
+  detailCopy: { padding: 4, gap: 12 },
+  mhead: { paddingHorizontal: 4, paddingRight: 48, minHeight: 48, flexDirection: "row", alignItems: "flex-start" },
+  detailTitle: { fontSize: 29, lineHeight: 36, fontWeight: "900", color: "#26233A" },
+  detailYomi: { marginTop: 4, color: "#8A7D8D", fontSize: 12, fontWeight: "900", letterSpacing: 1.4 },
+  detailBlock: { borderRadius: 16, backgroundColor: "rgba(66,184,168,.16)", borderWidth: 2, borderColor: "#8BDED4", padding: 14 },
+  detailBlockHonne: { borderRadius: 16, backgroundColor: "rgba(242,109,136,.13)", borderWidth: 2, borderStyle: "dashed", borderColor: "#F26D88", padding: 14 },
+  detailPlainBlock: { paddingHorizontal: 4, gap: 8 },
+  detailSceneBlock: { borderRadius: 16, backgroundColor: "#FFF3D0", borderLeftWidth: 3, borderLeftColor: "#F6A23A", padding: 14 },
+  detailLabel: { fontSize: 12, fontWeight: "900", color: "#655B50", letterSpacing: 0.5 },
+  bnum: { color: "#FFFDF8", backgroundColor: "#26233A", fontSize: 11, fontWeight: "900" },
+  detailText: { marginTop: 7, color: "#26233A", fontSize: 17, fontWeight: "900", lineHeight: 26 },
+  honneWarn: { marginTop: 8, color: "#B6405E", fontSize: 12, fontWeight: "900" },
+  honneText: { marginTop: 6, color: "#8F3352", fontSize: 18, fontWeight: "900", lineHeight: 30 },
+  whyText: { color: "#4E4653", fontSize: 15, lineHeight: 27, fontWeight: "700" },
+  sceneWho: { color: "#798852", fontSize: 13, fontWeight: "900", marginBottom: 6 },
+  sceneText: { color: "#8A7357", fontSize: 14, fontWeight: "800", lineHeight: 22 },
+  hannariBox: { paddingHorizontal: 4 },
+  hMeter: { marginTop: 8, flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 7 },
+  hGold: { width: 17, height: 17, borderRadius: 999, backgroundColor: "#E8DED4" },
+  hGoldOn: { backgroundColor: "#D9B43A" },
+  hText: { color: "#A06D22", fontSize: 14, fontWeight: "900" },
+  relBox: { paddingHorizontal: 4, gap: 8 },
+  relRail: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  relChip: { borderRadius: 999, backgroundColor: "#FFFDF8", borderWidth: 2, borderColor: "#E4DAD0", paddingHorizontal: 12, paddingVertical: 8 },
+  relChipText: { color: "#335C81", fontSize: 13, fontWeight: "900" },
   mapScreen: { padding: 16, gap: 14 },
   mapHero: {
-    minHeight: 154,
+    minHeight: 164,
     borderRadius: 24,
-    backgroundColor: "#E9FAF6",
-    borderWidth: 2,
-    borderColor: "#B9E7DF",
+    backgroundColor: "rgba(255,253,248,.92)",
+    borderWidth: 3,
+    borderColor: "#26233A",
     padding: 18,
     flexDirection: "row",
     alignItems: "center",
     overflow: "hidden",
+    shadowColor: "#26233A",
+    shadowOpacity: 0.14,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
   },
   mapHeroCopy: { flex: 1, paddingRight: 8 },
   mapEyebrow: { color: "#335C81", fontSize: 12, fontWeight: "900" },
   mapTitle: { marginTop: 8, color: "#26233A", fontSize: 24, lineHeight: 31, fontWeight: "900" },
-  mapGuide: { width: 82, height: 126, resizeMode: "contain" },
+  mapLead: { marginTop: 8, color: "#655B50", fontSize: 13, lineHeight: 20, fontWeight: "800" },
+  mapGuide: { width: 108, height: 150, resizeMode: "contain", marginRight: -10, marginBottom: -18 },
   mapBoard: {
     height: 330,
     borderRadius: 24,
@@ -871,35 +1028,77 @@ const styles = StyleSheet.create({
   mapRoadEast: { right: "18%", top: 18 },
   mapPin: {
     position: "absolute",
-    width: 48,
-    minHeight: 38,
+    minWidth: 48,
+    maxWidth: 94,
+    minHeight: 34,
     marginLeft: -24,
-    marginTop: -19,
+    marginTop: -17,
     borderRadius: 999,
-    borderWidth: 3,
+    borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 8,
     shadowColor: "#26233A",
     shadowOpacity: 0.28,
     shadowRadius: 7,
     shadowOffset: { width: 0, height: 5 },
   },
-  mapPinText: { color: "#26233A", fontSize: 11, fontWeight: "900" },
+  mapPinText: { color: "#26233A", fontSize: 10, fontWeight: "900", textAlign: "center" },
   mapPinTextActive: { color: "#FFFFFF" },
-  spotCard: { borderRadius: 24, backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: "#E4DAD0", padding: 18 },
-  spotHeader: { flexDirection: "row", justifyContent: "space-between", gap: 12 },
+  spotCard: {
+    borderRadius: 24,
+    backgroundColor: "rgba(255,253,248,.92)",
+    borderWidth: 2,
+    borderColor: "rgba(38,35,58,.16)",
+    padding: 18,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+  },
+  spotHeader: { flexDirection: "row", justifyContent: "space-between", gap: 12, alignItems: "flex-start" },
+  spotTitleBlock: { flex: 1, minWidth: 0, paddingRight: 8 },
   spotArea: { color: "#F26D88", fontSize: 12, fontWeight: "900" },
-  spotName: { marginTop: 4, color: "#26233A", fontSize: 30, fontWeight: "900", lineHeight: 36 },
+  spotName: { marginTop: 4, color: "#26233A", fontSize: 26, fontWeight: "900", lineHeight: 33, flexShrink: 1 },
   spotKana: { marginTop: 2, color: "#8A7D8D", fontSize: 11, fontWeight: "800", letterSpacing: 1 },
   spotBadge: { width: 44, height: 44, borderRadius: 14, alignItems: "center", justifyContent: "center" },
   spotBadgeText: { color: "#FFFFFF", fontSize: 18, fontWeight: "900" },
   spotNote: { marginTop: 12, color: "#514754", fontSize: 14, fontWeight: "700", lineHeight: 22 },
+  mapPanelArt: {
+    width: "100%",
+    height: 158,
+    marginTop: 14,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: "#26233A",
+    resizeMode: "cover",
+    backgroundColor: "#F6E7CB",
+  },
   phraseRail: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 14 },
   phraseChip: { borderRadius: 999, backgroundColor: "#FFF4F7", borderWidth: 2, borderColor: "#F4C9D4", padding: 10 },
   phraseChipText: { color: "#A33652", fontSize: 12, fontWeight: "900" },
   mapTerm: { marginTop: 12, borderRadius: 16, backgroundColor: "#FAF6EE", padding: 13 },
   mapTermTitle: { color: "#26233A", fontSize: 16, fontWeight: "900" },
   mapTermText: { marginTop: 5, color: "#514754", fontSize: 13, fontWeight: "700", lineHeight: 20 },
+  mapInfoGrid: { gap: 10, marginTop: 14 },
+  mapInfoBlock: { borderRadius: 16, backgroundColor: "#FAF6EE", padding: 13, borderWidth: 1, borderColor: "#E4DAD0" },
+  mapInfoBlockPink: { borderRadius: 16, backgroundColor: "#FFF4F7", padding: 13, borderWidth: 1, borderColor: "#F4C9D4" },
+  mapInfoLabel: { color: "#F26D88", fontSize: 11, fontWeight: "900", letterSpacing: 1 },
+  mapOpen: {
+    alignSelf: "flex-start",
+    marginTop: 16,
+    borderRadius: 999,
+    backgroundColor: "#F26D88",
+    borderWidth: 2,
+    borderColor: "#26233A",
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.18,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  mapOpenText: { color: "#FFFDF8", fontSize: 13, fontWeight: "900" },
   quizScreen: { padding: 16, gap: 14 },
   quizHero: {
     minHeight: 190,
