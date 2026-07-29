@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="20">
+<title>京ふれーず 開発進捗ボード</title>
+<style>
+body{margin:0;background:#FAF6EE;color:#26233A;font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+main{max-width:980px;margin:0 auto;padding:32px 18px 56px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:stretch}
+.panel{background:#FFFDF8;border:2px solid #E5DACE;border-radius:20px;padding:20px;box-shadow:0 8px 0 rgba(38,35,58,.08)}
+h1{font-size:34px;line-height:1.2;margin:0 0 8px}
+h2{font-size:18px;margin:0 0 12px}
+p{line-height:1.8}
+a{color:#C0392B;font-weight:900}
+.badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:#E9FAF6;color:#236B61;font-size:13px;font-weight:900;padding:8px 12px}
+.dot{width:10px;height:10px;border-radius:999px;background:#42B8A8;box-shadow:0 0 0 6px rgba(66,184,168,.16)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.item{background:#fff;border:2px solid #E8DED4;border-radius:16px;padding:16px}
+.item b{display:block;font-size:16px;margin-bottom:6px}
+.done{border-color:#42B8A8;background:#F1FFFB}
+.doing{border-color:#F26D88;background:#FFF4F7}
+.next{border-color:#F6A23A;background:#FFF8EA}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.link{display:inline-flex;border-radius:999px;background:#26233A;color:#FFFDF8;text-decoration:none;padding:10px 14px}
+.sub{color:#716878;font-weight:700}
+code{background:#F2E8DC;border-radius:8px;padding:2px 6px}
+@media(max-width:760px){.hero,.grid{grid-template-columns:1fr}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div class="panel">
+      <span class="badge"><span class="dot"></span>開発中 / 20秒ごとに自動更新</span>
+      <h1>京ふれーず 開発進捗</h1>
+      <p class="sub">Expoプレビューを横に開いたまま、ここで進捗と次の作業を確認できます。</p>
+      <div class="links">
+        <a class="link" href="http://localhost:8082">Expoプレビューを開く</a>
+        <a class="link" href="support.html">サポートページ</a>
+        <a class="link" href="privacy.html">プライバシーポリシー</a>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>現在の見どころ</h2>
+      <p>辞典、洛中地図、はんなり検定、iOS計画タブまで入っています。PCではExpo Web、実機ではExpo Go / EAS Buildで確認する流れです。</p>
+      <p>最新の反映: <code>mobile map / quiz / preview flow</code></p>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="item done">
+      <b>完了: 土台</b>
+      <p>Expo版、Bundle ID、辞書データ129語、ことは画像、アイコンを配置済み。</p>
+    </div>
+    <div class="item done">
+      <b>完了: 画面</b>
+      <p>辞典カード、洛中地図、はんなり検定、iOS計画タブを実装済み。</p>
+    </div>
+    <div class="item doing">
+      <b>進行中: 実機確認</b>
+      <p>プレビュー表示を見ながら、スマホでの操作感とApp Store準備を詰めます。</p>
+    </div>
+    <div class="item next">
+      <b>次: EAS / Expo Go</b>
+      <p>実機確認の手順、Expoアカウント、ビルド方針を整理します。</p>
+    </div>
+    <div class="item next">
+      <b>次: 収益化</b>
+      <p>AdMob、広告削除、追加カードパックのIDと実装順を固めます。</p>
+    </div>
+    <div class="item next">
+      <b>次: App Store素材</b>
+      <p>スクリーンショット、説明文、サポートURL、プライバシー回答を仕上げます。</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>
