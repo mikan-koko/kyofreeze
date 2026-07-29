@@ -41,6 +41,7 @@ type Term = {
 };
 
 type ViewMode = "dict" | "map" | "quiz" | "roadmap";
+type CatFilter = keyof typeof CATS;
 
 type MapSpot = {
   id: string;
@@ -212,6 +213,7 @@ function buildOptions(term: Term, field: "choku" | "honne", index: number) {
 
 export default function App() {
   const [mode, setMode] = useState<ViewMode>("dict");
+  const [selectedCat, setSelectedCat] = useState<CatFilter>("greet");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Term>(TERMS[0]);
   const [selectedSpot, setSelectedSpot] = useState<MapSpot>(MAP_SPOTS[6]);
@@ -221,11 +223,12 @@ export default function App() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return TERMS;
-    return TERMS.filter((term) =>
+    const scoped = q ? TERMS : TERMS.filter((term) => term.c === selectedCat);
+    if (!q) return scoped;
+    return scoped.filter((term) =>
       [term.k, term.y, term.choku, term.honne, term.why, term.scene].join(" ").toLowerCase().includes(q),
     );
-  }, [query]);
+  }, [query, selectedCat]);
 
   const mapTerms = selectedSpot.phrases.map((phrase) => findTerm(phrase)).filter(Boolean) as Term[];
   const quizTerm = TERMS[(quizIndex * 17) % TERMS.length];
@@ -236,6 +239,7 @@ export default function App() {
   const progress = Math.min(100, ((quizIndex % 10) + (answered ? 1 : 0)) * 10);
   const selectedArt = illustrationFor(selected);
   const quizArt = illustrationFor(quizTerm);
+  const selectedCatMeta = CATS[selectedCat];
 
   function chooseAnswer(value: string) {
     if (answered) return;
@@ -251,84 +255,135 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
-      <View style={styles.header}>
-        <View style={styles.headerMain}>
-          <View style={styles.logoRow}>
-            <Image source={APP_ICON} style={styles.headerIcon} />
-            <View style={styles.logoText}>
-              <Text style={styles.appName}>京ふれーず</Text>
-              <Text style={styles.tagline}>RAKUCHU REAL</Text>
-            </View>
-          </View>
-          <Text style={styles.headerMessage}>直訳と意訳で、{"\n"}京の空気をめくる</Text>
-        </View>
-        <Image source={GUIDE} style={styles.headerGuide} />
-      </View>
-      <View style={styles.headerStripe} />
-
-      {mode === "dict" && (
-        <View style={styles.screen}>
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            placeholder="京ことばを検索"
-            placeholderTextColor="#9B9284"
-            style={styles.search}
-          />
-          <FlatList
-            style={styles.termList}
-            data={filtered}
-            keyExtractor={(item) => item.k}
-            contentContainerStyle={styles.list}
-            ListHeaderComponent={
-              <ImageBackground source={HERO_TOWN} resizeMode="cover" imageStyle={styles.dictHeroImage} style={styles.dictHero}>
-                <View style={styles.dictHeroOverlay}>
-                  <Text style={styles.dictHeroKicker}>RAKUCHU REAL</Text>
-                  <Text style={styles.dictHeroTitle}>直訳と意訳で、京の空気をめくる</Text>
-                  <Text style={styles.dictHeroText}>Web版の和ポップな町並みとカードの絵を、iOS版にもそのまま持ち込んでいます。</Text>
-                </View>
-              </ImageBackground>
-            }
-            renderItem={({ item }) => {
-              const cat = CATS[item.c];
-              const isSelected = selected.k === item.k;
-              const art = illustrationFor(item);
-              return (
-                <Pressable
-                  onPress={() => setSelected(item)}
-                  style={[styles.termCard, isSelected && styles.termCardActive, { borderLeftColor: cat.color }]}
-                >
-                  {art ? (
-                    <Image source={art} style={styles.termThumb} />
-                  ) : (
-                    <View style={[styles.seal, { backgroundColor: cat.color }]}>
-                      <Text style={styles.sealText}>{cat.seal}</Text>
-                    </View>
-                  )}
-                  <View style={styles.termBody}>
-                    <Text style={styles.term}>{item.k}</Text>
-                    <Text style={styles.yomi}>{item.y}</Text>
-                    <Text style={styles.meaning} numberOfLines={2}>
-                      {stripHtml(item.choku)}
-                    </Text>
+      <View style={styles.appBg}>
+        <Image source={HERO_TOWN} style={styles.appBgPhoto} />
+        <View style={styles.appVeil}>
+          <View style={styles.header}>
+            <View style={styles.headerMain}>
+              <View style={styles.logoRow}>
+                <Image source={APP_ICON} style={styles.headerIcon} />
+                <View style={styles.logoText}>
+                  <View style={styles.headerTitleRow}>
+                    <Text style={styles.appName}>京ふれーず</Text>
+                    <Text style={styles.headerMessage}>直訳と意訳で、京の空気をめくる</Text>
                   </View>
-                  <Text style={styles.hannari}>Lv.{item.h}</Text>
-                </Pressable>
-              );
-            }}
-          />
-          <View style={styles.detail}>
-            {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
-            <View style={styles.detailCopy}>
-              <Text style={styles.detailTitle}>{selected.k}</Text>
-              <Text style={styles.detailLabel}>直訳</Text>
-              <Text style={styles.detailText}>{stripHtml(selected.choku)}</Text>
-              <Text style={styles.detailLabel}>意訳</Text>
-              <Text style={styles.detailText}>{stripHtml(selected.honne)}</Text>
+                  <Text style={styles.tagline}>RAKUCHU REAL</Text>
+                </View>
+              </View>
             </View>
+            <Image source={GUIDE} style={styles.headerGuide} />
           </View>
-        </View>
-      )}
+          <View style={styles.headerStripe} />
+
+          {mode === "dict" && (
+            <View style={styles.screen}>
+              <TextInput
+                value={query}
+                onChangeText={setQuery}
+                placeholder="京ことばを検索"
+                placeholderTextColor="#9B9284"
+                style={styles.search}
+              />
+              <FlatList
+                style={styles.termList}
+                data={filtered}
+                keyExtractor={(item) => item.k}
+                contentContainerStyle={styles.list}
+                ListHeaderComponent={
+                  <View>
+                    <ImageBackground source={HERO_TOWN} resizeMode="cover" imageStyle={styles.dictHeroImage} style={styles.dictHero}>
+                      <View style={styles.dictHeroOverlay}>
+                        <Text style={styles.dictHeroKicker}>RAKUCHU REAL</Text>
+                        <Text style={styles.dictHeroTitle}>洛中リアル・京ことば辞典。</Text>
+                        <Text style={styles.dictHeroText}>おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。</Text>
+                      </View>
+                    </ImageBackground>
+                    <View style={styles.catRail}>
+                      {(Object.keys(CATS) as CatFilter[]).map((id) => {
+                        const cat = CATS[id];
+                        const active = selectedCat === id && !query.trim();
+                        return (
+                          <Pressable
+                            key={id}
+                            onPress={() => {
+                              setSelectedCat(id);
+                              setQuery("");
+                              const first = TERMS.find((term) => term.c === id);
+                              if (first) setSelected(first);
+                            }}
+                            style={[styles.catChip, active && styles.catChipActive, { borderColor: cat.color }]}
+                          >
+                            <Text style={[styles.catSeal, active && styles.catSealActive]}>{cat.seal}</Text>
+                            <Text style={[styles.catChipText, active && styles.catChipTextActive]}>{cat.label}</Text>
+                          </Pressable>
+                        );
+                      })}
+                    </View>
+                    <View style={styles.sectionHead}>
+                      <View>
+                        <Text style={styles.sectionKicker}>SORTED BY</Text>
+                        <Text style={styles.sectionTitle}>{query.trim() ? "検索結果" : selectedCatMeta.label}</Text>
+                      </View>
+                      <Text style={styles.sectionCount}>{filtered.length}語</Text>
+                    </View>
+                  </View>
+                }
+                renderItem={({ item }) => {
+                  const cat = CATS[item.c];
+                  const isSelected = selected.k === item.k;
+                  const art = illustrationFor(item);
+                  return (
+                    <Pressable
+                      onPress={() => setSelected(item)}
+                      style={[styles.termCard, isSelected && styles.termCardActive, { borderColor: isSelected ? cat.color : "#26233A" }]}
+                    >
+                      <View style={styles.cornerTop} />
+                      <View style={styles.cornerBottom} />
+                      <View style={[styles.fudaBand, { backgroundColor: cat.color }]} />
+                      {art && <Image source={art} style={styles.termThumb} />}
+                      <View style={styles.termBody}>
+                        <Text style={[styles.termCat, { color: cat.color }]}>{cat.label}</Text>
+                        <Text style={styles.term}>{item.k}</Text>
+                        <Text style={styles.yomi}>{item.y}</Text>
+                        <View style={styles.rule} />
+                        <Text style={styles.meaning} numberOfLines={2}>
+                          {stripHtml(item.choku)}
+                        </Text>
+                        <View style={styles.beans}>
+                          {[1, 2, 3, 4, 5].map((level) => (
+                            <View key={level} style={[styles.bean, item.h >= level && styles.beanOn]} />
+                          ))}
+                        </View>
+                      </View>
+                      <Text style={[styles.hannari, { color: cat.color }]}>Lv.{item.h}</Text>
+                    </Pressable>
+                  );
+                }}
+              />
+              <View style={styles.detail}>
+                <View style={styles.detailFuda}>
+                  {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
+                  <View style={[styles.detailSeal, { backgroundColor: CATS[selected.c].color }]}>
+                    <Text style={styles.detailSealText}>{CATS[selected.c].seal}</Text>
+                  </View>
+                </View>
+                <View style={styles.detailCopy}>
+                  <Text style={styles.detailCat}>{CATS[selected.c].label}</Text>
+                  <Text style={styles.detailTitle}>{selected.k}</Text>
+                  <Text style={styles.detailYomi}>{selected.y}</Text>
+                  <View style={styles.detailBlock}>
+                    <Text style={styles.detailLabel}>直訳</Text>
+                    <Text style={styles.detailText}>{stripHtml(selected.choku)}</Text>
+                  </View>
+                  <View style={styles.detailBlockHonne}>
+                    <Text style={styles.detailLabel}>意訳</Text>
+                    <Text style={styles.detailText}>{stripHtml(selected.honne)}</Text>
+                  </View>
+                  <Text style={styles.sceneText}>{stripHtml(selected.scene)}</Text>
+                </View>
+              </View>
+            </View>
+          )}
 
       {mode === "map" && (
         <ScrollView contentContainerStyle={styles.mapScreen}>
@@ -472,18 +527,20 @@ export default function App() {
         </ScrollView>
       )}
 
-      <View style={styles.bottomNav}>
-        {TAB_ITEMS.map((item) => {
-          const active = mode === item.id;
-          return (
-            <Pressable key={item.id} onPress={() => setMode(item.id)} style={[styles.navItem, active && styles.navItemActive]}>
-              <View style={[styles.navMark, active && styles.navMarkActive]}>
-                <Text style={[styles.navMarkText, active && styles.navMarkTextActive]}>{item.mark}</Text>
-              </View>
-              <Text style={[styles.navLabel, active && styles.navLabelActive]}>{item.label}</Text>
-            </Pressable>
-          );
-        })}
+          <View style={styles.bottomNav}>
+            {TAB_ITEMS.map((item) => {
+              const active = mode === item.id;
+              return (
+                <Pressable key={item.id} onPress={() => setMode(item.id)} style={[styles.navItem, active && styles.navItemActive]}>
+                  <View style={[styles.navMark, active && styles.navMarkActive]}>
+                    <Text style={[styles.navMarkText, active && styles.navMarkTextActive]}>{item.mark}</Text>
+                  </View>
+                  <Text style={[styles.navLabel, active && styles.navLabelActive]}>{item.label}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -491,8 +548,21 @@ export default function App() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#FAF6EE" },
+  appBg: { flex: 1, overflow: "hidden", position: "relative" },
+  appBgPhoto: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    opacity: 0.16,
+    resizeMode: "cover",
+  },
+  appVeil: { flex: 1, backgroundColor: "rgba(250, 246, 238, 0.86)" },
   header: {
-    minHeight: 122,
+    minHeight: 92,
     paddingHorizontal: 18,
     paddingTop: 12,
     paddingBottom: 10,
@@ -505,17 +575,18 @@ const styles = StyleSheet.create({
   logoRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   headerIcon: { width: 44, height: 44, borderRadius: 13, borderWidth: 2, borderColor: "#26233A" },
   logoText: { flex: 1 },
-  appName: { fontSize: 29, lineHeight: 33, fontWeight: "900", color: "#26233A", letterSpacing: 0.5 },
+  headerTitleRow: { flexDirection: "row", alignItems: "center", gap: 9 },
+  appName: { fontSize: 27, lineHeight: 32, fontWeight: "900", color: "#26233A", letterSpacing: 0.5 },
   tagline: { marginTop: 1, fontSize: 10, fontWeight: "900", color: "#F26D88", letterSpacing: 2.2 },
   headerMessage: {
-    marginTop: 8,
     color: "#514754",
-    fontSize: 12,
-    lineHeight: 17,
+    fontSize: 10,
+    lineHeight: 13,
     fontWeight: "900",
     letterSpacing: 0.4,
+    flex: 1,
   },
-  headerGuide: { width: 74, height: 100, resizeMode: "contain" },
+  headerGuide: { width: 58, height: 78, resizeMode: "contain" },
   headerStripe: { height: 5, backgroundColor: "#F26D88", borderBottomWidth: 1, borderBottomColor: "#E7D3C3" },
   bottomNav: {
     flexDirection: "row",
@@ -571,7 +642,7 @@ const styles = StyleSheet.create({
     minHeight: 178,
     padding: 18,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(255, 248, 232, 0.38)",
+    backgroundColor: "rgba(255, 248, 232, 0.28)",
   },
   dictHeroKicker: { color: "#F26D88", fontSize: 11, fontWeight: "900", letterSpacing: 2 },
   dictHeroTitle: { marginTop: 6, color: "#26233A", fontSize: 26, lineHeight: 33, fontWeight: "900" },
@@ -579,7 +650,7 @@ const styles = StyleSheet.create({
   search: {
     minHeight: 46,
     borderRadius: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(255,253,248,.92)",
     borderWidth: 2,
     borderColor: "#E8DED4",
     paddingHorizontal: 14,
@@ -589,26 +660,84 @@ const styles = StyleSheet.create({
   },
   termList: { flex: 1 },
   list: { gap: 10, paddingVertical: 12 },
+  catRail: { flexDirection: "row", flexWrap: "wrap", gap: 7, paddingVertical: 12 },
+  catChip: {
+    minHeight: 42,
+    borderRadius: 999,
+    borderWidth: 2,
+    backgroundColor: "rgba(255,253,248,.88)",
+    paddingHorizontal: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  catChipActive: { backgroundColor: "#26233A", borderColor: "#26233A" },
+  catSeal: { fontSize: 12, fontWeight: "900", color: "#26233A" },
+  catSealActive: { color: "#FFFDF8" },
+  catChipText: { fontSize: 12, fontWeight: "900", color: "#514754" },
+  catChipTextActive: { color: "#FFFDF8" },
+  sectionHead: {
+    marginBottom: 2,
+    paddingHorizontal: 2,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
+  sectionKicker: { color: "#F26D88", fontSize: 10, fontWeight: "900", letterSpacing: 2 },
+  sectionTitle: { marginTop: 2, color: "#26233A", fontSize: 20, fontWeight: "900" },
+  sectionCount: {
+    color: "#26233A",
+    backgroundColor: "#FFF3D0",
+    borderRadius: 999,
+    overflow: "hidden",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    fontSize: 12,
+    fontWeight: "900",
+  },
   termCard: {
     flexDirection: "row",
     gap: 12,
-    minHeight: 116,
-    padding: 13,
-    borderRadius: 18,
-    backgroundColor: "#FFFDF8",
+    minHeight: 136,
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,253,248,.94)",
     borderWidth: 2,
     borderColor: "#26233A",
-    borderLeftWidth: 7,
     shadowColor: "#26233A",
     shadowOpacity: 0.16,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 7 },
+    overflow: "hidden",
   },
-  termCardActive: { borderColor: "#F26D88", backgroundColor: "#FFF4F7" },
+  termCardActive: { backgroundColor: "#FFF4F7" },
+  cornerTop: {
+    position: "absolute",
+    top: 8,
+    left: 8,
+    width: 18,
+    height: 18,
+    borderTopWidth: 3,
+    borderLeftWidth: 3,
+    borderColor: "#D9B43A",
+  },
+  cornerBottom: {
+    position: "absolute",
+    right: 8,
+    bottom: 8,
+    width: 18,
+    height: 18,
+    borderRightWidth: 3,
+    borderBottomWidth: 3,
+    borderColor: "#D9B43A",
+  },
+  fudaBand: { position: "absolute", left: 0, top: 0, bottom: 0, width: 5 },
   termThumb: {
-    width: 72,
-    height: 82,
-    borderRadius: 14,
+    width: 88,
+    height: 108,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: "#26233A",
     resizeMode: "cover",
@@ -617,25 +746,53 @@ const styles = StyleSheet.create({
   seal: { width: 36, height: 36, borderRadius: 10, alignItems: "center", justifyContent: "center" },
   sealText: { color: "#FFFFFF", fontWeight: "900" },
   termBody: { flex: 1 },
-  term: { fontSize: 20, fontWeight: "900", color: "#26233A" },
+  termCat: { fontSize: 10, fontWeight: "900", letterSpacing: 1 },
+  term: { marginTop: 2, fontSize: 21, fontWeight: "900", color: "#26233A" },
   yomi: { marginTop: 2, fontSize: 11, fontWeight: "800", color: "#8A7D8D", letterSpacing: 1 },
-  meaning: { marginTop: 7, color: "#514754", fontSize: 13, fontWeight: "700", lineHeight: 19 },
+  rule: { width: 54, height: 1, backgroundColor: "rgba(38,35,58,.26)", marginTop: 8, marginBottom: 6 },
+  meaning: { color: "#514754", fontSize: 13, fontWeight: "800", lineHeight: 19 },
+  beans: { flexDirection: "row", gap: 4, marginTop: 8 },
+  bean: { width: 10, height: 10, borderRadius: 999, borderWidth: 1, borderColor: "#D8CFC7", backgroundColor: "#F3EBDD" },
+  beanOn: { backgroundColor: "#26233A", borderColor: "#26233A" },
   hannari: { color: "#F26D88", fontWeight: "900" },
   detail: {
     marginBottom: 12,
-    borderRadius: 20,
+    borderRadius: 14,
     padding: 12,
-    backgroundColor: "#FFFDF8",
+    backgroundColor: "rgba(255,253,248,.96)",
     borderWidth: 3,
     borderColor: "#26233A",
     flexDirection: "row",
     gap: 12,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: -8 },
   },
-  detailArt: { width: 116, height: 156, borderRadius: 16, resizeMode: "cover", backgroundColor: "#F6E7CB" },
+  detailFuda: { width: 116, minHeight: 172, position: "relative" },
+  detailArt: { width: 116, height: 172, borderRadius: 10, resizeMode: "cover", backgroundColor: "#F6E7CB" },
+  detailSeal: {
+    position: "absolute",
+    left: 8,
+    top: 8,
+    width: 34,
+    height: 34,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#FFFDF8",
+  },
+  detailSealText: { color: "#FFFDF8", fontWeight: "900" },
   detailCopy: { flex: 1 },
+  detailCat: { color: "#F26D88", fontSize: 11, fontWeight: "900", letterSpacing: 1 },
   detailTitle: { fontSize: 24, fontWeight: "900", color: "#26233A" },
-  detailLabel: { marginTop: 12, fontSize: 12, fontWeight: "900", color: "#F26D88" },
+  detailYomi: { marginTop: 1, color: "#8A7D8D", fontSize: 11, fontWeight: "900", letterSpacing: 1.4 },
+  detailBlock: { marginTop: 10, borderRadius: 12, backgroundColor: "rgba(66,184,168,.12)", padding: 10 },
+  detailBlockHonne: { marginTop: 8, borderRadius: 12, backgroundColor: "rgba(242,109,136,.10)", borderWidth: 1, borderColor: "rgba(242,109,136,.35)", padding: 10 },
+  detailLabel: { fontSize: 11, fontWeight: "900", color: "#F26D88" },
   detailText: { marginTop: 4, color: "#514754", fontSize: 14, fontWeight: "700", lineHeight: 22 },
+  sceneText: { marginTop: 8, color: "#8A7357", fontSize: 12, fontWeight: "800", lineHeight: 18 },
   mapScreen: { padding: 16, gap: 14 },
   mapHero: {
     minHeight: 154,
