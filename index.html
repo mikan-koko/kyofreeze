@@ -143,6 +143,7 @@ header::after{content:"";display:block;height:3px;
 .tab:hover{color:var(--ink)}
 .tab.on{background:var(--ai);color:#fff;border-color:var(--ai);box-shadow:0 4px 16px rgba(28,43,74,.25)}
 .view-tools{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:24px 0 6px}
+.view-tools.quiz-on .search{display:none}
 .view-switch{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0}
 .view-btn{padding:10px 18px;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;font-weight:800;background:#fff;color:var(--muted);border:1.5px solid rgba(40,50,74,.15);transition:all .2s}
 .view-btn:hover{color:var(--ink)}
@@ -215,6 +216,49 @@ header::after{content:"";display:block;height:3px;
 .map-panel dt{font-size:11px;font-weight:900;color:var(--pop-ai);letter-spacing:.14em}
 .map-panel dd{font-size:14px;font-weight:700;line-height:1.75;color:#4E4653}
 .map-open{margin-top:18px;border:2px solid rgba(38,35,58,.14);border-radius:999px;background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan));color:#FFFDF8;font:inherit;font-size:13px;font-weight:900;padding:10px 14px;cursor:pointer;box-shadow:0 5px 0 rgba(38,35,58,.14)}
+
+/* hannari quiz */
+.quiz-view{padding:18px 0 80px}
+.quiz-shell{position:relative;overflow:hidden;border:2px solid rgba(38,35,58,.14);border-radius:24px;background:linear-gradient(150deg,rgba(255,253,248,.93),rgba(255,244,247,.88) 52%,rgba(239,249,246,.92));box-shadow:0 12px 0 rgba(38,35,58,.10),0 30px 58px -42px rgba(38,35,58,.75)}
+.quiz-shell::before{content:"";position:absolute;inset:0;pointer-events:none;background:url("assets/hero/kyoto-town-real-pop.png") center/cover no-repeat;opacity:.18;filter:saturate(1.08)}
+.quiz-shell::after{content:"";position:absolute;left:-8%;right:-8%;bottom:-18px;height:74px;background:repeating-linear-gradient(90deg,rgba(192,57,43,.28) 0 18px,rgba(244,211,94,.28) 18px 36px,rgba(66,184,168,.24) 36px 54px);transform:rotate(-1.6deg);opacity:.7}
+.quiz-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr);gap:24px;align-items:stretch;padding:28px}
+.quiz-intro{display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:430px}
+.quiz-badge{align-self:flex-start;border:2px solid var(--pop-ink);border-radius:999px;background:#FFFDF8;color:var(--pop-ink);padding:8px 13px;font-size:12px;font-weight:900;box-shadow:0 5px 0 rgba(38,35,58,.12)}
+.quiz-intro h2{font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;font-size:clamp(30px,5vw,56px);font-weight:900;line-height:1.03;color:var(--pop-ink);letter-spacing:0}
+.quiz-intro h2 span{display:block;color:var(--pop-sakura);-webkit-text-stroke:1px var(--pop-ink);text-shadow:3px 3px 0 #FFFDF8}
+.quiz-intro p{max-width:430px;color:#514754;font-size:14px;font-weight:800;line-height:1.85}
+.quiz-kotoha{position:relative;min-height:190px}
+.quiz-kotoha img{position:absolute;left:-24px;bottom:-30px;width:min(250px,58vw);filter:drop-shadow(0 10px 0 rgba(38,35,58,.16))}
+.quiz-name{position:absolute;left:164px;bottom:32px;border:2px solid var(--pop-ink);border-radius:14px;background:#FFFDF8;padding:6px 12px;box-shadow:0 5px 0 rgba(38,35,58,.14);font-weight:900;transform:rotate(-3deg)}
+.quiz-name b{color:var(--pop-sakura)}
+.quiz-card{align-self:stretch;border:2px solid rgba(38,35,58,.16);border-radius:20px;background:rgba(255,253,248,.9);box-shadow:0 10px 0 rgba(38,35,58,.10);padding:20px;display:flex;flex-direction:column;gap:16px;min-height:430px}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.quiz-step{font-size:12px;font-weight:900;color:#6C6075;letter-spacing:.08em}
+.quiz-score{border:2px solid rgba(38,35,58,.14);border-radius:999px;background:#FFF;color:var(--pop-ai);font-size:12px;font-weight:900;padding:7px 11px}
+.quiz-progress{height:10px;border:2px solid rgba(38,35,58,.12);border-radius:999px;background:#FFF;overflow:hidden}
+.quiz-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pop-aqua),var(--pop-sakura),var(--pop-mikan));transition:width .24s}
+.quiz-question{display:grid;gap:10px}
+.quiz-question .mode{font-size:12px;font-weight:900;color:var(--pop-sakura);letter-spacing:.1em}
+.quiz-question h3{font-family:"Shippori Mincho",serif;font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.22;color:var(--pop-ink)}
+.quiz-question p{color:#665C6B;font-size:13px;font-weight:800;line-height:1.75}
+.quiz-options{display:grid;gap:10px}
+.quiz-option{width:100%;min-height:56px;border:2px solid rgba(38,35,58,.15);border-radius:16px;background:#FFF;color:#352E3C;font:inherit;font-size:14px;font-weight:900;line-height:1.5;text-align:left;padding:12px 14px;cursor:pointer;box-shadow:0 5px 0 rgba(38,35,58,.10);transition:transform .14s,background .14s,border-color .14s}
+.quiz-option:hover{transform:translateY(-2px);border-color:var(--pop-mikan)}
+.quiz-option.correct{background:rgba(66,184,168,.20);border-color:#42B8A8}
+.quiz-option.wrong{background:rgba(242,109,136,.18);border-color:#F26D88}
+.quiz-option:disabled{cursor:default}
+.quiz-feedback{min-height:78px;border-radius:16px;background:rgba(255,255,255,.72);border:1.5px dashed rgba(38,35,58,.18);padding:13px 14px;color:#4E4653;font-size:13px;font-weight:800;line-height:1.75}
+.quiz-feedback b{color:var(--pop-sakura)}
+.quiz-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+.quiz-main-btn,.quiz-sub-btn{border:2px solid rgba(38,35,58,.16);border-radius:999px;font:inherit;font-size:13px;font-weight:900;padding:11px 15px;cursor:pointer;box-shadow:0 5px 0 rgba(38,35,58,.12);transition:transform .14s}
+.quiz-main-btn{background:linear-gradient(90deg,var(--pop-sakura),var(--pop-mikan));color:#FFFDF8}
+.quiz-sub-btn{background:#FFFDF8;color:var(--pop-ai)}
+.quiz-main-btn:hover,.quiz-sub-btn:hover{transform:translateY(-2px)}
+.quiz-result{display:grid;gap:14px;text-align:left}
+.quiz-result .big{font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;font-size:clamp(34px,7vw,64px);font-weight:900;line-height:1;color:var(--pop-sakura);-webkit-text-stroke:1px var(--pop-ink)}
+.quiz-result h3{font-family:"Shippori Mincho",serif;font-size:24px;font-weight:800;color:var(--pop-ink)}
+.quiz-result p{font-size:14px;font-weight:800;line-height:1.8;color:#514754}
 
 /* modal */
 .mback{position:fixed;inset:0;background:rgba(28,32,44,.5);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:4vh 16px 6vh}
@@ -1039,6 +1083,12 @@ footer .discl{
   .map-canvas{min-height:420px}
   .map-pin{font-size:11px;padding:8px 9px}
   .map-panel{padding:17px}
+  .quiz-inner{grid-template-columns:1fr;padding:20px}
+  .quiz-intro{min-height:auto}
+  .quiz-card{min-height:0}
+  .quiz-kotoha{min-height:155px}
+  .quiz-kotoha img{left:-18px;bottom:-28px;width:min(205px,58vw)}
+  .quiz-name{left:138px;bottom:24px}
   .card{border-radius:16px;box-shadow:0 8px 0 rgba(38,35,58,.12),0 20px 40px -34px rgba(38,35,58,.7)}
   .seal{width:42px;height:42px}
   .seal span{font-size:13px}
@@ -1051,6 +1101,10 @@ footer .discl{
 @media (max-width:420px){
   .cat-section .cards-wrap{grid-template-columns:1fr}
   .map-canvas{min-height:360px}
+  .quiz-inner{padding:16px}
+  .quiz-intro h2 span{text-shadow:2px 2px 0 #FFFDF8}
+  .quiz-name{left:118px;bottom:18px;font-size:13px}
+  .quiz-option{font-size:13px}
 }
 </style>
 </head>
@@ -1089,10 +1143,11 @@ footer .discl{
     </div>
   </section>
 
-  <div class="view-tools">
+  <div class="view-tools" id="viewTools">
     <div class="view-switch" aria-label="表示切り替え">
       <button class="view-btn on" type="button" data-view="dict">辞典カード</button>
       <button class="view-btn" type="button" data-view="map">洛中地図</button>
+      <button class="view-btn" type="button" data-view="quiz">はんなり検定</button>
     </div>
     <div class="search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C7361" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -1121,6 +1176,25 @@ footer .discl{
         <img src="assets/map/rakuchu-map-current-pop.png" alt="" loading="lazy">
       </div>
       <aside class="map-panel" id="mapPanel" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section class="quiz-view is-hidden" id="quizView">
+    <div class="quiz-shell">
+      <div class="quiz-inner">
+        <div class="quiz-intro">
+          <div>
+            <span class="quiz-badge">京ことばミニクイズ</span>
+            <h2>はんなり<span>検定</span></h2>
+            <p>ことはが出す京ことばの「直訳」や「意訳」を選ぶ、5問勝負のミニ検定です。辞典カードで見たニュアンスを、さらっと試してみましょ。</p>
+          </div>
+          <div class="quiz-kotoha" aria-hidden="true">
+            <img src="assets/characters/kyofreeze-guide-bold.png" alt="" loading="lazy">
+            <div class="quiz-name">出題係 <b>ことは</b></div>
+          </div>
+        </div>
+        <div class="quiz-card" id="quizCard" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 </main>
@@ -1843,17 +1917,34 @@ const tabsEl = document.getElementById("tabs");
 const chipsEl = document.getElementById("chips");
 const dictViewEl = document.getElementById("dictView");
 const mapViewEl = document.getElementById("mapView");
+const quizViewEl = document.getElementById("quizView");
+const viewToolsEl = document.getElementById("viewTools");
 const mapCanvasEl = document.getElementById("mapCanvas");
 const mapPanelEl = document.getElementById("mapPanel");
+const quizCardEl = document.getElementById("quizCard");
 const viewBtns = document.querySelectorAll("[data-view]");
+let quizState = null;
 
-viewBtns.forEach(btn=>btn.addEventListener("click",()=>{
-  activeView=btn.dataset.view;
-  viewBtns.forEach(b=>b.classList.toggle("on",b===btn));
+function viewFromHash(){
+  const v=location.hash.replace("#","");
+  return ["dict","map","quiz"].includes(v) ? v : "dict";
+}
+function setView(view,updateHash=true){
+  activeView=view;
+  viewBtns.forEach(b=>b.classList.toggle("on",b.dataset.view===view));
   dictViewEl.classList.toggle("is-hidden",activeView!=="dict");
   mapViewEl.classList.toggle("is-hidden",activeView!=="map");
+  quizViewEl.classList.toggle("is-hidden",activeView!=="quiz");
+  viewToolsEl.classList.toggle("quiz-on",activeView==="quiz");
   if(activeView==="map") renderMap();
-}));
+  if(activeView==="quiz" && !quizState) startQuiz();
+  if(updateHash){
+    const next=view==="dict" ? location.pathname + location.search : `#${view}`;
+    history.pushState(null,"",next);
+  }
+}
+viewBtns.forEach(btn=>btn.addEventListener("click",()=>setView(btn.dataset.view)));
+window.addEventListener("hashchange",()=>setView(viewFromHash(),false));
 
 /* ------- tabs ------- */
 const tabDefs = [["all","すべて",""]].concat(Object.keys(CATS).map(k=>[k,CATS[k].label,CATS[k].seal]));
@@ -2231,6 +2322,94 @@ async function shareSite(){
   const url=`https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
   window.open(url,"_blank","noopener,noreferrer");
 }
+function cleanText(s){
+  const el=document.createElement("div");
+  el.innerHTML=s || "";
+  return el.textContent.replace(/\s+/g," ").trim();
+}
+function shuffle(list){
+  return list.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+}
+function makeQuizQuestion(d,index){
+  const type = index % 2 === 0 ? "honne" : "choku";
+  const field = type === "honne" ? "honne" : "choku";
+  const prompt = type === "honne" ? "この京ことばの意訳はどれ？" : "この京ことばの直訳はどれ？";
+  const answer = cleanText(d[field]);
+  const options = shuffle([answer].concat(
+    shuffle(D.filter(x=>x.k!==d.k && x[field] && cleanText(x[field])!==answer))
+      .slice(0,3).map(x=>cleanText(x[field]))
+  ));
+  return {term:d.k,yomi:d.y,cat:CATS[d.c].label,field,prompt,answer,options,why:cleanText(d.why),scene:cleanText(d.scene)};
+}
+function startQuiz(){
+  const pool = shuffle(D.filter(d=>d.choku && d.honne && d.why)).slice(0,5);
+  quizState = {questions:pool.map(makeQuizQuestion),index:0,score:0,answered:false,selected:null};
+  renderQuiz();
+}
+function renderQuiz(){
+  if(!quizState || !quizCardEl) return;
+  const total=quizState.questions.length;
+  const done=quizState.index>=total;
+  if(done){
+    const score=quizState.score;
+    const title=score===5 ? "洛中級どす" : score>=3 ? "はんなり筋あり" : "まずはおぶでも一杯";
+    const message=score===5 ? "直訳も意訳も、空気までよう読めてはります。" : score>=3 ? "だいぶ京ことばの間合いがつかめてきました。" : "まだまだ伸びしろあり。辞典カードで復習しましょ。";
+    quizCardEl.innerHTML=`
+      <div class="quiz-result">
+        <div class="big">${score}/${total}</div>
+        <h3>${title}</h3>
+        <p>${message}</p>
+      </div>
+      <div class="quiz-actions">
+        <button class="quiz-main-btn" type="button" data-quiz-restart>もう一回受ける</button>
+        <button class="quiz-sub-btn" type="button" data-quiz-share>結果を共有</button>
+        <button class="quiz-sub-btn" type="button" data-quiz-dict>辞典で復習</button>
+      </div>`;
+    return;
+  }
+  const q=quizState.questions[quizState.index];
+  const progress=Math.round((quizState.index/total)*100);
+  quizCardEl.innerHTML=`
+    <div class="quiz-top">
+      <span class="quiz-step">第${quizState.index+1}問 / 全${total}問</span>
+      <span class="quiz-score">正解 ${quizState.score}</span>
+    </div>
+    <div class="quiz-progress" aria-hidden="true"><span style="width:${progress}%"></span></div>
+    <div class="quiz-question">
+      <span class="mode">${q.cat}</span>
+      <h3>${q.term}</h3>
+      <p>${q.prompt}</p>
+    </div>
+    <div class="quiz-options">
+      ${q.options.map(opt=>{
+        const cls = !quizState.answered ? "" : opt===q.answer ? " correct" : opt===quizState.selected ? " wrong" : "";
+        return `<button class="quiz-option${cls}" type="button" data-quiz-answer="${encodeURIComponent(opt)}" ${quizState.answered?"disabled":""}>${opt}</button>`;
+      }).join("")}
+    </div>
+    <div class="quiz-feedback">${quizState.answered ? `<b>${quizState.selected===q.answer?"正解":"惜しい"}</b><br>${q.why}` : "答えを選ぶと、ことはがニュアンスをひとこと解説します。"}</div>
+    <div class="quiz-actions">
+      <button class="quiz-main-btn" type="button" data-quiz-next ${quizState.answered?"":"disabled"}>${quizState.index+1===total?"結果を見る":"次の問題へ"}</button>
+      <button class="quiz-sub-btn" type="button" data-quiz-open="${encodeURIComponent(q.term)}">辞典で見る</button>
+    </div>`;
+}
+function answerQuiz(answer){
+  if(!quizState || quizState.answered) return;
+  const q=quizState.questions[quizState.index];
+  quizState.selected=answer;
+  quizState.answered=true;
+  if(answer===q.answer) quizState.score += 1;
+  renderQuiz();
+}
+async function shareQuizResult(){
+  if(!quizState) return;
+  const total=quizState.questions.length;
+  const data={title:"京ふれーず はんなり検定",text:`はんなり検定 ${quizState.score}/${total}問正解どした。\n#京ふれーず`,url:location.href};
+  if(navigator.share){
+    try{await navigator.share(data);return;}catch(e){if(e.name==="AbortError") return;}
+  }
+  const url=`https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
+  window.open(url,"_blank","noopener,noreferrer");
+}
 const MAP_SPOTS = [
   {k:"丸竹夷",x:43,y:24,note:"御所の南側へ広がる東西の通りを覚える、洛中の地図感覚そのもの。"},
   {k:"寺御幸",x:57,y:27,note:"河原町より西の南北通りをたどる時の、昔ながらの道しるべ。"},
@@ -2280,6 +2459,26 @@ mapPanelEl.addEventListener("click",e=>{
   const b=e.target.closest("[data-map-open]"); if(!b) return;
   openModal(decodeURIComponent(b.dataset.mapOpen));
 });
+quizCardEl.addEventListener("click",e=>{
+  const answer=e.target.closest("[data-quiz-answer]");
+  if(answer){answerQuiz(decodeURIComponent(answer.dataset.quizAnswer));return;}
+  if(e.target.closest("[data-quiz-next]")){
+    if(!quizState || !quizState.answered) return;
+    quizState.index += 1;
+    quizState.answered=false;
+    quizState.selected=null;
+    renderQuiz();
+    return;
+  }
+  if(e.target.closest("[data-quiz-restart]")){startQuiz();return;}
+  if(e.target.closest("[data-quiz-share]")){shareQuizResult();return;}
+  if(e.target.closest("[data-quiz-dict]")){
+    setView("dict");
+    return;
+  }
+  const open=e.target.closest("[data-quiz-open]");
+  if(open) openModal(decodeURIComponent(open.dataset.quizOpen));
+});
 gridEl.addEventListener("click",e=>{
   const t=e.target.closest("[data-collapse]");
   if(t){
@@ -2311,6 +2510,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 
 /* init */
 render();
+setView(viewFromHash(),false);
 </script>
 </body>
 </html>

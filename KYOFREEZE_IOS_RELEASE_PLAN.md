@@ -5,7 +5,7 @@
 ## 現在地
 
 - Web版は `outputs/index.html` の静的アプリ。
-- 129語、7ジャンル、カード画像、トップキャラ、洛中地図を実装済み。
+- 129語、7ジャンル、カード画像、トップキャラ、洛中地図、はんなり検定を実装済み。
 - GitHub管理用チェックアウトは `C:\Users\chaha\Documents\Codex\kyofreeze-github`。
 - GitHub Pages公開候補は `https://mikan-koko.github.io/kyofreeze/`。
 
@@ -45,6 +45,7 @@
 
 - Web版資産を活かすなら、初期版はExpo + WebViewまたはハイブリッド構成。
 - App Store品質まで上げるなら、カード一覧、検索、詳細モーダル、地図ビューをSwiftUI/React Native画面として再構成する。
+- はんなり検定は、iOS版ではタブまたはホーム内カードから入れる学習ミニゲームとして扱う。
 - 画像資産は `assets/illustrations`、`assets/icons`、`assets/characters`、`assets/map` を転用する。
 - データは現在 `index.html` 内の `D` 配列にあるため、iOS化前に `terms.json` へ分離するのが望ましい。
 
