@@ -50,6 +50,7 @@
 - 画像資産は `assets/illustrations`、`assets/icons`、`assets/characters`、`assets/map` を転用する。
 - 辞書データは `assets/data/terms.json` に分離済み。Web版は `assets/data/terms-data.js` 経由で同じデータを読み込む。
 - Mobile版は `mobile/assets/data/terms.json` を読み込み、辞典リスト、洛中地図、はんなり検定の初期ネイティブ画面を実装済み。
+- Web版の町並み背景、洛中地図画像、代表カードイラストをMobile版にも転用し、iOS版の初期UXをWeb版の和ポップ表現へ寄せた。
 - `iOS計画` タブにAdMob、広告削除IAP、追加カードパックIAPの実装メモを表示済み。
 
 ## Phase A 先に進める事務
@@ -84,6 +85,6 @@
 
 1. Expo Go / EAS Buildで実機確認
 2. アイコン、スプラッシュ、App Storeスクショの制作
-3. AdMob/IAPの実装方式とID整理
-4. App Store審査向けのプライバシー回答整理
-5. サポートURLの正式問い合わせ窓口を確定
+3. 全カード画像を同梱するか、追加カードパック/オンデマンド配信に分けるか決定
+4. AdMob/IAPの実装方式とID整理
+5. App Store審査向けのプライバシー回答整理

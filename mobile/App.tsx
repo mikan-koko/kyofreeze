@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import {
   FlatList,
   Image,
+  ImageBackground,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -54,6 +55,43 @@ type MapSpot = {
 
 const TERMS = termsJson as Term[];
 const GUIDE = require("./assets/characters/kyofreeze-guide-bold.png");
+const HERO_TOWN = require("./assets/hero/kyoto-town-pop.png");
+const RAKUCHU_MAP = require("./assets/map/rakuchu-map-current-pop.png");
+
+const ILLUSTRATIONS = {
+  おいでやす: require("./assets/illustrations/oideyasu.png"),
+  おこしやす: require("./assets/illustrations/okoshiyasu.png"),
+  "〜してはる": require("./assets/illustrations/shite-haru.png"),
+  おおきに: require("./assets/illustrations/ookini.png"),
+  かんにんね: require("./assets/illustrations/kannin-ne.png"),
+  ほな: require("./assets/illustrations/hona.png"),
+  はばかりさん: require("./assets/illustrations/habakari-san.png"),
+  おやかまっさん: require("./assets/illustrations/oyakamassan.png"),
+  ごめんやす: require("./assets/illustrations/gomen-yasu.png"),
+  さいなら: require("./assets/illustrations/sainara.png"),
+  "ぶぶ漬けでもどうどすか": require("./assets/illustrations/bubuzuke-demo-dou-dosu-ka.png"),
+  "よう言わんわ": require("./assets/illustrations/you-iwan-wa.png"),
+  いけず: require("./assets/illustrations/ikezu.png"),
+  はんなり: require("./assets/illustrations/hannari.png"),
+  おばんざい: require("./assets/illustrations/obanzai.png"),
+  べっぴんさん: require("./assets/illustrations/beppin-san.png"),
+  先斗町: require("./assets/illustrations/pontocho.png"),
+  "錦市場はもうインバウンドの場所やな": require("./assets/illustrations/nishiki-inbound.png"),
+  "一乗寺でラーメン食べて百万遍で飲も": require("./assets/illustrations/ichijoji-hyakumanben.png"),
+  百万遍交差点xy軸: require("./assets/illustrations/hyakumanben-xy.png"),
+  ふたばの豆餅もろた: require("./assets/illustrations/futaba-mamemochi.png"),
+  鴨川等間隔の法則: require("./assets/illustrations/kamogawa-toukankaku.png"),
+  カルネ買っといて: require("./assets/illustrations/karune.png"),
+  "206系統は絶対混む": require("./assets/illustrations/bus-206.png"),
+  地下鉄が高い: require("./assets/illustrations/chikatetsu-takai.png"),
+  天一こってり: require("./assets/illustrations/tenichi-kotteri.png"),
+  王将1号店行こ: require("./assets/illustrations/ohsho-ichigouten.png"),
+  "西院・大宮でせんべろ": require("./assets/illustrations/saiin-omiya-senbero.png"),
+  木屋町: require("./assets/illustrations/kiyamachi.png"),
+  丸竹夷: require("./assets/illustrations/marutake-ebisu.png"),
+  上がる: require("./assets/illustrations/agaru.png"),
+  下る: require("./assets/illustrations/sagaru.png"),
+};
 
 const MAP_SPOTS: MapSpot[] = [
   {
@@ -180,6 +218,11 @@ function findTerm(name: string) {
   return TERMS.find((term) => term.k === name || term.k.includes(name) || name.includes(term.k));
 }
 
+function illustrationFor(term?: Term | null) {
+  if (!term) return null;
+  return ILLUSTRATIONS[term.k as keyof typeof ILLUSTRATIONS] ?? null;
+}
+
 function buildOptions(term: Term, field: "choku" | "honne", index: number) {
   const answer = stripHtml(term[field]);
   const stride = field === "honne" ? 7 : 11;
@@ -217,6 +260,8 @@ export default function App() {
   const options = buildOptions(quizTerm, quizField, quizIndex);
   const answered = answer !== null;
   const progress = Math.min(100, ((quizIndex % 10) + (answered ? 1 : 0)) * 10);
+  const selectedArt = illustrationFor(selected);
+  const quizArt = illustrationFor(quizTerm);
 
   function chooseAnswer(value: string) {
     if (answered) return;
@@ -267,20 +312,35 @@ export default function App() {
             style={styles.search}
           />
           <FlatList
+            style={styles.termList}
             data={filtered}
             keyExtractor={(item) => item.k}
             contentContainerStyle={styles.list}
+            ListHeaderComponent={
+              <ImageBackground source={HERO_TOWN} resizeMode="cover" imageStyle={styles.dictHeroImage} style={styles.dictHero}>
+                <View style={styles.dictHeroOverlay}>
+                  <Text style={styles.dictHeroKicker}>RAKUCHU REAL</Text>
+                  <Text style={styles.dictHeroTitle}>直訳と意訳で、京の空気をめくる</Text>
+                  <Text style={styles.dictHeroText}>Web版の和ポップな町並みとカードの絵を、iOS版にもそのまま持ち込んでいます。</Text>
+                </View>
+              </ImageBackground>
+            }
             renderItem={({ item }) => {
               const cat = CATS[item.c];
               const isSelected = selected.k === item.k;
+              const art = illustrationFor(item);
               return (
                 <Pressable
                   onPress={() => setSelected(item)}
                   style={[styles.termCard, isSelected && styles.termCardActive, { borderLeftColor: cat.color }]}
                 >
-                  <View style={[styles.seal, { backgroundColor: cat.color }]}>
-                    <Text style={styles.sealText}>{cat.seal}</Text>
-                  </View>
+                  {art ? (
+                    <Image source={art} style={styles.termThumb} />
+                  ) : (
+                    <View style={[styles.seal, { backgroundColor: cat.color }]}>
+                      <Text style={styles.sealText}>{cat.seal}</Text>
+                    </View>
+                  )}
                   <View style={styles.termBody}>
                     <Text style={styles.term}>{item.k}</Text>
                     <Text style={styles.yomi}>{item.y}</Text>
@@ -294,11 +354,14 @@ export default function App() {
             }}
           />
           <View style={styles.detail}>
-            <Text style={styles.detailTitle}>{selected.k}</Text>
-            <Text style={styles.detailLabel}>直訳</Text>
-            <Text style={styles.detailText}>{stripHtml(selected.choku)}</Text>
-            <Text style={styles.detailLabel}>意訳</Text>
-            <Text style={styles.detailText}>{stripHtml(selected.honne)}</Text>
+            {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
+            <View style={styles.detailCopy}>
+              <Text style={styles.detailTitle}>{selected.k}</Text>
+              <Text style={styles.detailLabel}>直訳</Text>
+              <Text style={styles.detailText}>{stripHtml(selected.choku)}</Text>
+              <Text style={styles.detailLabel}>意訳</Text>
+              <Text style={styles.detailText}>{stripHtml(selected.honne)}</Text>
+            </View>
           </View>
         </View>
       )}
@@ -313,15 +376,8 @@ export default function App() {
             <Image source={GUIDE} style={styles.mapGuide} />
           </View>
 
-          <View style={styles.mapBoard}>
-            <View style={styles.mapRiver} />
-            <View style={styles.mapRoadVertical} />
-            <View style={styles.mapRoadHorizontal} />
-            <Text style={[styles.mapRoadLabel, styles.mapRoadNorth]}>今出川</Text>
-            <Text style={[styles.mapRoadLabel, styles.mapRoadCenter]}>四条</Text>
-            <Text style={[styles.mapRoadLabel, styles.mapRoadSouth]}>京都駅</Text>
-            <Text style={[styles.mapRoadLabel, styles.mapRoadWest]}>烏丸</Text>
-            <Text style={[styles.mapRoadLabel, styles.mapRoadEast]}>河原町</Text>
+          <ImageBackground source={RAKUCHU_MAP} resizeMode="cover" imageStyle={styles.mapBoardImage} style={styles.mapBoard}>
+            <View style={styles.mapImageShade} />
             {MAP_SPOTS.map((spot) => {
               const active = selectedSpot.id === spot.id;
               return (
@@ -342,7 +398,7 @@ export default function App() {
                 </Pressable>
               );
             })}
-          </View>
+          </ImageBackground>
 
           <View style={styles.spotCard}>
             <View style={styles.spotHeader}>
@@ -385,19 +441,21 @@ export default function App() {
 
       {mode === "quiz" && (
         <ScrollView contentContainerStyle={styles.quizScreen}>
-          <View style={styles.quizHero}>
+          <ImageBackground source={HERO_TOWN} resizeMode="cover" imageStyle={styles.quizHeroBg} style={styles.quizHero}>
+            <View style={styles.quizHeroVeil} />
             <View style={styles.quizHeroCopy}>
               <Text style={styles.quizBadge}>はんなり検定</Text>
               <Text style={styles.quizTitle}>第{(quizIndex % 10) + 1}問</Text>
               <Text style={styles.quizScore}>正解 {score} / 挑戦 {quizIndex}</Text>
             </View>
             <Image source={GUIDE} style={styles.quizGuide} />
-          </View>
+          </ImageBackground>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress}%` }]} />
           </View>
 
           <View style={styles.questionCard}>
+            {quizArt && <Image source={quizArt} style={styles.questionArt} />}
             <Text style={styles.questionKind}>{CATS[quizTerm.c].label}</Text>
             <Text style={styles.questionTerm}>{quizTerm.k}</Text>
             <Text style={styles.questionScene}>{stripHtml(quizTerm.scene)}</Text>
@@ -486,6 +544,24 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 12, fontWeight: "900", color: "#655B50" },
   tabTextActive: { color: "#FFFDF8" },
   screen: { flex: 1, paddingHorizontal: 14 },
+  dictHero: {
+    minHeight: 178,
+    borderRadius: 24,
+    overflow: "hidden",
+    borderWidth: 3,
+    borderColor: "#26233A",
+    justifyContent: "flex-end",
+  },
+  dictHeroImage: { borderRadius: 21 },
+  dictHeroOverlay: {
+    minHeight: 178,
+    padding: 18,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(255, 248, 232, 0.38)",
+  },
+  dictHeroKicker: { color: "#F26D88", fontSize: 11, fontWeight: "900", letterSpacing: 2 },
+  dictHeroTitle: { marginTop: 6, color: "#26233A", fontSize: 26, lineHeight: 33, fontWeight: "900" },
+  dictHeroText: { marginTop: 8, color: "#3F3849", fontSize: 13, lineHeight: 20, fontWeight: "800" },
   search: {
     minHeight: 46,
     borderRadius: 16,
@@ -497,19 +573,33 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
   },
+  termList: { flex: 1 },
   list: { gap: 10, paddingVertical: 12 },
   termCard: {
     flexDirection: "row",
     gap: 12,
-    minHeight: 96,
+    minHeight: 116,
     padding: 13,
     borderRadius: 18,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFFDF8",
     borderWidth: 2,
-    borderColor: "#EEE3D8",
+    borderColor: "#26233A",
     borderLeftWidth: 7,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.16,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 7 },
   },
   termCardActive: { borderColor: "#F26D88", backgroundColor: "#FFF4F7" },
+  termThumb: {
+    width: 72,
+    height: 82,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: "#26233A",
+    resizeMode: "cover",
+    backgroundColor: "#F6E7CB",
+  },
   seal: { width: 36, height: 36, borderRadius: 10, alignItems: "center", justifyContent: "center" },
   sealText: { color: "#FFFFFF", fontWeight: "900" },
   termBody: { flex: 1 },
@@ -520,11 +610,15 @@ const styles = StyleSheet.create({
   detail: {
     marginBottom: 12,
     borderRadius: 20,
-    padding: 16,
+    padding: 12,
     backgroundColor: "#FFFDF8",
-    borderWidth: 2,
-    borderColor: "#E5DACE",
+    borderWidth: 3,
+    borderColor: "#26233A",
+    flexDirection: "row",
+    gap: 12,
   },
+  detailArt: { width: 116, height: 156, borderRadius: 16, resizeMode: "cover", backgroundColor: "#F6E7CB" },
+  detailCopy: { flex: 1 },
   detailTitle: { fontSize: 24, fontWeight: "900", color: "#26233A" },
   detailLabel: { marginTop: 12, fontSize: 12, fontWeight: "900", color: "#F26D88" },
   detailText: { marginTop: 4, color: "#514754", fontSize: 14, fontWeight: "700", lineHeight: 22 },
@@ -551,6 +645,15 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "#26233A",
     overflow: "hidden",
+  },
+  mapBoardImage: { borderRadius: 21 },
+  mapImageShade: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: "rgba(255, 253, 248, 0.10)",
   },
   mapRiver: {
     position: "absolute",
@@ -601,13 +704,14 @@ const styles = StyleSheet.create({
     minHeight: 38,
     marginLeft: -24,
     marginTop: -19,
-    borderRadius: 14,
+    borderRadius: 999,
     borderWidth: 3,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#26233A",
-    shadowOpacity: 0.18,
+    shadowOpacity: 0.28,
     shadowRadius: 7,
+    shadowOffset: { width: 0, height: 5 },
   },
   mapPinText: { color: "#26233A", fontSize: 11, fontWeight: "900" },
   mapPinTextActive: { color: "#FFFFFF" },
@@ -637,14 +741,33 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     overflow: "hidden",
   },
-  quizHeroCopy: { flex: 1 },
+  quizHeroBg: { borderRadius: 20 },
+  quizHeroVeil: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: "rgba(255, 244, 247, 0.68)",
+  },
+  quizHeroCopy: { flex: 1, zIndex: 2 },
   quizBadge: { alignSelf: "flex-start", color: "#26233A", fontSize: 12, fontWeight: "900" },
   quizTitle: { marginTop: 8, fontSize: 44, lineHeight: 50, fontWeight: "900", color: "#F26D88" },
   quizScore: { marginTop: 8, color: "#335C81", fontWeight: "900" },
-  quizGuide: { width: 142, height: 190, resizeMode: "contain", alignSelf: "flex-end" },
+  quizGuide: { width: 142, height: 190, resizeMode: "contain", alignSelf: "flex-end", zIndex: 2 },
   progressTrack: { height: 14, borderRadius: 999, backgroundColor: "#E8DED4", overflow: "hidden", borderWidth: 2, borderColor: "#FFFFFF" },
   progressFill: { height: "100%", borderRadius: 999, backgroundColor: "#42B8A8" },
-  questionCard: { borderRadius: 22, backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: "#E4DAD0", padding: 18 },
+  questionCard: { borderRadius: 22, backgroundColor: "#FFFFFF", borderWidth: 3, borderColor: "#26233A", padding: 18 },
+  questionArt: {
+    width: "100%",
+    height: 190,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: "#26233A",
+    resizeMode: "cover",
+    marginBottom: 14,
+    backgroundColor: "#F6E7CB",
+  },
   questionKind: { color: "#F26D88", fontSize: 12, fontWeight: "900" },
   questionTerm: { marginTop: 8, color: "#26233A", fontSize: 32, fontWeight: "900", lineHeight: 40 },
   questionScene: { marginTop: 6, color: "#8A7357", fontSize: 13, fontWeight: "800", lineHeight: 20 },
