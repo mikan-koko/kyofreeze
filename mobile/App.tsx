@@ -353,6 +353,10 @@ export default function App() {
                       <View style={styles.cornerBottom} />
                       <View style={[styles.fudaBand, { backgroundColor: cat.color }]} />
                       <View style={styles.termFrame} />
+                      <View style={[styles.termSeal, { backgroundColor: cat.color }]}>
+                        <Text style={styles.termSealText}>{cat.seal}</Text>
+                      </View>
+                      <Text style={[styles.termRank, { color: cat.color }]}>{HANNARI[item.h as keyof typeof HANNARI].replace("レベル", "")}</Text>
                       <View style={styles.termImageStage}>
                         {art && <Image source={art} style={styles.termThumb} />}
                       </View>
@@ -364,11 +368,18 @@ export default function App() {
                         <Text style={styles.meaning} numberOfLines={2}>
                           {stripHtml(item.choku)}
                         </Text>
-                        <View style={styles.beans}>
-                          {[1, 2, 3, 4, 5].map((level) => (
-                            <View key={level} style={[styles.bean, item.h >= level && styles.beanOn]} />
-                          ))}
-                        </View>
+                      </View>
+                      <View style={styles.fudaFooter}>
+                        <Text style={styles.fudaFooterLabel}>はんなり</Text>
+                        {[1, 2, 3, 4, 5].map((level) => (
+                          <View
+                            key={level}
+                            style={[
+                              styles.fudaFooterDot,
+                              item.h >= level && { backgroundColor: cat.color, borderColor: cat.color },
+                            ]}
+                          />
+                        ))}
                       </View>
                       <View style={styles.sharePill}>
                         <Text style={styles.sharePillText}>共有</Text>
@@ -405,7 +416,13 @@ export default function App() {
                         <View style={styles.fudaBeans}>
                           <Text style={styles.fudaBeansLabel}>はんなり</Text>
                           {[1, 2, 3, 4, 5].map((level) => (
-                            <View key={level} style={[styles.fudaBean, selected.h >= level && styles.fudaBeanOn]} />
+                            <View
+                              key={level}
+                              style={[
+                                styles.fudaBean,
+                                selected.h >= level && { backgroundColor: CATS[selected.c].color },
+                              ]}
+                            />
                           ))}
                         </View>
                       </View>
@@ -478,7 +495,9 @@ export default function App() {
               <Text style={styles.mapTitle}>今の地理から、京ことばをひらく</Text>
               <Text style={styles.mapLead}>地名・通り名・街のあるあるにピンを置いた、デフォルメ概略地図です。</Text>
             </View>
-            <Animated.Image source={GUIDE_MAP} style={[styles.mapGuide, mapFloatStyle]} />
+            <Animated.View style={[styles.kotohaMapFrame, mapFloatStyle]}>
+              <Image source={GUIDE_MAP} style={styles.mapGuide} />
+            </Animated.View>
           </View>
 
           <ImageBackground source={RAKUCHU_MAP} resizeMode="cover" imageStyle={styles.mapBoardImage} style={styles.mapBoard}>
@@ -556,7 +575,9 @@ export default function App() {
               <Text style={styles.quizTitle}>第{(quizIndex % 10) + 1}問</Text>
               <Text style={styles.quizScore}>正解 {score} / 挑戦 {quizIndex}</Text>
             </View>
-            <Animated.Image source={GUIDE_QUIZ} style={[styles.quizGuide, quizFloatStyle]} />
+            <Animated.View style={[styles.kotohaQuizFrame, quizFloatStyle]}>
+              <Image source={GUIDE_QUIZ} style={styles.quizGuide} />
+            </Animated.View>
           </ImageBackground>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress}%` }]} />
@@ -854,7 +875,7 @@ const styles = StyleSheet.create({
   termCard: {
     flex: 1,
     maxWidth: "48.8%",
-    minHeight: 318,
+    minHeight: 338,
     padding: 13,
     borderRadius: 18,
     backgroundColor: "rgba(255,246,251,.98)",
@@ -900,10 +921,40 @@ const styles = StyleSheet.create({
     borderColor: "#FF7E9C",
   },
   fudaBand: { position: "absolute", left: 0, top: 0, bottom: 0, width: 7, opacity: 0.55, borderTopLeftRadius: 18, borderBottomLeftRadius: 18 },
+  termSeal: {
+    position: "absolute",
+    left: 18,
+    top: 18,
+    width: 38,
+    height: 48,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "rgba(255,253,248,.92)",
+    shadowColor: "#26233A",
+    shadowOpacity: 0.14,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 3 },
+    transform: [{ rotate: "-4deg" }],
+    zIndex: 4,
+  },
+  termSealText: { color: "#FFFDF8", fontSize: 15, fontWeight: "900" },
+  termRank: {
+    position: "absolute",
+    right: 15,
+    top: 18,
+    width: 16,
+    fontSize: 10,
+    lineHeight: 13,
+    fontWeight: "900",
+    textAlign: "center",
+    zIndex: 4,
+  },
   termImageStage: {
     width: 132,
     height: 132,
-    marginTop: 18,
+    marginTop: 30,
     borderRadius: 999,
     borderWidth: 8,
     borderColor: "rgba(255,253,248,.92)",
@@ -932,6 +983,25 @@ const styles = StyleSheet.create({
   beans: { flexDirection: "row", gap: 4, marginTop: 7 },
   bean: { width: 10, height: 10, borderRadius: 999, borderWidth: 1, borderColor: "#D8CFC7", backgroundColor: "#F3EBDD" },
   beanOn: { backgroundColor: "#26233A", borderColor: "#26233A" },
+  fudaFooter: {
+    position: "absolute",
+    bottom: 18,
+    left: 48,
+    right: 56,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5,
+  },
+  fudaFooterLabel: { color: "#B89A5A", fontSize: 10, fontWeight: "900", marginRight: 3 },
+  fudaFooterDot: {
+    width: 9,
+    height: 9,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: "#F4DDE5",
+    backgroundColor: "#F7DFE7",
+  },
   sharePill: {
     position: "absolute",
     right: 8,
@@ -1113,7 +1183,24 @@ const styles = StyleSheet.create({
   mapEyebrow: { color: "#335C81", fontSize: 12, fontWeight: "900" },
   mapTitle: { marginTop: 8, color: "#26233A", fontSize: 24, lineHeight: 31, fontWeight: "900" },
   mapLead: { marginTop: 8, color: "#655B50", fontSize: 13, lineHeight: 20, fontWeight: "800" },
-  mapGuide: { width: 108, height: 150, resizeMode: "contain", marginRight: -10, marginBottom: -18 },
+  kotohaMapFrame: {
+    width: 104,
+    height: 132,
+    borderRadius: 18,
+    backgroundColor: "#FFF4D8",
+    borderWidth: 2,
+    borderColor: "rgba(38,35,58,.14)",
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginRight: -6,
+    marginBottom: -4,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+  },
+  mapGuide: { width: 96, height: 124, resizeMode: "contain", marginBottom: 2 },
   mapBoard: {
     height: 330,
     borderRadius: 24,
@@ -1272,7 +1359,24 @@ const styles = StyleSheet.create({
   quizBadge: { alignSelf: "flex-start", color: "#26233A", fontSize: 12, fontWeight: "900" },
   quizTitle: { marginTop: 8, fontSize: 44, lineHeight: 50, fontWeight: "900", color: "#F26D88" },
   quizScore: { marginTop: 8, color: "#335C81", fontWeight: "900" },
-  quizGuide: { width: 142, height: 190, resizeMode: "contain", alignSelf: "flex-end", zIndex: 2 },
+  kotohaQuizFrame: {
+    width: 128,
+    height: 166,
+    borderRadius: 26,
+    backgroundColor: "#FFF4D8",
+    borderWidth: 2,
+    borderColor: "rgba(38,35,58,.16)",
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    alignSelf: "flex-end",
+    zIndex: 2,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.14,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 7 },
+  },
+  quizGuide: { width: 116, height: 154, resizeMode: "contain", marginBottom: 2 },
   progressTrack: { height: 14, borderRadius: 999, backgroundColor: "#E8DED4", overflow: "hidden", borderWidth: 2, borderColor: "#FFFFFF" },
   progressFill: { height: "100%", borderRadius: 999, backgroundColor: "#42B8A8" },
   questionCard: { borderRadius: 22, backgroundColor: "#FFFFFF", borderWidth: 3, borderColor: "#26233A", padding: 18 },
