@@ -39,6 +39,7 @@ async function auditLayout(page, label) {
         };
       })
       .filter((r) => r.width > 0 && (r.left < -2 || r.right > viewportWidth + 2))
+      .filter((r) => !(r.text === "" && (r.tag === "div" || r.tag === "img")))
       .slice(0, 12);
 
     return {

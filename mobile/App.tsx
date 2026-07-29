@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 
+import { ILLUSTRATIONS } from "./assets/illustrations";
 import termsJson from "./assets/data/terms.json";
 
 const CATS = {
@@ -56,42 +57,8 @@ type MapSpot = {
 const TERMS = termsJson as Term[];
 const GUIDE = require("./assets/characters/kyofreeze-guide-bold.png");
 const HERO_TOWN = require("./assets/hero/kyoto-town-pop.png");
+const APP_ICON = require("./assets/icon.png");
 const RAKUCHU_MAP = require("./assets/map/rakuchu-map-current-pop.png");
-
-const ILLUSTRATIONS = {
-  おいでやす: require("./assets/illustrations/oideyasu.png"),
-  おこしやす: require("./assets/illustrations/okoshiyasu.png"),
-  "〜してはる": require("./assets/illustrations/shite-haru.png"),
-  おおきに: require("./assets/illustrations/ookini.png"),
-  かんにんね: require("./assets/illustrations/kannin-ne.png"),
-  ほな: require("./assets/illustrations/hona.png"),
-  はばかりさん: require("./assets/illustrations/habakari-san.png"),
-  おやかまっさん: require("./assets/illustrations/oyakamassan.png"),
-  ごめんやす: require("./assets/illustrations/gomen-yasu.png"),
-  さいなら: require("./assets/illustrations/sainara.png"),
-  "ぶぶ漬けでもどうどすか": require("./assets/illustrations/bubuzuke-demo-dou-dosu-ka.png"),
-  "よう言わんわ": require("./assets/illustrations/you-iwan-wa.png"),
-  いけず: require("./assets/illustrations/ikezu.png"),
-  はんなり: require("./assets/illustrations/hannari.png"),
-  おばんざい: require("./assets/illustrations/obanzai.png"),
-  べっぴんさん: require("./assets/illustrations/beppin-san.png"),
-  先斗町: require("./assets/illustrations/pontocho.png"),
-  "錦市場はもうインバウンドの場所やな": require("./assets/illustrations/nishiki-inbound.png"),
-  "一乗寺でラーメン食べて百万遍で飲も": require("./assets/illustrations/ichijoji-hyakumanben.png"),
-  百万遍交差点xy軸: require("./assets/illustrations/hyakumanben-xy.png"),
-  ふたばの豆餅もろた: require("./assets/illustrations/futaba-mamemochi.png"),
-  鴨川等間隔の法則: require("./assets/illustrations/kamogawa-toukankaku.png"),
-  カルネ買っといて: require("./assets/illustrations/karune.png"),
-  "206系統は絶対混む": require("./assets/illustrations/bus-206.png"),
-  地下鉄が高い: require("./assets/illustrations/chikatetsu-takai.png"),
-  天一こってり: require("./assets/illustrations/tenichi-kotteri.png"),
-  王将1号店行こ: require("./assets/illustrations/ohsho-ichigouten.png"),
-  "西院・大宮でせんべろ": require("./assets/illustrations/saiin-omiya-senbero.png"),
-  木屋町: require("./assets/illustrations/kiyamachi.png"),
-  丸竹夷: require("./assets/illustrations/marutake-ebisu.png"),
-  上がる: require("./assets/illustrations/agaru.png"),
-  下る: require("./assets/illustrations/sagaru.png"),
-};
 
 const MAP_SPOTS: MapSpot[] = [
   {
@@ -210,6 +177,13 @@ const MONETIZATION_ITEMS = [
   },
 ];
 
+const TAB_ITEMS: { id: ViewMode; label: string; mark: string }[] = [
+  { id: "dict", label: "辞典", mark: "辞" },
+  { id: "map", label: "洛中地図", mark: "図" },
+  { id: "quiz", label: "検定", mark: "検" },
+  { id: "roadmap", label: "iOS計画", mark: "計" },
+];
+
 function stripHtml(value: string) {
   return value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
@@ -278,29 +252,19 @@ export default function App() {
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <View style={styles.headerCopy}>
-          <Text style={styles.appName}>京ふれーず</Text>
-          <Text style={styles.tagline}>洛中リアル京/ことば辞典</Text>
+        <View style={styles.headerMain}>
+          <View style={styles.logoRow}>
+            <Image source={APP_ICON} style={styles.headerIcon} />
+            <View style={styles.logoText}>
+              <Text style={styles.appName}>京ふれーず</Text>
+              <Text style={styles.tagline}>RAKUCHU REAL</Text>
+            </View>
+          </View>
+          <Text style={styles.headerMessage}>直訳と意訳で、{"\n"}京の空気をめくる</Text>
         </View>
         <Image source={GUIDE} style={styles.headerGuide} />
       </View>
-
-      <View style={styles.tabs}>
-        {[
-          ["dict", "辞典"],
-          ["map", "洛中地図"],
-          ["quiz", "検定"],
-          ["roadmap", "iOS計画"],
-        ].map(([id, label]) => (
-          <Pressable
-            key={id}
-            onPress={() => setMode(id as ViewMode)}
-            style={[styles.tab, mode === id && styles.tabActive]}
-          >
-            <Text style={[styles.tabText, mode === id && styles.tabTextActive]}>{label}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <View style={styles.headerStripe} />
 
       {mode === "dict" && (
         <View style={styles.screen}>
@@ -507,6 +471,20 @@ export default function App() {
           <Text style={styles.roadItem}>次: Expo Go / EAS Buildで実機確認</Text>
         </ScrollView>
       )}
+
+      <View style={styles.bottomNav}>
+        {TAB_ITEMS.map((item) => {
+          const active = mode === item.id;
+          return (
+            <Pressable key={item.id} onPress={() => setMode(item.id)} style={[styles.navItem, active && styles.navItemActive]}>
+              <View style={[styles.navMark, active && styles.navMarkActive]}>
+                <Text style={[styles.navMarkText, active && styles.navMarkTextActive]}>{item.mark}</Text>
+              </View>
+              <Text style={[styles.navLabel, active && styles.navLabelActive]}>{item.label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </SafeAreaView>
   );
 }
@@ -514,35 +492,71 @@ export default function App() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#FAF6EE" },
   header: {
-    minHeight: 132,
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 12,
-    backgroundColor: "#FFF7E8",
-    borderBottomWidth: 3,
-    borderBottomColor: "#F26D88",
+    minHeight: 122,
+    paddingHorizontal: 18,
+    paddingTop: 12,
+    paddingBottom: 10,
+    backgroundColor: "rgba(255, 248, 232, 0.96)",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  headerCopy: { flex: 1, paddingRight: 12 },
-  appName: { fontSize: 31, fontWeight: "900", color: "#26233A", letterSpacing: 1 },
-  tagline: { marginTop: 5, fontSize: 13, fontWeight: "800", color: "#F26D88", letterSpacing: 1.2 },
-  headerGuide: { width: 94, height: 116, resizeMode: "contain" },
-  tabs: { flexDirection: "row", gap: 6, padding: 12, backgroundColor: "#FAF6EE" },
-  tab: {
+  headerMain: { flex: 1, paddingRight: 8 },
+  logoRow: { flexDirection: "row", alignItems: "center", gap: 10 },
+  headerIcon: { width: 44, height: 44, borderRadius: 13, borderWidth: 2, borderColor: "#26233A" },
+  logoText: { flex: 1 },
+  appName: { fontSize: 29, lineHeight: 33, fontWeight: "900", color: "#26233A", letterSpacing: 0.5 },
+  tagline: { marginTop: 1, fontSize: 10, fontWeight: "900", color: "#F26D88", letterSpacing: 2.2 },
+  headerMessage: {
+    marginTop: 8,
+    color: "#514754",
+    fontSize: 12,
+    lineHeight: 17,
+    fontWeight: "900",
+    letterSpacing: 0.4,
+  },
+  headerGuide: { width: 74, height: 100, resizeMode: "contain" },
+  headerStripe: { height: 5, backgroundColor: "#F26D88", borderBottomWidth: 1, borderBottomColor: "#E7D3C3" },
+  bottomNav: {
+    flexDirection: "row",
+    gap: 7,
+    paddingHorizontal: 10,
+    paddingTop: 9,
+    paddingBottom: 10,
+    backgroundColor: "rgba(255, 253, 248, 0.96)",
+    borderTopWidth: 2,
+    borderTopColor: "#E8DED4",
+    shadowColor: "#26233A",
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: -8 },
+  },
+  navItem: {
     flex: 1,
-    minHeight: 42,
-    borderRadius: 999,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: "#E6DED3",
+    minHeight: 58,
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
+    gap: 4,
+    borderWidth: 2,
+    borderColor: "transparent",
   },
-  tabActive: { backgroundColor: "#26233A", borderColor: "#26233A" },
-  tabText: { fontSize: 12, fontWeight: "900", color: "#655B50" },
-  tabTextActive: { color: "#FFFDF8" },
+  navItemActive: { backgroundColor: "#26233A", borderColor: "#26233A" },
+  navMark: {
+    width: 25,
+    height: 25,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFF3D0",
+    borderWidth: 1,
+    borderColor: "#E8DED4",
+  },
+  navMarkActive: { backgroundColor: "#F26D88", borderColor: "#F26D88" },
+  navMarkText: { color: "#26233A", fontSize: 12, fontWeight: "900" },
+  navMarkTextActive: { color: "#FFFDF8" },
+  navLabel: { color: "#655B50", fontSize: 11, fontWeight: "900" },
+  navLabelActive: { color: "#FFFDF8" },
   screen: { flex: 1, paddingHorizontal: 14 },
   dictHero: {
     minHeight: 178,
