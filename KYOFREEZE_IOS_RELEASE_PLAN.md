@@ -22,8 +22,8 @@
 | 収益化 | Google AdMob + 広告削除IAP + 追加カードパックIAP | 方針済 |
 | IAP SKU案 | `com.kokokikaku.kyofreeze.removeads` / `com.kokokikaku.kyofreeze.cardpack.*` | 仮 |
 | 課金保存キー案 | `kyofreeze.adsremoved.v1` | 未 |
-| サポートURL | 未定 | 未 |
-| プライバシーポリシーURL | 未定 | 未 |
+| サポートURL | `https://mikan-koko.github.io/kyofreeze/support.html` | 仮 |
+| プライバシーポリシーURL | `https://mikan-koko.github.io/kyofreeze/privacy.html` | 仮 |
 
 ## Phase 1 Web側の土台
 
@@ -33,9 +33,9 @@
 - [x] `robots.txt`
 - [x] `sitemap.xml`
 - [ ] 公開URLを確定して、`robots.txt` と `sitemap.xml` のURLを最終値へ差し替え
-- [ ] App Store用サポートURL、マーケティングURLを決める
+- [x] App Store用サポートURL、プライバシーポリシーURLの仮ページを用意
 - [x] 収益化方針を決める
-- [ ] AdMob導入前に、プライバシーポリシーへGoogle AdMob、広告ID、オプトアウトの説明を正式追記
+- [x] AdMob導入前に、プライバシーポリシーへGoogle AdMob、広告ID、購入情報の扱いを仮追記
 - [ ] IAP導入前に、広告削除と追加カードパックの説明、復元導線、購入状態の扱いを整理
 - [ ] Web AdSenseを使う場合は `ads.txt` とCSP方針を決める
 
@@ -49,7 +49,8 @@
 - はんなり検定は、iOS版ではタブまたはホーム内カードから入れる学習ミニゲームとして扱う。
 - 画像資産は `assets/illustrations`、`assets/icons`、`assets/characters`、`assets/map` を転用する。
 - 辞書データは `assets/data/terms.json` に分離済み。Web版は `assets/data/terms-data.js` 経由で同じデータを読み込む。
-- Mobile版は `mobile/assets/data/terms.json` を読み込み、辞典リストと検定の初期画面を実装済み。
+- Mobile版は `mobile/assets/data/terms.json` を読み込み、辞典リスト、洛中地図、はんなり検定の初期ネイティブ画面を実装済み。
+- `iOS計画` タブにAdMob、広告削除IAP、追加カードパックIAPの実装メモを表示済み。
 
 ## Phase A 先に進める事務
 
@@ -81,8 +82,8 @@
 
 ## 次の実作業候補
 
-1. `privacy.html` の問い合わせ先と公開URL確定
-2. 洛中地図のネイティブ画面化
-3. アイコン、スプラッシュ、App Storeスクショの制作
-4. AdMob/IAP設計
-5. App Store審査向けのプライバシー回答整理
+1. Expo Go / EAS Buildで実機確認
+2. アイコン、スプラッシュ、App Storeスクショの制作
+3. AdMob/IAPの実装方式とID整理
+4. App Store審査向けのプライバシー回答整理
+5. サポートURLの正式問い合わせ窓口を確定

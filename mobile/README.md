@@ -6,7 +6,9 @@ Expo/React Native版の初期実装です。
 
 - `assets/data/terms.json` から129語の辞書データを読み込み
 - 辞典リスト、検索、選択語の直訳/意訳表示
-- はんなり検定の初期クイズ画面
+- 洛中地図の初期ネイティブ画面
+- はんなり検定のクイズ画面
+- iOS計画タブでAdMob/IAPの実装メモ表示
 - iOS Bundle ID: `com.kokokikaku.kyofreeze`
 - アプリアイコンと案内役「ことは」画像の利用
 
@@ -21,7 +23,7 @@ Windows上ではiOSシミュレータを直接起動できないため、実機�
 
 ## 次にやること
 
-- 洛中地図のネイティブ画面化
 - App Storeスクリーンショット用の画面調整
-- Google AdMob設計
-- 広告削除IAPと追加カードパックIAPの設計
+- Google AdMob実装前のID整理
+- 広告削除IAPと追加カードパックIAPの実装方式決定
+- Expo Go / EAS Buildで実機確認

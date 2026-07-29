@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "verify:ui": "node scripts/verify-kyofreeze-ui.mjs"
+    "verify:ui": "node scripts/verify-kyofreeze-ui.mjs",
+    "verify:mobile-preview": "node scripts/verify-mobile-preview.mjs"
   },
   "keywords": [],
   "author": "",
