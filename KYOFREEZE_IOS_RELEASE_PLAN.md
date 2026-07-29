@@ -13,15 +13,17 @@
 
 | 項目 | 京ふれーず案 | 確定 |
 |---|---|---|
-| アプリ名 | 京ふれーず | 未 |
-| サブタイトル | 洛中リアル・京ことば辞典 | 未 |
-| Bundle ID | `com.kokokikaku.kyofreeze` または `com.mikankoko.kyofreeze` | 未 |
+| アプリ名 | 京ふれーず | 済 |
+| サブタイトル | 洛中リアル京/ことば辞典 | 済 |
+| Bundle ID | `com.kokokikaku.kyofreeze` | 済 |
 | Expo account | `mikan-koko` | 未 |
 | Expo project | `kyofreeze` | 未 |
 | Web origin | `https://mikan-koko.github.io/kyofreeze` | 仮 |
-| 収益化 | AdMob + 広告削除IAP + Web AdSense | 要判断 |
-| IAP SKU案 | `com.kokokikaku.kyofreeze.removeads` | 未 |
+| 収益化 | Google AdMob + 広告削除IAP + 追加カードパックIAP | 方針済 |
+| IAP SKU案 | `com.kokokikaku.kyofreeze.removeads` / `com.kokokikaku.kyofreeze.cardpack.*` | 仮 |
 | 課金保存キー案 | `kyofreeze.adsremoved.v1` | 未 |
+| サポートURL | 未定 | 未 |
+| プライバシーポリシーURL | 未定 | 未 |
 
 ## Phase 1 Web側の土台
 
@@ -32,8 +34,10 @@
 - [x] `sitemap.xml`
 - [ ] 公開URLを確定して、`robots.txt` と `sitemap.xml` のURLを最終値へ差し替え
 - [ ] App Store用サポートURL、マーケティングURLを決める
-- [ ] 広告を入れる場合は、プライバシーポリシーへAdMob/AdSenseの説明を追記
-- [ ] AdSenseを使う場合は `ads.txt` とCSP方針を決める
+- [x] 収益化方針を決める
+- [ ] AdMob導入前に、プライバシーポリシーへGoogle AdMob、広告ID、オプトアウトの説明を正式追記
+- [ ] IAP導入前に、広告削除と追加カードパックの説明、復元導線、購入状態の扱いを整理
+- [ ] Web AdSenseを使う場合は `ads.txt` とCSP方針を決める
 
 ## Phase 2 iOS化方針
 
@@ -51,6 +55,10 @@
 - [ ] 銀行口座登録
 - [ ] W-8BEN提出
 - [ ] App Store Connectで新規App枠作成
+- [ ] App Store ConnectでBundle ID `com.kokokikaku.kyofreeze` を使う新規Appを作成
+- [ ] In-App Purchase: 広告削除
+- [ ] In-App Purchase: 追加カードパック
+- [ ] AdMobアプリを作成し、iOS App IDと広告ユニットIDを控える
 
 ## App Store素材メモ
 
@@ -74,4 +82,5 @@
 2. `privacy.html` の問い合わせ先と公開URL確定
 3. Expoプロジェクト作成
 4. アイコン、スプラッシュ、App Storeスクショの制作
-5. AdMob/IAPを入れるかどうかの判断
+5. AdMob/IAP設計
+6. App Store審査向けのプライバシー回答整理
