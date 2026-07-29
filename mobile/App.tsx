@@ -57,6 +57,7 @@ type MapSpot = {
 const TERMS = termsJson as Term[];
 const GUIDE = require("./assets/characters/kyofreeze-guide-bold.png");
 const GUIDE_MAP = require("./assets/characters/kotoha-guide-map-pose.png");
+const GUIDE_QUIZ = require("./assets/characters/kotoha-quiz-cheer-pose.png");
 const HERO_TOWN = require("./assets/hero/kyoto-town-pop.png");
 const APP_ICON = require("./assets/icon.png");
 const RAKUCHU_MAP = require("./assets/map/rakuchu-map-current-pop.png");
@@ -172,26 +173,66 @@ export default function App() {
   const mapArt = illustrationFor(mapTerm);
   const quizArt = illustrationFor(quizTerm);
   const selectedCatMeta = CATS[selectedCat];
-  const float = useRef(new Animated.Value(0)).current;
+  const heroFloat = useRef(new Animated.Value(0)).current;
+  const mapFloat = useRef(new Animated.Value(0)).current;
+  const quizFloat = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const loop = Animated.loop(
+    const heroLoop = Animated.loop(
       Animated.sequence([
-        Animated.timing(float, { toValue: 1, duration: 1700, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
-        Animated.timing(float, { toValue: 0, duration: 1700, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+        Animated.timing(heroFloat, { toValue: 1, duration: 1800, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+        Animated.timing(heroFloat, { toValue: 0, duration: 1800, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
       ]),
     );
-    loop.start();
-    return () => loop.stop();
-  }, [float]);
+    const mapLoop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(mapFloat, { toValue: 1, duration: 2300, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(mapFloat, { toValue: 0, duration: 2300, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+      ]),
+    );
+    const quizLoop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(quizFloat, { toValue: 1, duration: 900, easing: Easing.out(Easing.back(1.3)), useNativeDriver: true }),
+        Animated.timing(quizFloat, { toValue: 0, duration: 1200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+      ]),
+    );
+    heroLoop.start();
+    mapLoop.start();
+    quizLoop.start();
+    return () => {
+      heroLoop.stop();
+      mapLoop.stop();
+      quizLoop.stop();
+    };
+  }, [heroFloat, mapFloat, quizFloat]);
 
-  const floatStyle = {
+  const heroFloatStyle = {
     transform: [
       {
-        translateY: float.interpolate({ inputRange: [0, 1], outputRange: [0, -6] }),
+        translateY: heroFloat.interpolate({ inputRange: [0, 1], outputRange: [0, -7] }),
       },
       {
-        rotate: float.interpolate({ inputRange: [0, 1], outputRange: ["-1deg", "1deg"] }),
+        rotate: heroFloat.interpolate({ inputRange: [0, 1], outputRange: ["-1.5deg", "1.5deg"] }),
+      },
+    ],
+  };
+  const mapFloatStyle = {
+    transform: [
+      {
+        translateX: mapFloat.interpolate({ inputRange: [0, 1], outputRange: [0, 5] }),
+      },
+      {
+        rotate: mapFloat.interpolate({ inputRange: [0, 1], outputRange: ["1deg", "-2deg"] }),
+      },
+    ],
+  };
+  const quizFloatStyle = {
+    transform: [
+      {
+        translateY: quizFloat.interpolate({ inputRange: [0, 1], outputRange: [0, -11] }),
+      },
+      {
+        scale: quizFloat.interpolate({ inputRange: [0, 1], outputRange: [1, 1.04] }),
       },
     ],
   };
@@ -226,13 +267,6 @@ export default function App() {
                 </View>
               </View>
             </View>
-            <View style={styles.headerGuideWrap}>
-              <Animated.Image source={GUIDE} style={[styles.headerGuide, floatStyle]} />
-              <View style={styles.guideName}>
-                <Text style={styles.guideRole}>案内役</Text>
-                <Text style={styles.guideText}>ことは</Text>
-              </View>
-            </View>
           </View>
           <View style={styles.headerStripe} />
 
@@ -253,10 +287,20 @@ export default function App() {
                 ListHeaderComponent={
                   <View>
                     <ImageBackground source={HERO_TOWN} resizeMode="cover" imageStyle={styles.dictHeroImage} style={styles.dictHero}>
+                      <View style={styles.dictHeroShade} />
                       <View style={styles.dictHeroOverlay}>
-                        <Text style={styles.dictHeroKicker}>RAKUCHU REAL</Text>
-                        <Text style={styles.dictHeroTitle}>洛中リアル・京ことば辞典。</Text>
-                        <Text style={styles.dictHeroText}>おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。</Text>
+                        <View style={styles.dictHeroCopy}>
+                          <Text style={styles.dictHeroKicker}>RAKUCHU REAL</Text>
+                          <Text style={styles.dictHeroTitle}>洛中リアル・京ことば辞典。</Text>
+                          <Text style={styles.dictHeroText}>おおきに、ぶぶ漬け、よう言わんわ。直訳だけやのうて、言葉の奥にあるニュアンスまで。</Text>
+                        </View>
+                        <View style={styles.heroGuideWrap}>
+                          <Animated.Image source={GUIDE} style={[styles.heroGuide, heroFloatStyle]} />
+                          <View style={styles.guideName}>
+                            <Text style={styles.guideRole}>案内役</Text>
+                            <Text style={styles.guideText}>ことは</Text>
+                          </View>
+                        </View>
                       </View>
                     </ImageBackground>
                     <View style={styles.catRail}>
@@ -305,7 +349,10 @@ export default function App() {
                       <View style={styles.cornerTop} />
                       <View style={styles.cornerBottom} />
                       <View style={[styles.fudaBand, { backgroundColor: cat.color }]} />
-                      {art && <Image source={art} style={styles.termThumb} />}
+                      <View style={styles.termFrame} />
+                      <View style={styles.termImageStage}>
+                        {art && <Image source={art} style={styles.termThumb} />}
+                      </View>
                       <View style={styles.termBody}>
                         <Text style={[styles.termCat, { color: cat.color }]}>{cat.label}</Text>
                         <Text style={styles.term}>{item.k}</Text>
@@ -343,7 +390,9 @@ export default function App() {
                           <Text style={styles.detailSealText}>{CATS[selected.c].seal}</Text>
                         </View>
                         <Text style={styles.detailRank}>{HANNARI[selected.h as keyof typeof HANNARI].replace("レベル", "")}</Text>
-                        {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
+                        <View style={styles.detailArtStage}>
+                          {selectedArt && <Image source={selectedArt} style={styles.detailArt} />}
+                        </View>
                         <Text style={styles.detailFudaTitle}>{selected.k}</Text>
                         <Text style={styles.detailFudaYomi}>{selected.y}</Text>
                         <Text style={[styles.detailFudaCat, { color: CATS[selected.c].color }]}>{CATS[selected.c].label}</Text>
@@ -424,7 +473,7 @@ export default function App() {
               <Text style={styles.mapTitle}>今の地理から、京ことばをひらく</Text>
               <Text style={styles.mapLead}>地名・通り名・街のあるあるにピンを置いた、デフォルメ概略地図です。</Text>
             </View>
-            <Animated.Image source={GUIDE_MAP} style={[styles.mapGuide, floatStyle]} />
+            <Animated.Image source={GUIDE_MAP} style={[styles.mapGuide, mapFloatStyle]} />
           </View>
 
           <ImageBackground source={RAKUCHU_MAP} resizeMode="cover" imageStyle={styles.mapBoardImage} style={styles.mapBoard}>
@@ -502,7 +551,7 @@ export default function App() {
               <Text style={styles.quizTitle}>第{(quizIndex % 10) + 1}問</Text>
               <Text style={styles.quizScore}>正解 {score} / 挑戦 {quizIndex}</Text>
             </View>
-            <Animated.Image source={GUIDE_MAP} style={[styles.quizGuide, floatStyle]} />
+            <Animated.Image source={GUIDE_QUIZ} style={[styles.quizGuide, quizFloatStyle]} />
           </ImageBackground>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress}%` }]} />
@@ -682,7 +731,7 @@ const styles = StyleSheet.create({
   navLabelActive: { color: "#FFFDF8" },
   screen: { flex: 1, paddingHorizontal: 14 },
   dictHero: {
-    minHeight: 178,
+    minHeight: 218,
     borderRadius: 24,
     overflow: "hidden",
     borderWidth: 3,
@@ -690,15 +739,40 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   dictHeroImage: { borderRadius: 21 },
-  dictHeroOverlay: {
-    minHeight: 178,
-    padding: 18,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(255, 248, 232, 0.28)",
+  dictHeroShade: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: "rgba(255, 248, 232, 0.34)",
   },
-  dictHeroKicker: { color: "#F26D88", fontSize: 11, fontWeight: "900", letterSpacing: 2 },
-  dictHeroTitle: { marginTop: 6, color: "#26233A", fontSize: 26, lineHeight: 33, fontWeight: "900" },
-  dictHeroText: { marginTop: 8, color: "#3F3849", fontSize: 13, lineHeight: 20, fontWeight: "800" },
+  dictHeroOverlay: {
+    minHeight: 218,
+    padding: 14,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  dictHeroCopy: {
+    flex: 1,
+    minWidth: 0,
+    borderRadius: 18,
+    backgroundColor: "rgba(255,253,248,.88)",
+    borderWidth: 2,
+    borderColor: "rgba(38,35,58,.18)",
+    padding: 14,
+    shadowColor: "#26233A",
+    shadowOpacity: 0.18,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 7 },
+  },
+  dictHeroKicker: { color: "#F26D88", fontSize: 10, fontWeight: "900", letterSpacing: 2 },
+  dictHeroTitle: { marginTop: 5, color: "#26233A", fontSize: 22, lineHeight: 29, fontWeight: "900" },
+  dictHeroText: { marginTop: 7, color: "#3F3849", fontSize: 12, lineHeight: 19, fontWeight: "900" },
+  heroGuideWrap: { width: 92, alignItems: "center", marginRight: -4, marginBottom: -10 },
+  heroGuide: { width: 104, height: 158, resizeMode: "contain" },
   search: {
     minHeight: 46,
     borderRadius: 16,
@@ -753,7 +827,7 @@ const styles = StyleSheet.create({
   termCard: {
     flex: 1,
     maxWidth: "48.8%",
-    minHeight: 238,
+    minHeight: 286,
     padding: 10,
     borderRadius: 12,
     backgroundColor: "rgba(255,248,232,.96)",
@@ -767,6 +841,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   termCardActive: { backgroundColor: "#FFF4F7" },
+  termFrame: {
+    position: "absolute",
+    top: 7,
+    right: 7,
+    bottom: 7,
+    left: 7,
+    borderWidth: 1,
+    borderColor: "#F26D88",
+    borderRadius: 9,
+    opacity: 0.72,
+  },
   cornerTop: {
     position: "absolute",
     top: 8,
@@ -788,19 +873,26 @@ const styles = StyleSheet.create({
     borderColor: "#D9B43A",
   },
   fudaBand: { position: "absolute", left: 0, top: 0, bottom: 0, width: 7, opacity: 0.82 },
-  termThumb: {
+  termImageStage: {
     width: "100%",
-    height: 104,
+    height: 146,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#26233A",
-    resizeMode: "cover",
     backgroundColor: "#F6E7CB",
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  termThumb: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
   seal: { width: 36, height: 36, borderRadius: 10, alignItems: "center", justifyContent: "center" },
   sealText: { color: "#FFFFFF", fontWeight: "900" },
   termBody: { flex: 1, width: "100%", alignItems: "center" },
-  termCat: { marginTop: 7, fontSize: 9, fontWeight: "900", letterSpacing: 1 },
+  termCat: { marginTop: 8, fontSize: 9, fontWeight: "900", letterSpacing: 1 },
   term: { marginTop: 3, fontSize: 18, lineHeight: 23, fontWeight: "900", color: "#26233A", textAlign: "center" },
   yomi: { marginTop: 2, fontSize: 10, fontWeight: "800", color: "#8A7D8D", letterSpacing: 1, textAlign: "center" },
   rule: { width: 48, height: 1, backgroundColor: "rgba(38,35,58,.26)", marginTop: 7, marginBottom: 6 },
@@ -849,7 +941,7 @@ const styles = StyleSheet.create({
   closeButtonText: { color: "#26233A", fontSize: 26, lineHeight: 28, fontWeight: "500" },
   detailScroll: { padding: 10, gap: 12 },
   detailFuda: {
-    minHeight: 414,
+    minHeight: 506,
     borderRadius: 12,
     position: "relative",
     overflow: "hidden",
@@ -880,15 +972,22 @@ const styles = StyleSheet.create({
     borderColor: "#FF7E9C",
   },
   fudaBandTall: { position: "absolute", left: 0, top: 0, bottom: 0, width: 8, opacity: 0.9 },
-  detailArt: {
-    width: 154,
-    height: 154,
+  detailArtStage: {
+    width: 222,
+    height: 222,
     borderRadius: 999,
-    resizeMode: "cover",
+    overflow: "hidden",
     backgroundColor: "#FFF3D0",
-    borderWidth: 7,
-    borderColor: "rgba(255,253,248,.92)",
+    borderWidth: 8,
+    borderColor: "rgba(255,253,248,.94)",
     marginTop: 28,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  detailArt: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
   detailSeal: {
     position: "absolute",
@@ -912,10 +1011,10 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     writingDirection: "rtl",
   },
-  detailFudaTitle: { marginTop: 14, color: "#26233A", fontSize: 25, lineHeight: 32, fontWeight: "900", textAlign: "center" },
+  detailFudaTitle: { marginTop: 16, color: "#26233A", fontSize: 25, lineHeight: 32, fontWeight: "900", textAlign: "center" },
   detailFudaYomi: { marginTop: 3, color: "#514754", fontSize: 13, letterSpacing: 1.3 },
-  detailFudaCat: { marginTop: 22, fontSize: 12, fontWeight: "900" },
-  detailFudaScene: { marginTop: 14, color: "#4E4653", fontSize: 15, lineHeight: 24, textAlign: "center", fontWeight: "900" },
+  detailFudaCat: { marginTop: 18, fontSize: 12, fontWeight: "900" },
+  detailFudaScene: { marginTop: 12, color: "#4E4653", fontSize: 15, lineHeight: 24, textAlign: "center", fontWeight: "900" },
   fudaBeans: { position: "absolute", bottom: 18, flexDirection: "row", alignItems: "center", gap: 6 },
   fudaBeansLabel: { color: "#B89A5A", fontSize: 11, fontWeight: "900", marginRight: 4 },
   fudaBean: { width: 11, height: 11, borderRadius: 999, backgroundColor: "#F3D3DB" },
