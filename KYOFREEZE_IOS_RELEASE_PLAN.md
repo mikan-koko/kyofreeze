@@ -43,11 +43,13 @@
 
 第一候補は Expo/EAS。
 
+- `mobile/` にExpo/React Native初期プロジェクトを作成済み。
 - Web版資産を活かすなら、初期版はExpo + WebViewまたはハイブリッド構成。
 - App Store品質まで上げるなら、カード一覧、検索、詳細モーダル、地図ビューをSwiftUI/React Native画面として再構成する。
 - はんなり検定は、iOS版ではタブまたはホーム内カードから入れる学習ミニゲームとして扱う。
 - 画像資産は `assets/illustrations`、`assets/icons`、`assets/characters`、`assets/map` を転用する。
 - 辞書データは `assets/data/terms.json` に分離済み。Web版は `assets/data/terms-data.js` 経由で同じデータを読み込む。
+- Mobile版は `mobile/assets/data/terms.json` を読み込み、辞典リストと検定の初期画面を実装済み。
 
 ## Phase A 先に進める事務
 
@@ -80,7 +82,7 @@
 ## 次の実作業候補
 
 1. `privacy.html` の問い合わせ先と公開URL確定
-2. Expoプロジェクト作成
+2. 洛中地図のネイティブ画面化
 3. アイコン、スプラッシュ、App Storeスクショの制作
 4. AdMob/IAP設計
 5. App Store審査向けのプライバシー回答整理

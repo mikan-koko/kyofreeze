@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "京ふれーず",
+    "slug": "kyofreeze",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "kyofreeze",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kokokikaku.kyofreeze",
+      "infoPlist": {
+        "CFBundleDisplayName": "京ふれーず"
+      }
+    },
+    "android": {
+      "package": "com.kokokikaku.kyofreeze",
+      "adaptiveIcon": {
+        "backgroundColor": "#FAF6EE",
+        "foregroundImage": "./assets/adaptive-icon.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
