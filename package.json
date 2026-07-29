@@ -1,0 +1,16 @@
+{
+  "name": "kyofreeze",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "verify:ui": "node scripts/verify-kyofreeze-ui.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright-core": "^1.62.0"
+  }
+}
