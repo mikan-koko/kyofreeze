@@ -56,8 +56,8 @@ type MapSpot = {
 
 const TERMS = termsJson as Term[];
 const GUIDE = require("./assets/characters/kyofreeze-guide-bold.png");
-const GUIDE_MAP = require("./assets/characters/kotoha-guide-map-pose.png");
-const GUIDE_QUIZ = require("./assets/characters/kotoha-quiz-cheer-pose-v2.png");
+const GUIDE_MAP = require("./assets/characters/kotoha-guide-map-pose-alpha.png");
+const GUIDE_QUIZ = require("./assets/characters/kotoha-quiz-cheer-pose-v2-alpha.png");
 const HERO_TOWN = require("./assets/hero/kyoto-town-pop.png");
 const APP_ICON = require("./assets/icon.png");
 const RAKUCHU_MAP = require("./assets/map/rakuchu-map-current-pop.png");
@@ -351,7 +351,7 @@ export default function App() {
                     >
                       <View style={styles.cornerTop} />
                       <View style={styles.cornerBottom} />
-                      <View style={[styles.fudaBand, { backgroundColor: cat.color }]} />
+                      <View style={styles.fudaBand} />
                       <View style={styles.termFrame} />
                       <View style={[styles.termSeal, { backgroundColor: cat.color }]}>
                         <Text style={styles.termSealText}>{cat.seal}</Text>
@@ -398,7 +398,7 @@ export default function App() {
                     </Pressable>
                     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.detailScroll}>
                       <View style={styles.detailFuda}>
-                        <View style={[styles.fudaBandTall, { backgroundColor: CATS[selected.c].color }]} />
+                        <View style={styles.fudaBandTall} />
                         <View style={styles.detailFrame} />
                         <View style={styles.detailCornerTop} />
                         <View style={styles.detailCornerBottom} />
@@ -784,9 +784,13 @@ const styles = StyleSheet.create({
     minHeight: 218,
     borderRadius: 24,
     overflow: "hidden",
-    borderWidth: 3,
-    borderColor: "#26233A",
+    borderWidth: 0,
     justifyContent: "flex-end",
+    backgroundColor: "rgba(255,253,248,.54)",
+    shadowColor: "#26233A",
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 9 },
   },
   dictHeroImage: { borderRadius: 21 },
   dictHeroShade: {
@@ -920,7 +924,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "#FF7E9C",
   },
-  fudaBand: { position: "absolute", left: 0, top: 0, bottom: 0, width: 7, opacity: 0.55, borderTopLeftRadius: 18, borderBottomLeftRadius: 18 },
+  fudaBand: { display: "none" },
   termSeal: {
     position: "absolute",
     left: 18,
@@ -1090,7 +1094,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "#FF7E9C",
   },
-  fudaBandTall: { position: "absolute", left: 0, top: 0, bottom: 0, width: 8, opacity: 0.58 },
+  fudaBandTall: { display: "none" },
   detailArtStage: {
     width: 230,
     height: 230,
@@ -1168,16 +1172,15 @@ const styles = StyleSheet.create({
     minHeight: 164,
     borderRadius: 24,
     backgroundColor: "rgba(255,253,248,.92)",
-    borderWidth: 3,
-    borderColor: "#26233A",
+    borderWidth: 0,
     padding: 18,
     flexDirection: "row",
     alignItems: "center",
     overflow: "hidden",
     shadowColor: "#26233A",
-    shadowOpacity: 0.14,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 9 },
   },
   mapHeroCopy: { flex: 1, paddingRight: 8 },
   mapEyebrow: { color: "#335C81", fontSize: 12, fontWeight: "900" },
@@ -1186,21 +1189,17 @@ const styles = StyleSheet.create({
   kotohaMapFrame: {
     width: 104,
     height: 132,
-    borderRadius: 18,
-    backgroundColor: "#FFF4D8",
-    borderWidth: 2,
-    borderColor: "rgba(38,35,58,.14)",
-    overflow: "hidden",
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    overflow: "visible",
     alignItems: "center",
     justifyContent: "flex-end",
     marginRight: -6,
     marginBottom: -4,
-    shadowColor: "#26233A",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0,
   },
-  mapGuide: { width: 96, height: 124, resizeMode: "contain", marginBottom: 2 },
+  mapGuide: { width: 108, height: 136, resizeMode: "contain", marginBottom: -2 },
   mapBoard: {
     height: 330,
     borderRadius: 24,
@@ -1338,9 +1337,8 @@ const styles = StyleSheet.create({
   quizHero: {
     minHeight: 190,
     borderRadius: 22,
-    backgroundColor: "#FFF4F7",
-    borderWidth: 2,
-    borderColor: "#EAD8D9",
+    backgroundColor: "rgba(255,244,247,.82)",
+    borderWidth: 0,
     padding: 18,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -1362,21 +1360,17 @@ const styles = StyleSheet.create({
   kotohaQuizFrame: {
     width: 128,
     height: 166,
-    borderRadius: 26,
-    backgroundColor: "#FFF4D8",
-    borderWidth: 2,
-    borderColor: "rgba(38,35,58,.16)",
-    overflow: "hidden",
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    overflow: "visible",
     alignItems: "center",
     justifyContent: "flex-end",
     alignSelf: "flex-end",
     zIndex: 2,
-    shadowColor: "#26233A",
-    shadowOpacity: 0.14,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 7 },
+    shadowOpacity: 0,
   },
-  quizGuide: { width: 116, height: 154, resizeMode: "contain", marginBottom: 2 },
+  quizGuide: { width: 128, height: 166, resizeMode: "contain", marginBottom: -4 },
   progressTrack: { height: 14, borderRadius: 999, backgroundColor: "#E8DED4", overflow: "hidden", borderWidth: 2, borderColor: "#FFFFFF" },
   progressFill: { height: "100%", borderRadius: 999, backgroundColor: "#42B8A8" },
   questionCard: { borderRadius: 22, backgroundColor: "#FFFFFF", borderWidth: 3, borderColor: "#26233A", padding: 18 },
