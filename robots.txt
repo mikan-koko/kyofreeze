@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mikan-koko.github.io/kyofreeze/sitemap.xml
