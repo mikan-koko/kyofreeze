@@ -337,17 +337,37 @@ export default function App() {
                     </View>
                   </View>
                 }
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
                   const cat = CATS[item.c];
                   const isSelected = selected.k === item.k;
                   const art = illustrationFor(item);
+                  const baseRotate = index % 4 === 0 ? "-0.55deg" : index % 4 === 1 ? "0.45deg" : index % 4 === 2 ? "-0.25deg" : "0.65deg";
                   return (
                     <Pressable
                       onPress={() => {
                         setSelected(item);
                         setDetailOpen(true);
                       }}
-                      style={[styles.termCard, isSelected && styles.termCardActive, { borderColor: isSelected ? cat.color : "#26233A" }]}
+                      style={(state) => {
+                        const hovered = Boolean("hovered" in state && state.hovered);
+                        const pressed = state.pressed;
+                        return [
+                          styles.termCard,
+                          isSelected && styles.termCardActive,
+                          {
+                            borderColor: isSelected || hovered ? cat.color : "rgba(38,35,58,.16)",
+                            shadowColor: hovered || pressed ? cat.color : "#26233A",
+                            shadowOpacity: hovered ? 0.28 : pressed ? 0.20 : 0.16,
+                            shadowRadius: hovered ? 20 : 10,
+                            shadowOffset: { width: 0, height: hovered ? 16 : pressed ? 5 : 7 },
+                            transform: [
+                              { translateY: hovered ? -8 : pressed ? -2 : 0 },
+                              { rotate: hovered ? "-1.2deg" : baseRotate },
+                              { scale: hovered ? 1.018 : pressed ? 0.99 : 1 },
+                            ],
+                          },
+                        ];
+                      }}
                     >
                       <View style={styles.cornerTop} />
                       <View style={styles.cornerBottom} />
